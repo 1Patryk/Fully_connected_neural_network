@@ -1,0 +1,3 @@
+C:/Users/patry/Desktop/GIT PODSTAWY/Fully-connected-neural-network/Build/CMakeFiles/FirstProject.dir
+C:/Users/patry/Desktop/GIT PODSTAWY/Fully-connected-neural-network/Build/CMakeFiles/ALL_BUILD.dir
+C:/Users/patry/Desktop/GIT PODSTAWY/Fully-connected-neural-network/Build/CMakeFiles/ZERO_CHECK.dir

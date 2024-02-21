@@ -37,7 +37,7 @@ void Fully_connected_network::Read_data_MLP_x_x(std::vector<double>& Input_x1,
 	const auto Start = std::chrono::high_resolution_clock::now();
 
 	// ifstream only can open file
-	std::ifstream file(filename);
+	std::ifstream file("../../Data/" + filename);
 
 	if (file)
 	{

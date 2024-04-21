@@ -18,3 +18,11 @@ int main()
 
 	DATA.Display_results_for_MLP_x_x();
 }
+
+
+
+
+
+
+
+// Add to program value like: number of epochs, amount of data, from file, not from manualy-writen constructor.

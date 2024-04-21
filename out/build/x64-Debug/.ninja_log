@@ -1,0 +1,13 @@
+# ninja log v5
+2	1157	7354210812844875	CMakeFiles/FirstProject.dir/src/main.cpp.obj	e33400f5f3e0378b
+3	688	7354214943091760	CMakeFiles/FirstProject.dir/src/Fully_connected_network.cpp.obj	4b411f3c52c4ac3b
+689	1013	7354214944802272	FirstProject.exe	d65f19ebfcd1a159
+2	14	0	clean	aba57fb843ed5db8
+2	842	7354220683304137	CMakeFiles/FirstProject.dir/src/main.cpp.obj	e33400f5f3e0378b
+7	913	7354220684012240	CMakeFiles/FirstProject.dir/src/Fully_connected_network.cpp.obj	4b411f3c52c4ac3b
+913	1185	7354220686067122	FirstProject.exe	3267bd765e9c27f3
+15	592	7354221877514146	CMakeFiles/FirstProject.dir/src/main.cpp.obj	e33400f5f3e0378b
+19	673	7354221878371894	CMakeFiles/FirstProject.dir/src/Fully_connected_network.cpp.obj	4b411f3c52c4ac3b
+673	1087	7354221881777042	FirstProject.exe	3267bd765e9c27f3
+13	659	7354222057337014	CMakeFiles/FirstProject.dir/src/Fully_connected_network.cpp.obj	4b411f3c52c4ac3b
+660	989	7354222059119495	FirstProject.exe	3267bd765e9c27f3

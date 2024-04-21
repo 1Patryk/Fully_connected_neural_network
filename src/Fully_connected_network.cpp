@@ -12,13 +12,15 @@ Fully_connected_network::Fully_connected_network()
 	Number_of_weights = 2;
 	Total_number_of_neurons = 1;
 	Learning_rate_factor = 1;
-	filename = "Table_XOR.txt";
-	plotname = "Plot_MLP_X_X.png";
+	Open_filename = "Add_1000.txt";
+	Save_filename = "Out_date.txt";
 	Input_x1 = new std::vector<double>(Amount_of_data);			// This is probably problematic with more data (memory)
 	Input_x2 = new std::vector<double>(Amount_of_data);
 	Output_y1 = new std::vector<double>(Amount_of_data);
 	Vector_of_weights = new std::vector<double>(Number_of_weights);
 	Vector_of_neuron_values = new std::vector<double>(Total_number_of_neurons);
+	MSE_value_vector_X = new std::vector<double>(Number_of_epochs);
+	MSE_value_vector_Y = new std::vector<double>(Number_of_epochs);
 }
 
 template<class start, class stop>
@@ -37,7 +39,7 @@ void Fully_connected_network::Read_data_MLP_x_x(std::vector<double>& Input_x1,
 	const auto Start = std::chrono::high_resolution_clock::now();
 
 	// ifstream only can open file
-	std::ifstream file("../../Data/" + filename);
+	std::ifstream file("../../../Data/" + Open_filename);
 
 	if (file)
 	{
@@ -55,6 +57,39 @@ void Fully_connected_network::Read_data_MLP_x_x(std::vector<double>& Input_x1,
 	else
 	{
 		std::cout << "Error, file not opened. Check if name of file is correct, or if this file exist.";
+		exit(3);
+	}
+
+	// end counting time 
+	const auto Stop = std::chrono::high_resolution_clock::now();
+
+	Display_results_counting_time(Start, Stop);
+}
+
+void Fully_connected_network::Write_data_MLP_x_x(
+	std::vector<double>& MSE_value_vector_X,
+	std::vector<double>& MSE_value_vector_Y)
+{
+	// start counting time 
+	const auto Start = std::chrono::high_resolution_clock::now();
+
+	// ifstream only can open file
+	std::ofstream file(Save_filename);
+
+	if (file)
+	{
+		for (int i = 0; i < Number_of_epochs; ++i)
+		{
+			file << MSE_value_vector_X[i];
+			file << " ";
+			file << MSE_value_vector_Y[i];
+			file << "\n";
+		}
+		file.close();
+	}
+	else
+	{
+		std::cout << "Error, file not created. Check if name of file is correct.";
 		exit(3);
 	}
 
@@ -135,12 +170,15 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 	std::vector<double>& Output_y1,
 	std::vector<double>& Vector_of_weights,
 	std::vector<double>& Vector_of_neuron_values,
+	std::vector<double>& MSE_value_vector_X,
+	std::vector<double>& MSE_value_vector_Y,
 	double& Bias)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
-	std::vector<double> Graph_value_vector;
+
 	// capacity reduction
-	Graph_value_vector.shrink_to_fit();
+	MSE_value_vector_X.shrink_to_fit();
+	MSE_value_vector_Y.shrink_to_fit();
 
 	Read_data_MLP_x_x(Input_x1, Input_x2, Output_y1);
 
@@ -152,12 +190,14 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 	Pseudo_random_numbers(Vector_of_weights);
 
 	double MSE = 0;
+	int e = 0;
+	int i = 0;
 
-	for (int e = 0; e < Number_of_epochs; ++e)
+	for (e = 0 ; e < Number_of_epochs; ++e)
 	{
 		MSE = 0;
 
-		for (int i = 0; i < Amount_of_data; ++i)
+		for (i = 0 ; i < Amount_of_data; ++i)
 		{
 			Vector_of_neuron_values[0] = Unipolar_sigmoidal_function((Input_x1[i] *
 				Vector_of_weights[0]) + (Input_x2[i] * Vector_of_weights[1]) + Bias);
@@ -181,70 +221,19 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 
 		MSE = MSE / Amount_of_data;
 
-		std::cout << "MSE: " << MSE << std::endl;
+		int iterator = (e + 1);
 
-		Graph_value_vector.push_back(MSE);
+		std::cout << "MSE(" << iterator << "): " << MSE << std::endl;
+
+		MSE_value_vector_X[e] = iterator;
+		MSE_value_vector_Y[e] = MSE;
 	}
 
-	Drawning_plot(&Graph_value_vector);
+	Write_data_MLP_x_x(MSE_value_vector_X, MSE_value_vector_Y);
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
 	Display_results_counting_time(Start, Stop);
-}
-
-int Fully_connected_network::Drawning_plot(std::vector<double>* Graph_value_vector)
-{
-	bool success;
-
-	StringReference* errorMessage = CreateStringReferenceLengthValue(0, L' ');
-	RGBABitmapImageReference* imageReference = CreateRGBABitmapImageReference();
-
-	std::vector<double> x_values;
-
-	for (int i = 0; i < Number_of_epochs; ++i)
-	{
-		x_values.push_back(i);
-	}
-
-	ScatterPlotSeries* series = GetDefaultScatterPlotSeriesSettings();
-	series->xs = &x_values;
-	series->ys = Graph_value_vector;
-	series->linearInterpolation = true;
-	series->lineType = toVector(L"solid");			// dashed line
-	series->lineThickness = 2;
-	series->color = GetGray(0.3);
-
-	ScatterPlotSettings* settings = GetDefaultScatterPlotSettings();
-	settings->width = 1920;	// 600 1920 3840
-	settings->height = 1080;		// 400 1080 2160
-	settings->autoBoundaries = true;
-	settings->autoPadding = true;
-	settings->title = toVector(L"MLP_X_X");
-	settings->xLabel = toVector(L"Number of epoch");
-	settings->yLabel = toVector(L"MSE");
-	settings->scatterPlotSeries->push_back(series);
-
-	success = DrawScatterPlotFromSettings(imageReference, settings, errorMessage);
-
-	if (success) {
-		std::vector<double>* pngdata = ConvertToPNG(imageReference->image);
-		WriteToFile(pngdata, plotname);
-		DeleteImage(imageReference->image);
-	}
-	else
-	{
-		std::cerr << "Error: ";
-		for (wchar_t c : *errorMessage->string)
-		{
-			std::wcerr << c;
-		}
-		std::cerr << std::endl;
-	}
-
-	//FreeAllocations();
-
-	return success ? 0 : 1;
 }
 
 double Fully_connected_network::Unipolar_sigmoidal_function(double e)
@@ -267,6 +256,8 @@ void Fully_connected_network::Display_results_for_MLP_x_x()
 		*&Output_y1[0],
 		*&Vector_of_weights[0],
 		*&Vector_of_neuron_values[0],
+		*&MSE_value_vector_X[0],
+		*&MSE_value_vector_Y[0],
 		*&Bias);
 
 }

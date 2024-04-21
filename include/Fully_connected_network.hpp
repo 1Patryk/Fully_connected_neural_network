@@ -5,8 +5,6 @@
 #include <fstream>				// adding posibility connect with .txt files
 #include <chrono>				// time executive in program 
 #include <ctime>				// ...
-#include "pbPlots.hpp"			// library for drawn plots
-#include "supportLib.hpp"		// ...
 
 class Fully_connected_network
 {
@@ -22,13 +20,15 @@ private:
 	int Number_of_weights;
 	int Total_number_of_neurons;
 	float Learning_rate_factor;
-	std::string filename;
-	std::string plotname;
+	std::string Open_filename;
+	std::string Save_filename;
 	std::vector<double>* Input_x1;
 	std::vector<double>* Input_x2;
 	std::vector<double>* Output_y1;
 	std::vector<double>* Vector_of_weights;
 	std::vector<double>* Vector_of_neuron_values;
+	std::vector<double>* MSE_value_vector_X;
+	std::vector<double>* MSE_value_vector_Y;
 
 public:
 
@@ -43,6 +43,11 @@ public:
 	void Read_data_MLP_x_x(std::vector<double>& Input_x1,
 		std::vector<double>& Input_x2,
 		std::vector<double>& Output_y1);
+
+	// write output data to file
+	void Write_data_MLP_x_x(
+		std::vector<double>& MSE_value_vector_X,
+		std::vector<double>& MSE_value_vector_Y);
 
 	// values from 0 to 1
 	void Min_max_unipolar_scaling(std::vector<double>& Vector);
@@ -61,10 +66,9 @@ public:
 		std::vector<double>& Output_y1,
 		std::vector<double>& Vector_of_weights,
 		std::vector<double>& Vector_of_neuron_values,
+		std::vector<double>& MSE_value_vector_X,
+		std::vector<double>& MSE_value_vector_Y,
 		double& Bias);
-
-	// creating file with plot
-	int Drawning_plot(std::vector<double>* Vector_of_neuron_values);
 
 	// values from 0 to 1 
 	double Unipolar_sigmoidal_function(double e);

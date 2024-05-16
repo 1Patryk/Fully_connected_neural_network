@@ -10,8 +10,8 @@ class Fully_connected_network
 {
 private:
 
-	double Bias;
-	double Beta;
+	float Bias;
+	float Beta;
 	int Amount_of_data;
 	int Number_of_epochs;
 	int Number_of_input;
@@ -22,13 +22,13 @@ private:
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
-	std::vector<double>* Input_x1;
-	std::vector<double>* Input_x2;
-	std::vector<double>* Output_y1;
-	std::vector<double>* Vector_of_weights;
-	std::vector<double>* Vector_of_neuron_values;
-	std::vector<double>* MSE_value_vector_X;
-	std::vector<double>* MSE_value_vector_Y;
+	std::vector<float>* Input_x1;
+	std::vector<float>* Input_x2;
+	std::vector<float>* Output_y1;
+	std::vector<float>* Vector_of_weights;
+	std::vector<float>* Vector_of_neuron_values;
+	std::vector<float>* MSE_value_vector_X;
+	std::vector<float>* MSE_value_vector_Y;
 
 public:
 
@@ -36,43 +36,43 @@ public:
 	Fully_connected_network();
 
 	// display times wich during from start to end function 
-	template<class start, class stop>
-	void Display_results_counting_time(start Start, stop Stop);
+	template<class start, class stop, class name>
+	void Display_results_counting_time(start Start, stop Stop, name name_of_function);
 
 	// reading input data from file
-	void Read_data_MLP_x_x(std::vector<double>& Input_x1,
-		std::vector<double>& Input_x2,
-		std::vector<double>& Output_y1);
+	void Read_data_MLP(std::vector<float>& Input_x1,
+		std::vector<float>& Input_x2,
+		std::vector<float>& Output_y1);
 
 	// write output data to file
-	void Write_data_MLP_x_x(
-		std::vector<double>& MSE_value_vector_X,
-		std::vector<double>& MSE_value_vector_Y);
+	void Write_data_MLP(
+		std::vector<float>& MSE_value_vector_X,
+		std::vector<float>& MSE_value_vector_Y);
 
 	// values from 0 to 1
-	void Min_max_unipolar_scaling(std::vector<double>& Vector);
+	void Min_max_unipolar_scaling(std::vector<float>& Vector);
 
 	// values from 0 to -1
-	void Min_max_bipolar_scaling(std::vector<double>& Vector);
+	void Min_max_bipolar_scaling(std::vector<float>& Vector);
 
 	void Reversal_min_max_unipolar_scaling();
 
 	// for first weights wector
-	void Pseudo_random_numbers(std::vector<double>& Vector);
+	void Pseudo_random_numbers(std::vector<float>& Vector);
 
 	// forward and back propagation
-	void Calculating_the_network_MLP_X_X(std::vector<double>& Input_x1,
-		std::vector<double>& Input_x2,
-		std::vector<double>& Output_y1,
-		std::vector<double>& Vector_of_weights,
-		std::vector<double>& Vector_of_neuron_values,
-		std::vector<double>& MSE_value_vector_X,
-		std::vector<double>& MSE_value_vector_Y,
-		double& Bias);
+	void Calculating_the_network_MLP(std::vector<float>& Input_x1,
+		std::vector<float>& Input_x2,
+		std::vector<float>& Output_y1,
+		std::vector<float>& Vector_of_weights,
+		std::vector<float>& Vector_of_neuron_values,
+		std::vector<float>& MSE_value_vector_X,
+		std::vector<float>& MSE_value_vector_Y,
+		float& Bias);
 
 	// values from 0 to 1 
-	double Unipolar_sigmoidal_function(double e);
+	float Unipolar_sigmoidal_function(float e);
 
 	// display results in main function
-	void Display_results_for_MLP_x_x();
+	void Display_results_for_MLP();
 };					

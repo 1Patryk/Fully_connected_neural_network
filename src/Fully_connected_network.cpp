@@ -2,38 +2,38 @@
 
 Fully_connected_network::Fully_connected_network()
 {
-	Bias = 1;
-	Beta = 1;
+	Bias = 1.0f;
+	Beta = 1.0f;
 	Amount_of_data = 4;
-	Number_of_epochs = 100;
+	Number_of_epochs = 10;
 	Number_of_input = 2;
 	Number_of_output = 1;
 	Number_of_hidden_layers = 1;
 	Number_of_weights = 2;
 	Total_number_of_neurons = 1;
-	Learning_rate_factor = 1;
+	Learning_rate_factor = 1.0f;
 	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
-	Input_x1 = new std::vector<double>(Amount_of_data);			// This is probably problematic with more data (memory)
-	Input_x2 = new std::vector<double>(Amount_of_data);
-	Output_y1 = new std::vector<double>(Amount_of_data);
-	Vector_of_weights = new std::vector<double>(Number_of_weights);
-	Vector_of_neuron_values = new std::vector<double>(Total_number_of_neurons);
-	MSE_value_vector_X = new std::vector<double>(Number_of_epochs);
-	MSE_value_vector_Y = new std::vector<double>(Number_of_epochs);
+	Input_x1 = new std::vector<float>(Amount_of_data);			// This is probably problematic with more data (memory)
+	Input_x2 = new std::vector<float>(Amount_of_data);
+	Output_y1 = new std::vector<float>(Amount_of_data);
+	Vector_of_weights = new std::vector<float>(Number_of_weights);
+	Vector_of_neuron_values = new std::vector<float>(Total_number_of_neurons);
+	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
+	MSE_value_vector_Y = new std::vector<float>(Number_of_epochs);
 }
 
-template<class start, class stop>
-void Fully_connected_network::Display_results_counting_time(start Start, stop Stop)
+template<class start, class stop, class name>
+void Fully_connected_network::Display_results_counting_time(start Start, stop Stop, name name_of_function)
 {
-	std::cout << "Calculations lasted: "
+	std::cout << "Calculations " << name_of_function << " lasted: "
 		<< std::chrono::duration_cast<std::chrono::milliseconds>(Stop - Start).count()
 		<< " millisecond/s\n";
 }
 
-void Fully_connected_network::Read_data_MLP_x_x(std::vector<double>& Input_x1,
-	std::vector<double>& Input_x2,
-	std::vector<double>& Output_y1)
+void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
+	std::vector<float>& Input_x2,
+	std::vector<float>& Output_y1)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -63,12 +63,12 @@ void Fully_connected_network::Read_data_MLP_x_x(std::vector<double>& Input_x1,
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Read_data_MLP");
 }
 
-void Fully_connected_network::Write_data_MLP_x_x(
-	std::vector<double>& MSE_value_vector_X,
-	std::vector<double>& MSE_value_vector_Y)
+void Fully_connected_network::Write_data_MLP(
+	std::vector<float>& MSE_value_vector_X,
+	std::vector<float>& MSE_value_vector_Y)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -96,15 +96,15 @@ void Fully_connected_network::Write_data_MLP_x_x(
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Write_data_MLP");
 }
 
-void Fully_connected_network::Min_max_unipolar_scaling(std::vector<double>& Vector)
+void Fully_connected_network::Min_max_unipolar_scaling(std::vector<float>& Vector)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	double max = *max_element(Vector.begin(), Vector.end());
-	double min = *min_element(Vector.begin(), Vector.end());
+	float max = *max_element(Vector.begin(), Vector.end());
+	float min = *min_element(Vector.begin(), Vector.end());
 
 	for (int i = 0; i < Amount_of_data; ++i)
 	{
@@ -118,15 +118,15 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<double>& Vect
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling");
 }
 
-void Fully_connected_network::Min_max_bipolar_scaling(std::vector<double>& Vector)
+void Fully_connected_network::Min_max_bipolar_scaling(std::vector<float>& Vector)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	double max = *max_element(Vector.begin(), Vector.end());
-	double min = *min_element(Vector.begin(), Vector.end());
+	float max = *max_element(Vector.begin(), Vector.end());
+	float min = *min_element(Vector.begin(), Vector.end());
 
 	for (int i = 0; i < Amount_of_data; ++i)
 	{
@@ -140,7 +140,7 @@ void Fully_connected_network::Min_max_bipolar_scaling(std::vector<double>& Vecto
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling");
 }
 
 void Fully_connected_network::Reversal_min_max_unipolar_scaling()
@@ -148,7 +148,7 @@ void Fully_connected_network::Reversal_min_max_unipolar_scaling()
 
 }
 
-void Fully_connected_network::Pseudo_random_numbers(std::vector<double>& Vector)
+void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -162,17 +162,17 @@ void Fully_connected_network::Pseudo_random_numbers(std::vector<double>& Vector)
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers");
 }
 
-void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double>& Input_x1,
-	std::vector<double>& Input_x2,
-	std::vector<double>& Output_y1,
-	std::vector<double>& Vector_of_weights,
-	std::vector<double>& Vector_of_neuron_values,
-	std::vector<double>& MSE_value_vector_X,
-	std::vector<double>& MSE_value_vector_Y,
-	double& Bias)
+void Fully_connected_network::Calculating_the_network_MLP(std::vector<float>& Input_x1,
+	std::vector<float>& Input_x2,
+	std::vector<float>& Output_y1,
+	std::vector<float>& Vector_of_weights,
+	std::vector<float>& Vector_of_neuron_values,
+	std::vector<float>& MSE_value_vector_X,
+	std::vector<float>& MSE_value_vector_Y,
+	float& Bias)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -180,7 +180,7 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 	MSE_value_vector_X.shrink_to_fit();
 	MSE_value_vector_Y.shrink_to_fit();
 
-	Read_data_MLP_x_x(Input_x1, Input_x2, Output_y1);
+	Read_data_MLP(Input_x1, Input_x2, Output_y1);
 
 	// changes for user interface (uniporar/bipolar)
 	Min_max_unipolar_scaling(Input_x1);
@@ -189,7 +189,7 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 
 	Pseudo_random_numbers(Vector_of_weights);
 
-	double MSE = 0;
+	float MSE = 0;
 	int e = 0;
 	int i = 0;
 
@@ -203,7 +203,7 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 				Vector_of_weights[0]) + (Input_x2[i] * Vector_of_weights[1]) + Bias);
 
 			// last neuron error
-			double error = Output_y1[i] - Vector_of_neuron_values[0];
+			float error = Output_y1[i] - Vector_of_neuron_values[0];
 
 			// new values of weight
 
@@ -216,32 +216,32 @@ void Fully_connected_network::Calculating_the_network_MLP_X_X(std::vector<double
 			Bias = Bias + Learning_rate_factor * error *
 				(Beta * Vector_of_neuron_values[0] * (1 - Vector_of_neuron_values[0]));
 
-			MSE += pow((Vector_of_neuron_values[0] - Output_y1[i]), 2);
+			MSE += static_cast<float>(pow((Vector_of_neuron_values[0] - Output_y1[i]), 2));
 		}
 
 		MSE = MSE / Amount_of_data;
 
-		int iterator = (e + 1);
+		float iterator = (e + 1);			// float because MSE_value_vector_x have float type
 
 		std::cout << "MSE(" << iterator << "): " << MSE << std::endl;
 
-		MSE_value_vector_X[e] = iterator;
-		MSE_value_vector_Y[e] = MSE;
+		MSE_value_vector_X.push_back(iterator);
+		MSE_value_vector_Y.push_back(MSE);
 	}
 
-	Write_data_MLP_x_x(MSE_value_vector_X, MSE_value_vector_Y);
+	Write_data_MLP(MSE_value_vector_X, MSE_value_vector_Y);
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop);
+	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP");
 }
 
-double Fully_connected_network::Unipolar_sigmoidal_function(double e)
+float Fully_connected_network::Unipolar_sigmoidal_function(float e)
 {
-	return (1.0 / (1.0 + exp(-Beta * e)));
+	return static_cast<float>(1.0 / (1.0 + exp(-Beta * e)));
 }
 
-void Fully_connected_network::Display_results_for_MLP_x_x()
+void Fully_connected_network::Display_results_for_MLP()
 {
 	std::cout << &Input_x1[0] << std::endl;
 	std::cout << &Input_x2[0] << std::endl;
@@ -251,7 +251,7 @@ void Fully_connected_network::Display_results_for_MLP_x_x()
 	std::cout << &Bias << std::endl;
 
 
-	Calculating_the_network_MLP_X_X(*&Input_x1[0],
+	Calculating_the_network_MLP(*&Input_x1[0],
 		*&Input_x2[0],
 		*&Output_y1[0],
 		*&Vector_of_weights[0],

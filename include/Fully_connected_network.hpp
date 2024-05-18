@@ -31,6 +31,28 @@ private:
 	std::vector<float>* MSE_value_vector_Y;
 
 public:
+	struct INIT
+	{
+		float Bias;
+		float Beta;
+		int Amount_of_data;		//count
+		int Number_of_epochs;
+		int Number_of_input;
+		int Number_of_output;
+		int Number_of_hidden_layers;
+		int Number_of_weights;
+		int Total_number_of_neurons;
+		float Learning_rate_factor;
+		std::string Open_filename;
+		std::string Save_filename;
+		std::vector<float>* Input_x1;
+		std::vector<float>* Input_x2;
+		std::vector<float>* Output_y1;
+		std::vector<float>* Vector_of_weights;
+		std::vector<float>* Vector_of_neuron_values;
+		std::vector<float>* MSE_value_vector_X;
+		std::vector<float>* MSE_value_vector_Y;
+	};
 
 	// constructor
 	Fully_connected_network();

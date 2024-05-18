@@ -14,9 +14,9 @@ Fully_connected_network::Fully_connected_network()
 	Learning_rate_factor = 1.0f;
 	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
-	Input_x1 = new std::vector<float>(Amount_of_data);			// This is probably problematic with more data (memory)
-	Input_x2 = new std::vector<float>(Amount_of_data);
-	Output_y1 = new std::vector<float>(Amount_of_data);
+	Input_x1 = new std::vector<float>(0, 0);			// This is probably problematic with more data (memory)
+	Input_x2 = new std::vector<float>(0, 0);
+	Output_y1 = new std::vector<float>(0, 0);
 	Vector_of_weights = new std::vector<float>(Number_of_weights);
 	Vector_of_neuron_values = new std::vector<float>(Total_number_of_neurons);
 	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
@@ -41,13 +41,21 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
 	// ifstream only can open file
 	std::ifstream file("../../../Data/" + Open_filename);
 
+	float x1 = 0.0f;
+	float x2 = 0.0f;
+	float y1 = 0.0f;
+
 	if (file)
 	{
-		for (int i = 0; i < Amount_of_data; ++i)
+		for (int i = 0; !file.eof(); ++i)
 		{
-			file >> Input_x1[i];
-			file >> Input_x2[i];
-			file >> Output_y1[i];
+			file >> x1;
+			file >> x2;
+			file >> y1;
+			Input_x1.push_back(x1);
+			Input_x2.push_back(x2);
+			Output_y1.push_back(y1);
+
 			std::cout << Input_x1[i] << std::endl;
 			std::cout << Input_x2[i] << std::endl;
 			std::cout << Output_y1[i] << std::endl;
@@ -59,6 +67,8 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
 		std::cout << "Error, file not opened. Check if name of file is correct, or if this file exist.";
 		exit(3);
 	}
+
+
 
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();

@@ -14,7 +14,7 @@ Fully_connected_network::Fully_connected_network()
 	Learning_rate_factor = 1.0f;
 	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
-	Input_x1 = new std::vector<float>(0, 0);			// This is probably problematic with more data (memory)
+	Input_x1 = new std::vector<float>(0, 0);			
 	Input_x2 = new std::vector<float>(0, 0);
 	Output_y1 = new std::vector<float>(0, 0);
 	Vector_of_weights = new std::vector<float>(Number_of_weights);
@@ -60,6 +60,27 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
 			std::cout << Input_x2[i] << std::endl;
 			std::cout << Output_y1[i] << std::endl;
 		}
+		std::cout << "Before: " << std::endl;
+		std::cout << "capacity(Input_x1): " << std::endl;
+		std::cout << Input_x1.capacity() << std::endl;
+		std::cout << "capacity(Input_x2): " << std::endl;
+		std::cout << Input_x2.capacity() << std::endl;
+		std::cout << "capacity(Output_y1): " << std::endl;
+		std::cout << Output_y1.capacity() << std::endl;
+
+		Input_x1.shrink_to_fit();
+		Input_x2.shrink_to_fit();
+		Output_y1.shrink_to_fit();
+
+		std::cout << "After: " << std::endl;
+		std::cout << "capacity(Input_x1): " << std::endl;
+		std::cout << Input_x1.capacity() << std::endl;
+		std::cout << "capacity(Input_x2): " << std::endl;
+		std::cout << Input_x2.capacity() << std::endl;
+		std::cout << "capacity(Output_y1): " << std::endl;
+		std::cout << Output_y1.capacity() << std::endl;
+
+
 		file.close();
 	}
 	else

@@ -4,7 +4,8 @@ int main()
 {
 	Fully_connected_network DATA;
 
-	DATA.Display_results_for_MLP();
+	DATA.Read_data_MLP(*DATA.Vector_of_data);
+	//DATA.Display_results_for_MLP();
 }
 
 

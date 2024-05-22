@@ -14,9 +14,8 @@ Fully_connected_network::Fully_connected_network()
 	Learning_rate_factor = 1.0f;
 	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
-	Input_x1 = new std::vector<float>(0, 0);			
-	Input_x2 = new std::vector<float>(0, 0);
-	Output_y1 = new std::vector<float>(0, 0);
+	Vector_of_data = new std::vector<float>(0, 0);
+
 	Vector_of_weights = new std::vector<float>(Number_of_weights);
 	Vector_of_neuron_values = new std::vector<float>(Total_number_of_neurons);
 	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
@@ -31,9 +30,7 @@ void Fully_connected_network::Display_results_counting_time(start Start, stop St
 		<< " millisecond/s\n";
 }
 
-void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
-	std::vector<float>& Input_x2,
-	std::vector<float>& Output_y1)
+void Fully_connected_network::Read_data_MLP(std::vector<float>& Vector_of_data)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -41,44 +38,26 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
 	// ifstream only can open file
 	std::ifstream file("../../../Data/" + Open_filename);
 
-	float x1 = 0.0f;
-	float x2 = 0.0f;
-	float y1 = 0.0f;
+	float one_piece_of_data = 0.0f;
 
 	if (file)
 	{
-		for (int i = 0; !file.eof(); ++i)
+		for (int i = 0; !file.eof(); (i + (Number_of_input + Number_of_output)))
 		{
-			file >> x1;
-			file >> x2;
-			file >> y1;
-			Input_x1.push_back(x1);
-			Input_x2.push_back(x2);
-			Output_y1.push_back(y1);
-
-			std::cout << Input_x1[i] << std::endl;
-			std::cout << Input_x2[i] << std::endl;
-			std::cout << Output_y1[i] << std::endl;
+			file >> one_piece_of_data;
+			Vector_of_data.push_back(one_piece_of_data);
+			std::cout << "Vector_of_data[" << i << "]: " << Vector_of_data[i] << std::endl;
 		}
-		std::cout << "Before: " << std::endl;
-		std::cout << "capacity(Input_x1): " << std::endl;
-		std::cout << Input_x1.capacity() << std::endl;
-		std::cout << "capacity(Input_x2): " << std::endl;
-		std::cout << Input_x2.capacity() << std::endl;
-		std::cout << "capacity(Output_y1): " << std::endl;
-		std::cout << Output_y1.capacity() << std::endl;
 
-		Input_x1.shrink_to_fit();
-		Input_x2.shrink_to_fit();
-		Output_y1.shrink_to_fit();
+		std::cout << "Before: " << std::endl;
+		std::cout << "capacity(Vector_of_data): " << std::endl;
+		std::cout << Vector_of_data.capacity() << std::endl;
+
+		Vector_of_data.shrink_to_fit();
 
 		std::cout << "After: " << std::endl;
-		std::cout << "capacity(Input_x1): " << std::endl;
-		std::cout << Input_x1.capacity() << std::endl;
-		std::cout << "capacity(Input_x2): " << std::endl;
-		std::cout << Input_x2.capacity() << std::endl;
-		std::cout << "capacity(Output_y1): " << std::endl;
-		std::cout << Output_y1.capacity() << std::endl;
+		std::cout << "capacity(Vector_of_data): " << std::endl;
+		std::cout << Vector_of_data.capacity() << std::endl;
 
 
 		file.close();
@@ -96,6 +75,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Input_x1,
 
 	Display_results_counting_time(Start, Stop, "Read_data_MLP");
 }
+
 
 void Fully_connected_network::Write_data_MLP(
 	std::vector<float>& MSE_value_vector_X,
@@ -130,12 +110,13 @@ void Fully_connected_network::Write_data_MLP(
 	Display_results_counting_time(Start, Stop, "Write_data_MLP");
 }
 
-void Fully_connected_network::Min_max_unipolar_scaling(std::vector<float>& Vector)
+/*
+void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<float>>* Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	float max = *max_element(Vector.begin(), Vector.end());
-	float min = *min_element(Vector.begin(), Vector.end());
+	float max = *std::max_element(Vector_of_data.begin(), Vector_of_data.end());
+	float min = *std::min_element(Vector_of_data.begin(), Vector_of_data.end());
 
 	for (int i = 0; i < Amount_of_data; ++i)
 	{
@@ -151,6 +132,8 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<float>& Vecto
 
 	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling");
 }
+
+/*
 
 void Fully_connected_network::Min_max_bipolar_scaling(std::vector<float>& Vector)
 {
@@ -188,7 +171,7 @@ void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector)
 	for (int i = 0; i < Number_of_weights; ++i)
 	{
 		Vector[i] = (float)(rand() % 100) / 100;
-		std::cout << "Iteration number: " << i << " " << Vector[i] << std::endl;
+		std::cout << "Iterations number: " << i << " " << Vector[i] << std::endl;
 	}
 
 	auto Stop = std::chrono::high_resolution_clock::now();
@@ -292,3 +275,4 @@ void Fully_connected_network::Display_results_for_MLP()
 		*&Bias);
 
 }
+*/

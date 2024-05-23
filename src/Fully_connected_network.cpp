@@ -12,10 +12,9 @@ Fully_connected_network::Fully_connected_network()
 	Number_of_weights = 2;
 	Total_number_of_neurons = 1;
 	Learning_rate_factor = 1.0f;
-	Open_filename = "Add_1000.txt";
+	Open_filename = "Add_100.txt";
 	Save_filename = "Out_date.txt";
-	Vector_of_data = new std::vector<float>(0, 0);
-
+	Vector_of_data = new std::vector<std::vector<float>>(0);
 	Vector_of_weights = new std::vector<float>(Number_of_weights);
 	Vector_of_neuron_values = new std::vector<float>(Total_number_of_neurons);
 	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
@@ -30,7 +29,7 @@ void Fully_connected_network::Display_results_counting_time(start Start, stop St
 		<< " millisecond/s\n";
 }
 
-void Fully_connected_network::Read_data_MLP(std::vector<float>& Vector_of_data)
+void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vector_of_data)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -38,27 +37,46 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Vector_of_data)
 	// ifstream only can open file
 	std::ifstream file("../../../Data/" + Open_filename);
 
+	int inp_out = (Number_of_input + Number_of_output);
 	float one_piece_of_data = 0.0f;
+
+	
 
 	if (file)
 	{
-		for (int i = 0; !file.eof(); (i + (Number_of_input + Number_of_output)))
+		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
+		for (int i = 0; i < inp_out; i++)
 		{
-			file >> one_piece_of_data;
-			Vector_of_data.push_back(one_piece_of_data);
-			std::cout << "Vector_of_data[" << i << "]: " << Vector_of_data[i] << std::endl;
+			std::vector<float> vec(0, 0);
+			Vector_of_data.push_back(vec);
 		}
 
-		std::cout << "Before: " << std::endl;
-		std::cout << "capacity(Vector_of_data): " << std::endl;
-		std::cout << Vector_of_data.capacity() << std::endl;
+		std::string info = "[Before main loop]";
+
+		Print_Vector_of_data(Vector_of_data, info);
+
+		for (int i = 0; !file.eof(); i++)
+		{
+			for (int j = 0; j < inp_out; j++)
+			{
+				file >> one_piece_of_data;
+				Vector_of_data[j].push_back(one_piece_of_data);
+				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
+			}
+		}
+
+		info = "[After main loop, before shrink]";
+		Print_Vector_of_data(Vector_of_data, info);
 
 		Vector_of_data.shrink_to_fit();
 
-		std::cout << "After: " << std::endl;
-		std::cout << "capacity(Vector_of_data): " << std::endl;
-		std::cout << Vector_of_data.capacity() << std::endl;
-
+		for (int i = 0; i < inp_out; i++)
+		{
+			Vector_of_data[i].shrink_to_fit();
+		}
+		
+		info = "[After shrink]";
+		Print_Vector_of_data(Vector_of_data, info);
 
 		file.close();
 	}
@@ -69,6 +87,13 @@ void Fully_connected_network::Read_data_MLP(std::vector<float>& Vector_of_data)
 	}
 
 
+	for (int i = 0; i < inp_out; i++)
+	{
+		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
+		{
+			std::cout << "Vector_of_data[" << i << "][" << j << "]: " << Vector_of_data[i][j] << std::endl;
+		}
+	}
 
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
@@ -276,3 +301,21 @@ void Fully_connected_network::Display_results_for_MLP()
 
 }
 */
+
+
+void Fully_connected_network::Print_Vector_of_data(std::vector<std::vector<float>>& Vector_of_data, std::string information)
+{
+	std::cout << information << std::endl;
+
+	std::cout << "Capacity(Vector_of_data): " << std::endl;
+	std::cout << Vector_of_data.capacity() << std::endl;
+
+	std::cout << "Capacity(Vector_of_data[0]): " << std::endl;
+	std::cout << Vector_of_data[0].capacity() << std::endl;
+
+	std::cout << "Capacity(Vector_of_data[1]): " << std::endl;
+	std::cout << Vector_of_data[1].capacity() << std::endl;
+
+	std::cout << "Capacity(Vector_of_data[2]): " << std::endl;
+	std::cout << Vector_of_data[2].capacity() << std::endl;
+}

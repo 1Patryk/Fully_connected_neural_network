@@ -6,6 +6,7 @@
 #include <chrono>				// time executive in program 
 #include <ctime>				// ...
 #include <algorithm>			// min - max scaler
+#include <string>
 
 class Fully_connected_network
 {
@@ -23,7 +24,7 @@ public:
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
-	std::vector<float>* Vector_of_data;
+	std::vector<std::vector<float>>* Vector_of_data;
 	std::vector<float>* Vector_of_weights;
 	std::vector<float>* Vector_of_neuron_values;
 	std::vector<float>* MSE_value_vector_X;
@@ -39,7 +40,7 @@ public:
 	void Display_results_counting_time(start Start, stop Stop, name name_of_function);
 
 	// reading input data from file
-	void Read_data_MLP(std::vector<float>& Vector_of_data);
+	void Read_data_MLP(std::vector<std::vector<float>>& Vector_of_data);
 
 	// write output data to file
 	void Write_data_MLP(
@@ -70,4 +71,10 @@ public:
 
 	// display results in main function
 	void Display_results_for_MLP();
+
+
+
+	// Diagnostic functions
+
+	void Print_Vector_of_data(std::vector<std::vector<float>>& Vector_of_data, std::string information);
 };

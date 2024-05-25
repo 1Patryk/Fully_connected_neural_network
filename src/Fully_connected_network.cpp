@@ -2,17 +2,19 @@
 
 Fully_connected_network::Fully_connected_network()
 {
-	Bias = 1.0f;
-	Beta = 1.0f;
+	Diag = false;
 	Amount_of_data = 4;
 	Number_of_epochs = 10;
 	Number_of_input = 2;
 	Number_of_output = 1;
+	inp_out = (Number_of_input + Number_of_output);
 	Number_of_hidden_layers = 1;
 	Number_of_weights = 2;
 	Total_number_of_neurons = 1;
+	Bias = 1.0f;
+	Beta = 1.0f;
 	Learning_rate_factor = 1.0f;
-	Open_filename = "Add_100.txt";
+	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
 	Vector_of_data = new std::vector<std::vector<float>>(0);
 	Vector_of_weights = new std::vector<float>(Number_of_weights);
@@ -21,12 +23,46 @@ Fully_connected_network::Fully_connected_network()
 	MSE_value_vector_Y = new std::vector<float>(Number_of_epochs);
 }
 
-template<class start, class stop, class name>
-void Fully_connected_network::Display_results_counting_time(start Start, stop Stop, name name_of_function)
+template<class start, class stop, class name, class unit>
+void Fully_connected_network::Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time)
 {
-	std::cout << "Calculations " << name_of_function << " lasted: "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(Stop - Start).count()
-		<< " millisecond/s\n";
+	switch (unit_of_time)
+	{
+	case(0):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::nanoseconds>(Stop - Start).count()
+			<< " nanosecond/s\n";
+		break;
+
+	case(1):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::microseconds>(Stop - Start).count()
+			<< " microsecond/s\n";
+		break;
+	case(2):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(Stop - Start).count()
+			<< " milisecond/s\n";
+		break;
+	case(3):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::seconds>(Stop - Start).count()
+			<< " second/s\n";
+		break;
+	case(4):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::minutes>(Stop - Start).count()
+			<< " minute/s\n";
+		break;
+	case(5):
+		std::cout << "Calculations " << name_of_function << " lasted: "
+			<< std::chrono::duration_cast<std::chrono::hours>(Stop - Start).count()
+			<< " hour/s\n";
+		break;
+	default:
+		std::cout << "Invalid unit of time! " << std::endl;
+		break;
+	}
 }
 
 void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vector_of_data)
@@ -37,10 +73,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 	// ifstream only can open file
 	std::ifstream file("../../../Data/" + Open_filename);
 
-	int inp_out = (Number_of_input + Number_of_output);
-	float one_piece_of_data = 0.0f;
-
-	
+	float One_piece_of_data = 0.0f;
 
 	if (file)
 	{
@@ -51,22 +84,28 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 			Vector_of_data.push_back(vec);
 		}
 
-		std::string info = "[Before main loop]";
-
-		Print_Vector_of_data(Vector_of_data, info);
+		// Diagnostic function
+		if (Diag == true)
+		{
+			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[Before main loop]");
+		}
+		
 
 		for (int i = 0; !file.eof(); i++)
 		{
 			for (int j = 0; j < inp_out; j++)
 			{
-				file >> one_piece_of_data;
-				Vector_of_data[j].push_back(one_piece_of_data);
+				file >> One_piece_of_data;
+				Vector_of_data[j].push_back(One_piece_of_data);
 				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
 			}
 		}
 
-		info = "[After main loop, before shrink]";
-		Print_Vector_of_data(Vector_of_data, info);
+		// Diagnostic function
+		if (Diag == true)
+		{
+			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After main loop, before shrink]");
+		}
 
 		Vector_of_data.shrink_to_fit();
 
@@ -74,9 +113,12 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		{
 			Vector_of_data[i].shrink_to_fit();
 		}
-		
-		info = "[After shrink]";
-		Print_Vector_of_data(Vector_of_data, info);
+
+		// Diagnostic function
+		if (Diag == true)
+		{
+			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After shrink]");
+		}
 
 		file.close();
 	}
@@ -86,21 +128,17 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		exit(3);
 	}
 
-
-	for (int i = 0; i < inp_out; i++)
+	// Diagnostic function
+	if (Diag == true)
 	{
-		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
-		{
-			std::cout << "Vector_of_data[" << i << "][" << j << "]: " << Vector_of_data[i][j] << std::endl;
-		}
+		Print_the_vector_of_data(Vector_of_data);
 	}
 
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Read_data_MLP");
+	Display_results_counting_time(Start, Stop, "Read_data_MLP", 2);
 }
-
 
 void Fully_connected_network::Write_data_MLP(
 	std::vector<float>& MSE_value_vector_X,
@@ -109,8 +147,8 @@ void Fully_connected_network::Write_data_MLP(
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
-	// ifstream only can open file
-	std::ofstream file(Save_filename);
+	// ofstream only can write file
+	std::ofstream file("../../../Output_data_(MSE)/" + Save_filename);
 
 	if (file)
 	{
@@ -132,30 +170,33 @@ void Fully_connected_network::Write_data_MLP(
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Write_data_MLP");
+	Display_results_counting_time(Start, Stop, "Write_data_MLP", 2);
 }
 
-/*
-void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<float>>* Vector_of_data)
+void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	float max = *std::max_element(Vector_of_data.begin(), Vector_of_data.end());
-	float min = *std::min_element(Vector_of_data.begin(), Vector_of_data.end());
-
-	for (int i = 0; i < Amount_of_data; ++i)
+	for (int i = 0; i < inp_out; i++)
 	{
-		Vector[i] = (Vector[i] - min) / (max - min);
-	}
+		float max = *std::max_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
+		float min = *std::min_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
 
-	for (int i = 0; i < Amount_of_data; ++i)
-	{
-		std::cout << "Wektor: " << Vector[i] << std::endl;
+		for (int j = 0; j < Vector_of_data[i].capacity(); ++j)
+		{
+			Vector_of_data[i][j] = (Vector_of_data[i][j] - min) / (max - min);
+		}
+
+		// Diagnostic function
+		if (Diag == true)
+		{
+			Print_the_MIN_MAX_and_individual_values(Vector_of_data, min, max, i);
+		}
 	}
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling");
+	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling", 2);
 }
 
 /*
@@ -302,8 +343,8 @@ void Fully_connected_network::Display_results_for_MLP()
 }
 */
 
-
-void Fully_connected_network::Print_Vector_of_data(std::vector<std::vector<float>>& Vector_of_data, std::string information)
+template<class Vec_of_data, class info>
+void Fully_connected_network::Print_the_capacity_of_the_vector_of_data(Vec_of_data Vector_of_data, info information)
 {
 	std::cout << information << std::endl;
 
@@ -318,4 +359,28 @@ void Fully_connected_network::Print_Vector_of_data(std::vector<std::vector<float
 
 	std::cout << "Capacity(Vector_of_data[2]): " << std::endl;
 	std::cout << Vector_of_data[2].capacity() << std::endl;
+}
+
+void Fully_connected_network::Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data)
+{
+	for (int i = 0; i < inp_out; i++)
+	{
+		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
+		{
+			std::cout << "Vector_of_data[" << i << "][" << j << "]: " << Vector_of_data[i][j] << std::endl;
+		}
+	}
+}
+
+void Fully_connected_network::Print_the_MIN_MAX_and_individual_values(std::vector<std::vector<float>>& Vector_of_data, 
+	float min, float max, int iterator)
+{
+	std::cout << "MAX value Vector_of_data[" << iterator << "] = " << max << std::endl;
+	std::cout << "MIN value Vector_of_data[" << iterator << "] = " << min << std::endl;
+	std::cout << "Individual value Vector_of_data[" << iterator << "]: " << std::endl;
+
+	for (int j = 0; j < Vector_of_data[iterator].capacity(); ++j)
+	{
+		std::cout << "No[" << j + 1 << "]: " << Vector_of_data[iterator][j] << std::endl;
+	}
 }

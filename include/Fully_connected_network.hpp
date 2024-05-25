@@ -12,15 +12,17 @@ class Fully_connected_network
 {
 	//private:
 public:
-	float Bias;
-	float Beta;
+	bool Diag;												// Diagnostic mode
 	int Amount_of_data;
 	int Number_of_epochs;
 	int Number_of_input;
 	int Number_of_output;
+	int inp_out = (Number_of_input + Number_of_output);
 	int Number_of_hidden_layers;
 	int Number_of_weights;
 	int Total_number_of_neurons;
+	float Bias;
+	float Beta;
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
@@ -36,8 +38,12 @@ public:
 	Fully_connected_network();
 
 	// display times wich during from start to end function 
-	template<class start, class stop, class name>
-	void Display_results_counting_time(start Start, stop Stop, name name_of_function);
+	// auto Start, Stop = value now() function of chrono library
+	// auto name = ID of this counting time
+	// const char[] = unit (Unit of time) : 0 - nano, 1 - micro, 
+	// 2 - mili, 3 - seconds, 4 - minutes, 5 - hours
+	template<class start, class stop, class name, class unit>
+	void Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time);
 
 	// reading input data from file
 	void Read_data_MLP(std::vector<std::vector<float>>& Vector_of_data);
@@ -48,9 +54,9 @@ public:
 		std::vector<float>& MSE_value_vector_Y);
 
 	// values from 0 to 1
-	void Min_max_unipolar_scaling(std::vector<std::vector<float>>* Vector_of_data);
+	void Min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
-	// values from 0 to -1
+	// values from -1 to 1
 	void Min_max_bipolar_scaling(std::vector<std::vector<float>>* Vector_of_data);
 
 	void Reversal_min_max_unipolar_scaling();
@@ -76,5 +82,11 @@ public:
 
 	// Diagnostic functions
 
-	void Print_Vector_of_data(std::vector<std::vector<float>>& Vector_of_data, std::string information);
+	template<class Vec_of_data, class info>
+	void Print_the_capacity_of_the_vector_of_data(Vec_of_data Vector_of_data, info information);
+
+	void Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data);
+
+	void Print_the_MIN_MAX_and_individual_values(std::vector<std::vector<float>>& Vector_of_data,
+		float min, float max, int iterator);
 };

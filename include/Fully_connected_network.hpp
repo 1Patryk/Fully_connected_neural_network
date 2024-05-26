@@ -13,12 +13,11 @@ class Fully_connected_network
 	//private:
 public:
 	bool Diag;												// Diagnostic mode
-	int Amount_of_data;
-	int Number_of_epochs;
-	int Number_of_input;
-	int Number_of_output;
-	int inp_out = (Number_of_input + Number_of_output);
-	int Number_of_hidden_layers;
+	int Amount_of_data;										// delete this?
+	int Number_of_epochs;									// user specifed
+	int Number_of_input;									// defined in txt. file header
+	int Number_of_output;									// defined in txt. file header
+	int Number_of_hidden_layers;							// user specifed
 	int Number_of_weights;
 	int Total_number_of_neurons;
 	float Bias;
@@ -59,6 +58,7 @@ public:
 	// values from -1 to 1
 	void Min_max_bipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
+	// ???
 	void Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
 	// for first weights wector

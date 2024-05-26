@@ -5,9 +5,8 @@ Fully_connected_network::Fully_connected_network()
 	Diag = false;
 	Amount_of_data = 4;
 	Number_of_epochs = 10;
-	Number_of_input = 2;
-	Number_of_output = 1;
-	inp_out = (Number_of_input + Number_of_output);
+	Number_of_input = 0;
+	Number_of_output = 0;
 	Number_of_hidden_layers = 1;
 	Number_of_weights = 2;
 	Total_number_of_neurons = 1;
@@ -77,8 +76,17 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 
 	if (file)
 	{
+		// read 2 int of data which specifying amound of input and output
+		file >> One_piece_of_data;
+		Number_of_input = One_piece_of_data;
+		file >> One_piece_of_data;
+		Number_of_output = One_piece_of_data;
+
+		std::cout << Number_of_input << std::endl;
+		std::cout << Number_of_output << std::endl;
+
 		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
-		for (int i = 0; i < inp_out; i++)
+		for (int i = 0; i < (Number_of_input + Number_of_output); i++)
 		{
 			std::vector<float> vec(0, 0);
 			Vector_of_data.push_back(vec);
@@ -93,7 +101,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 
 		for (int i = 0; !file.eof(); i++)
 		{
-			for (int j = 0; j < inp_out; j++)
+			for (int j = 0; j < (Number_of_input + Number_of_output); j++)
 			{
 				file >> One_piece_of_data;
 				Vector_of_data[j].push_back(One_piece_of_data);
@@ -109,7 +117,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 
 		Vector_of_data.shrink_to_fit();
 
-		for (int i = 0; i < inp_out; i++)
+		for (int i = 0; i < (Number_of_input + Number_of_output); i++)
 		{
 			Vector_of_data[i].shrink_to_fit();
 		}
@@ -177,7 +185,7 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<f
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	for (int i = 0; i < inp_out; i++)
+	for (int i = 0; i < (Number_of_input + Number_of_output); i++)
 	{
 		float max = *std::max_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
 		float min = *std::min_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
@@ -203,7 +211,7 @@ void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<fl
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	for (int i = 0; i < inp_out; i++)
+	for (int i = 0; i < (Number_of_input + Number_of_output); i++)
 	{
 		float max = *std::max_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
 		float min = *std::min_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
@@ -231,8 +239,7 @@ void Fully_connected_network::Reversal_min_max_unipolar_scaling(std::vector<std:
 }
 
 /*
-
-void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector)
+void Fully_connected_network::Pseudo_random_numbers(std::vector<std::vector<float>>& Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -367,7 +374,7 @@ void Fully_connected_network::Print_the_capacity_of_the_vector_of_data(Vec_of_da
 
 void Fully_connected_network::Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data)
 {
-	for (int i = 0; i < inp_out; i++)
+	for (int i = 0; i < (Number_of_input + Number_of_output); i++)
 	{
 		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
 		{

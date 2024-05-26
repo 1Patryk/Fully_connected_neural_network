@@ -8,7 +8,7 @@ int main()
 
 	DATA.Diag = true;		// Diagnostic mode						
 	DATA.Read_data_MLP(*DATA.Vector_of_data);
-	DATA.Min_max_unipolar_scaling(*DATA.Vector_of_data);
+	DATA.Min_max_bipolar_scaling(*DATA.Vector_of_data);
 
 
 

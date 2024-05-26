@@ -199,34 +199,38 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<f
 	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling", 2);
 }
 
-/*
-
-void Fully_connected_network::Min_max_bipolar_scaling(std::vector<float>& Vector)
+void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	float max = *max_element(Vector.begin(), Vector.end());
-	float min = *min_element(Vector.begin(), Vector.end());
-
-	for (int i = 0; i < Amount_of_data; ++i)
+	for (int i = 0; i < inp_out; i++)
 	{
-		Vector[i] = 2 * ((Vector[i] - min) / (max - min)) - 1;
-	}
+		float max = *std::max_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
+		float min = *std::min_element(Vector_of_data[i].begin(), Vector_of_data[i].end());
 
-	for (int i = 0; i < Amount_of_data; ++i)
-	{
-		std::cout << "Wektor: " << Vector[i] << std::endl;
-	}
+		for (int j = 0; j < Vector_of_data[i].capacity(); ++j)
+		{
+			Vector_of_data[i][j] = 2 * ((Vector_of_data[i][j] - min) / (max - min)) - 1;
+		}
 
+		// Diagnostic function
+		if (Diag == true)
+		{
+			Print_the_MIN_MAX_and_individual_values(Vector_of_data, min, max, i);
+		}
+	}
+	
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling");
+	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling", 2);
 }
 
 void Fully_connected_network::Reversal_min_max_unipolar_scaling()
 {
 
 }
+
+/*
 
 void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector)
 {

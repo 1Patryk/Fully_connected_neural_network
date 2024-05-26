@@ -59,7 +59,7 @@ public:
 	// values from -1 to 1
 	void Min_max_bipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
-	void Reversal_min_max_unipolar_scaling();
+	void Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
 	// for first weights wector
 	void Pseudo_random_numbers(std::vector<std::vector<float>>& Vector_of_data);

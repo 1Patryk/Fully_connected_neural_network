@@ -225,7 +225,7 @@ void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<fl
 	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling", 2);
 }
 
-void Fully_connected_network::Reversal_min_max_unipolar_scaling()
+void Fully_connected_network::Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
 {
 
 }

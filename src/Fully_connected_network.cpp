@@ -7,17 +7,19 @@ Fully_connected_network::Fully_connected_network()
 	Number_of_epochs = 10;
 	Number_of_input = 0;
 	Number_of_output = 0;
-	Number_of_hidden_layers = 1;
-	Number_of_weights = 2;
+	Number_of_hidden_layers = 3;
+	Number_of_weights = 0;
 	Total_number_of_neurons = 1;
-	Bias = 1.0f;
 	Beta = 1.0f;
 	Learning_rate_factor = 1.0f;
 	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
+	Number_of_neuros_in_hidden_layers = new std::vector<int>{ 5, 3, 8 };
 	Vector_of_data = new std::vector<std::vector<float>>(0);
-	Vector_of_weights = new std::vector<float>(Number_of_weights);
-	Vector_of_neuron_values = new std::vector<float>(Total_number_of_neurons);
+	Vector_of_neuron_values = new std::vector<std::vector<float>> (Number_of_hidden_layers + 2);
+	Vector_of_weights = new std::vector<float>(0, 0);
+	Vector_of_bias_weights = new std::vector<float>(0, 0);
+	Range_of_pseudo_numbers_values = new std::vector<float>{ -0.5, 0.5};
 	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
 	MSE_value_vector_Y = new std::vector<float>(Number_of_epochs);
 }
@@ -81,9 +83,6 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		Number_of_input = One_piece_of_data;
 		file >> One_piece_of_data;
 		Number_of_output = One_piece_of_data;
-
-		std::cout << Number_of_input << std::endl;
-		std::cout << Number_of_output << std::endl;
 
 		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
 		for (int i = 0; i < (Number_of_input + Number_of_output); i++)
@@ -238,23 +237,131 @@ void Fully_connected_network::Reversal_min_max_unipolar_scaling(std::vector<std:
 
 }
 
-/*
-void Fully_connected_network::Pseudo_random_numbers(std::vector<std::vector<float>>& Vector_of_data)
+void Fully_connected_network::Create_vector_of_neurons_values(std::vector<std::vector<float>>& Vector_of_neuron_values,
+	std::vector <int>& Number_of_neuros_in_hidden_layers)
+{
+	// iterator
+	int iter = 0;
+
+	// input layer of neurons
+	for (int i = 0; i < Number_of_input; i++)
+	{
+		Vector_of_neuron_values[iter].push_back(0);
+	}
+
+	iter += 1;
+
+	// hidden layers of neurons
+	for (iter; iter <= Number_of_hidden_layers; iter++)
+	{
+		for (int j = 0; j < Number_of_neuros_in_hidden_layers[iter - 1]; j++)
+		{
+			Vector_of_neuron_values[iter].push_back(0);
+		}
+	}
+
+	// output layer of neurons
+	for (int i = 0; i < Number_of_output; i++)
+	{
+		Vector_of_neuron_values[iter].push_back(0);
+	}
+	
+	// capacity = amount of neurons
+	Vector_of_neuron_values.shrink_to_fit();
+	for (int i = 0; i < Vector_of_neuron_values.capacity(); i++)
+	{
+		Vector_of_neuron_values[i].shrink_to_fit();
+	}
+
+	// Diagnostic function
+	if (Diag == true)
+	{
+		Capacity_of_Vector_of_neuron_values(Vector_of_neuron_values, iter);
+	}
+}
+
+void Fully_connected_network::Create_vector_of_weights(std::vector<float>& Vector_of_weights, 
+	std::vector<std::vector<float>>& Vector_of_neuron_values)
+{
+	int Add = 0;
+
+	// weights of neurons
+	for (int i = 0; i < Vector_of_neuron_values.capacity() - 1; i++)
+	{
+		Add += Vector_of_neuron_values[i].capacity() * 
+			   Vector_of_neuron_values[i + 1].capacity();
+	}
+	
+	// create vector of weights
+	for (int i = 0; i < Add; i++)
+	{
+		Vector_of_weights.push_back(0);
+	}
+
+	Vector_of_weights.shrink_to_fit();
+
+	// Diagnostic function
+	if (Diag == true)
+	{
+		std::cout << "Vector_of_weights capacity: " << Vector_of_weights.capacity() << std::endl;
+		std::cout << "Number of weights: " << Add << std::endl;
+	}
+}
+
+void Fully_connected_network::Create_vector_of_bias(std::vector<float>& Vector_of_bias_weights,
+	std::vector<std::vector<float>>& Vector_of_neuron_values)
+{
+	// bias weights = amount of hidden layer neurons
+	int Add = 0;
+	for (int i = 0; i < Vector_of_neuron_values.capacity(); i++)
+	{
+		Add += Vector_of_neuron_values[i].capacity();
+	}
+
+	Add -= (Number_of_input + Number_of_output);
+
+	for (int i = 0; i < Add; i++)
+	{
+		Vector_of_bias_weights.push_back(0);
+	}
+
+	Vector_of_bias_weights.shrink_to_fit();
+
+	// Diagnostic function
+	if (Diag == true)
+	{
+		std::cout << "Amound of bias: " << Add << std::endl;
+	}
+}
+
+void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector_of_weights,
+	std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	srand(static_cast<unsigned int>(time(NULL)));
+	std::random_device rd;  // Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+	std::uniform_real_distribution<> dis(Range_of_pseudo_numbers_values[0], 
+		Range_of_pseudo_numbers_values[1]);
 
-	for (int i = 0; i < Number_of_weights; ++i)
+	for (int i = 0; i < Vector_of_weights.capacity(); ++i)
 	{
-		Vector[i] = (float)(rand() % 100) / 100;
-		std::cout << "Iterations number: " << i << " " << Vector[i] << std::endl;
+		Vector_of_weights[i] = dis(gen);
+		std::cout << "Vector_of_weights[" << i << "]: " << Vector_of_weights[i] << std::endl;
+	}
+
+	for (int i = 0; i < Vector_of_bias_weights.capacity(); ++i)
+	{
+		Vector_of_bias_weights[i] = dis(gen);
+		std::cout << "Vector_of_bias_weights[" << i << "]: " << Vector_of_weights[i] << std::endl;
 	}
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers");
+	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers", 2);
 }
+
+/*
 
 void Fully_connected_network::Calculating_the_network_MLP(std::vector<float>& Input_x1,
 	std::vector<float>& Input_x2,
@@ -393,5 +500,16 @@ void Fully_connected_network::Print_the_MIN_MAX_and_individual_values(std::vecto
 	for (int j = 0; j < Vector_of_data[iterator].capacity(); ++j)
 	{
 		std::cout << "No[" << j + 1 << "]: " << Vector_of_data[iterator][j] << std::endl;
+	}
+}
+
+void Fully_connected_network::Capacity_of_Vector_of_neuron_values(std::vector<std::vector<float>>& Vector_of_neuron_values,
+	int iterator)
+{
+	std::cout << "Capacity of Vector_of_neuron_values:" << Vector_of_neuron_values.capacity() << std::endl;
+	for (int i = 0; i <= iterator; ++i)
+	{
+		std::cout << "Capacity of Vector_of_neuron_values[" << i << "] = " <<
+			Vector_of_neuron_values[i].capacity() << std::endl;
 	}
 }

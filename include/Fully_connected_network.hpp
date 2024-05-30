@@ -7,6 +7,7 @@
 #include <ctime>				// ...
 #include <algorithm>			// min - max scaler
 #include <string>
+#include <random>				// pseudo random numbers
 
 class Fully_connected_network
 {
@@ -20,14 +21,16 @@ public:
 	int Number_of_hidden_layers;							// user specifed
 	int Number_of_weights;
 	int Total_number_of_neurons;
-	float Bias;
 	float Beta;
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
+	std::vector <int>* Number_of_neuros_in_hidden_layers;
 	std::vector<std::vector<float>>* Vector_of_data;
+	std::vector<std::vector<float>>* Vector_of_neuron_values;
 	std::vector<float>* Vector_of_weights;
-	std::vector<float>* Vector_of_neuron_values;
+	std::vector<float>* Vector_of_bias_weights;
+	std::vector<float>* Range_of_pseudo_numbers_values;
 	std::vector<float>* MSE_value_vector_X;
 	std::vector<float>* MSE_value_vector_Y;
 
@@ -61,8 +64,19 @@ public:
 	// ???
 	void Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
+	// create vector of neuron values
+	void Create_vector_of_neurons_values(std::vector<std::vector<float>>& Vector_of_neuron_values, 
+		std::vector <int>& Number_of_neuros_in_hidden_layers);
+
+	void Create_vector_of_weights(std::vector<float>& Vector_of_weights, 
+		std::vector<std::vector<float>>& Vector_of_neuron_values);
+
+	void Create_vector_of_bias(std::vector<float>& Vector_of_bias_weights,
+		std::vector<std::vector<float>>& Vector_of_neuron_values);
+
 	// for first weights wector
-	void Pseudo_random_numbers(std::vector<std::vector<float>>& Vector_of_data);
+	void Pseudo_random_numbers(std::vector<float>& Vector_of_weights,
+		std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values);
 
 	// forward and back propagation
 	void Calculating_the_network_MLP(std::vector<std::vector<float>>* Vector_of_data,
@@ -89,4 +103,7 @@ public:
 
 	void Print_the_MIN_MAX_and_individual_values(std::vector<std::vector<float>>& Vector_of_data,
 		float min, float max, int iterator);
+
+	void Capacity_of_Vector_of_neuron_values(std::vector<std::vector<float>>& Vector_of_neuron_values,
+		int iterator);
 };

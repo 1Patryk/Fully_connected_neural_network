@@ -9,23 +9,26 @@ Fully_connected_network::Fully_connected_network()
 	Number_of_output = 0;
 	Number_of_hidden_layers = 3;
 	Number_of_weights = 0;
-	Total_number_of_neurons = 1;
+	Total_number_of_neurons = 0;
 	Beta = 1.0f;
 	Learning_rate_factor = 1.0f;
-	Open_filename = "Add_1000.txt";
+	Open_filename = "Add_100.txt";
 	Save_filename = "Out_date.txt";
-	Number_of_neuros_in_hidden_layers = new std::vector<int>{ 5, 3, 8 };
+	Number_of_neurons_in_hidden_layers = new std::vector<int>{ 5, 3, 8 };
 	Vector_of_data = new std::vector<std::vector<float>>(0);
 	Vector_of_neuron_values = new std::vector<std::vector<float>> (Number_of_hidden_layers + 2);
 	Vector_of_weights = new std::vector<float>(0, 0);
 	Vector_of_bias_weights = new std::vector<float>(0, 0);
-	Range_of_pseudo_numbers_values = new std::vector<float>{ -0.5, 0.5};
+	Range_of_pseudo_numbers_values = new std::vector<float>{ -0.5, 0.5 };
+	Vector_of_error_values = new std::vector<float>(0, 0);
 	MSE_value_vector_X = new std::vector<float>(Number_of_epochs);
 	MSE_value_vector_Y = new std::vector<float>(Number_of_epochs);
 }
 
 template<class start, class stop, class name, class unit>
-void Fully_connected_network::Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time)
+void Fully_connected_network::Display_results_counting_time(
+	start Start, stop Stop, name name_of_function, 
+	unit unit_of_time)
 {
 	switch (unit_of_time)
 	{
@@ -80,9 +83,9 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 	{
 		// read 2 int of data which specifying amound of input and output
 		file >> One_piece_of_data;
-		Number_of_input = One_piece_of_data;
+		Fully_connected_network::Number_of_input = One_piece_of_data;
 		file >> One_piece_of_data;
-		Number_of_output = One_piece_of_data;
+		Fully_connected_network::Number_of_output = One_piece_of_data;
 
 		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
 		for (int i = 0; i < (Number_of_input + Number_of_output); i++)
@@ -92,7 +95,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		}
 
 		// Diagnostic function
-		if (Diag == true)
+		if (Diag == true || false)
 		{
 			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[Before main loop]");
 		}
@@ -109,7 +112,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		}
 
 		// Diagnostic function
-		if (Diag == true)
+		if (Diag == true || false)
 		{
 			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After main loop, before shrink]");
 		}
@@ -122,7 +125,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		}
 
 		// Diagnostic function
-		if (Diag == true)
+		if (Diag == true || false)
 		{
 			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After shrink]");
 		}
@@ -180,7 +183,8 @@ void Fully_connected_network::Write_data_MLP(
 	Display_results_counting_time(Start, Stop, "Write_data_MLP", 2);
 }
 
-void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
+void Fully_connected_network::Min_max_unipolar_scaling(
+	std::vector<std::vector<float>>& Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -195,7 +199,7 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<f
 		}
 
 		// Diagnostic function
-		if (Diag == true)
+		if (Diag == true || false)
 		{
 			Print_the_MIN_MAX_and_individual_values(Vector_of_data, min, max, i);
 		}
@@ -206,7 +210,8 @@ void Fully_connected_network::Min_max_unipolar_scaling(std::vector<std::vector<f
 	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling", 2);
 }
 
-void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
+void Fully_connected_network::Min_max_bipolar_scaling(
+	std::vector<std::vector<float>>& Vector_of_data)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -221,7 +226,7 @@ void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<fl
 		}
 
 		// Diagnostic function
-		if (Diag == true)
+		if (Diag == true || false)
 		{
 			Print_the_MIN_MAX_and_individual_values(Vector_of_data, min, max, i);
 		}
@@ -232,12 +237,14 @@ void Fully_connected_network::Min_max_bipolar_scaling(std::vector<std::vector<fl
 	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling", 2);
 }
 
-void Fully_connected_network::Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data)
+void Fully_connected_network::Reversal_min_max_unipolar_scaling(
+	std::vector<std::vector<float>>& Vector_of_data)
 {
 
 }
 
-void Fully_connected_network::Create_vector_of_neurons_values(std::vector<std::vector<float>>& Vector_of_neuron_values,
+void Fully_connected_network::Create_vector_of_neurons_values(
+	std::vector<std::vector<float>>& Vector_of_neuron_values,
 	std::vector <int>& Number_of_neuros_in_hidden_layers)
 {
 	// iterator
@@ -274,13 +281,14 @@ void Fully_connected_network::Create_vector_of_neurons_values(std::vector<std::v
 	}
 
 	// Diagnostic function
-	if (Diag == true)
+	if (Diag == true || false)
 	{
 		Capacity_of_Vector_of_neuron_values(Vector_of_neuron_values, iter);
 	}
 }
 
-void Fully_connected_network::Create_vector_of_weights(std::vector<float>& Vector_of_weights, 
+void Fully_connected_network::Create_vector_of_weights(
+	std::vector<float>& Vector_of_weights, 
 	std::vector<std::vector<float>>& Vector_of_neuron_values)
 {
 	int Add = 0;
@@ -301,14 +309,15 @@ void Fully_connected_network::Create_vector_of_weights(std::vector<float>& Vecto
 	Vector_of_weights.shrink_to_fit();
 
 	// Diagnostic function
-	if (Diag == true)
+	if (Diag == true || false)
 	{
 		std::cout << "Vector_of_weights capacity: " << Vector_of_weights.capacity() << std::endl;
 		std::cout << "Number of weights: " << Add << std::endl;
 	}
 }
 
-void Fully_connected_network::Create_vector_of_bias(std::vector<float>& Vector_of_bias_weights,
+void Fully_connected_network::Create_vector_of_bias(
+	std::vector<float>& Vector_of_bias_weights,
 	std::vector<std::vector<float>>& Vector_of_neuron_values)
 {
 	// bias weights = amount of hidden layer neurons
@@ -318,7 +327,7 @@ void Fully_connected_network::Create_vector_of_bias(std::vector<float>& Vector_o
 		Add += Vector_of_neuron_values[i].capacity();
 	}
 
-	Add -= (Number_of_input + Number_of_output);
+	Add -= (Number_of_input);
 
 	for (int i = 0; i < Add; i++)
 	{
@@ -328,14 +337,16 @@ void Fully_connected_network::Create_vector_of_bias(std::vector<float>& Vector_o
 	Vector_of_bias_weights.shrink_to_fit();
 
 	// Diagnostic function
-	if (Diag == true)
+	if (Diag == true || false)
 	{
 		std::cout << "Amound of bias: " << Add << std::endl;
 	}
 }
 
-void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector_of_weights,
-	std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values)
+void Fully_connected_network::Pseudo_random_numbers(
+	std::vector<float>& Vector_of_weights,
+	std::vector<float>& Vector_of_bias_weights, 
+	std::vector<float>& Range_of_pseudo_numbers_values)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
@@ -347,13 +358,17 @@ void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector_o
 	for (int i = 0; i < Vector_of_weights.capacity(); ++i)
 	{
 		Vector_of_weights[i] = dis(gen);
-		std::cout << "Vector_of_weights[" << i << "]: " << Vector_of_weights[i] << std::endl;
 	}
 
 	for (int i = 0; i < Vector_of_bias_weights.capacity(); ++i)
 	{
 		Vector_of_bias_weights[i] = dis(gen);
-		std::cout << "Vector_of_bias_weights[" << i << "]: " << Vector_of_weights[i] << std::endl;
+	}
+
+	// Diagnostic function
+	if (Diag == true || false)
+	{
+		Print_pseudo_random_numbers(Vector_of_weights, Vector_of_bias_weights);
 	}
 
 	auto Stop = std::chrono::high_resolution_clock::now();
@@ -361,41 +376,213 @@ void Fully_connected_network::Pseudo_random_numbers(std::vector<float>& Vector_o
 	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers", 2);
 }
 
-/*
-
-void Fully_connected_network::Calculating_the_network_MLP(std::vector<float>& Input_x1,
-	std::vector<float>& Input_x2,
-	std::vector<float>& Output_y1,
+void Fully_connected_network::Calculating_the_network_MLP(
+	std::vector <int>& Number_of_neurons_in_hidden_layers,
+	std::vector<std::vector<float>>& Vector_of_data,
+	std::vector<std::vector<float>>& Vector_of_neuron_values,
 	std::vector<float>& Vector_of_weights,
-	std::vector<float>& Vector_of_neuron_values,
+	std::vector<float>& Vector_of_bias_weights,
+	std::vector<float>& Vector_of_error_values,
 	std::vector<float>& MSE_value_vector_X,
-	std::vector<float>& MSE_value_vector_Y,
-	float& Bias)
+	std::vector<float>& MSE_value_vector_Y)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	// capacity reduction
-	MSE_value_vector_X.shrink_to_fit();
-	MSE_value_vector_Y.shrink_to_fit();
-
-	Read_data_MLP(Input_x1, Input_x2, Output_y1);
+	Read_data_MLP(Vector_of_data);
 
 	// changes for user interface (uniporar/bipolar)
-	Min_max_unipolar_scaling(Input_x1);
-	Min_max_unipolar_scaling(Input_x2);
-	Min_max_unipolar_scaling(Output_y1);
+	Min_max_unipolar_scaling(Vector_of_data);
+	Create_vector_of_neurons_values(Vector_of_neuron_values, Number_of_neurons_in_hidden_layers);
+	Create_vector_of_weights(Vector_of_weights, Vector_of_neuron_values);
+	Create_vector_of_bias(Vector_of_bias_weights, Vector_of_neuron_values);
 
-	Pseudo_random_numbers(Vector_of_weights);
+	Pseudo_random_numbers(Vector_of_weights, Vector_of_bias_weights, *Range_of_pseudo_numbers_values);
+
+	// create errors vector
+
+	Total_number_of_neurons += Number_of_input + Number_of_output;
+
+	for (int i = 0; i < Number_of_hidden_layers; i++)
+	{
+		Total_number_of_neurons += Number_of_neurons_in_hidden_layers[i];
+	}
+
+	Vector_of_error_values.resize(Total_number_of_neurons - Number_of_input);
 
 	float MSE = 0;
 	int e = 0;
 	int i = 0;
+	int weight = 0;
+	int bias = 0;
+	int prev_layer = 0;
+	int neu_iter = 0;
+	int error_iter = 0;
 
 	for (e = 0 ; e < Number_of_epochs; ++e)
 	{
 		MSE = 0;
 
-		for (i = 0 ; i < Amount_of_data; ++i)
+		for (i = 0 ; i < Vector_of_data[0].capacity(); ++i)
+		{
+			// forward propagation
+			// 
+			// input layer
+
+			for (int j = 0; j < Vector_of_neuron_values[0].capacity(); j++)
+			{
+				Vector_of_neuron_values[0][j] = Unipolar_sigmoidal_function(Vector_of_data[j][i]);
+
+				// Diagnostic function
+				if (Diag == true || false)
+				{
+					std::cout << "Vector_of_neuron_values[0][" << j << "]: " <<
+						Vector_of_neuron_values[0][j] << std::endl;
+				}
+			}
+
+			// hidden layers
+			weight = 0;
+			bias = 0;
+			for (int k = 1; k < Number_of_hidden_layers + 1; k++)
+			{
+				for (int l = 0; l < Vector_of_neuron_values[k].capacity(); l++)
+				{
+					for (int m = 0; m < Vector_of_neuron_values[k - 1].capacity(); m++)
+					{
+						Vector_of_neuron_values[k][l] +=
+							((Vector_of_neuron_values[k - 1][m] * Vector_of_weights[weight]) +
+							Vector_of_bias_weights[bias]);
+						weight += 1;
+					}
+					bias += 1;
+					Vector_of_neuron_values[k][l] = Unipolar_sigmoidal_function(
+						Vector_of_neuron_values[k][l]);
+					
+					// Diagnostic function
+					if (Diag == true || false)
+					{
+						std::cout << "Vector_of_neuron_values[" <<
+							k << "][" << l << "]: " <<
+							Vector_of_neuron_values[k][l] << std::endl;
+					}
+				}
+			}
+			
+			// output layer
+			prev_layer = 1 + Number_of_hidden_layers;		// previous layers
+			for (int n = 0; n < Number_of_output; n++)
+			{
+				for (int o = 0; o < Vector_of_neuron_values[prev_layer].capacity(); o++)
+				{
+					Vector_of_neuron_values[prev_layer][n] += 
+						((Vector_of_neuron_values[prev_layer - 1][o] * Vector_of_weights[weight]) +
+						Vector_of_bias_weights[bias]);
+					weight += 1;
+					bias += 1;
+				}
+				Vector_of_neuron_values[prev_layer][n] = Unipolar_sigmoidal_function(
+					Vector_of_neuron_values[prev_layer][n]);
+
+				// Diagnostic function
+				if (Diag == true || false)
+				{
+					std::cout << "Vector_of_neuron_values[" <<
+						prev_layer << "][" << n << "]: " <<
+						Vector_of_neuron_values[prev_layer][n] << std::endl;
+				}
+			}
+
+			// back propagation 
+			// 
+			// error count 
+			
+			// output layer
+			error_iter = Vector_of_error_values.capacity() - 1;
+
+			for (int p = (Vector_of_weights.capacity() - 1); p > ((Vector_of_weights.capacity() - 1) - Number_of_output); p--)
+			{
+				for (int r = Number_of_output; r > 0; r--)
+				{
+					Vector_of_error_values[error_iter] =
+						Vector_of_data[Vector_of_data.capacity() - r][i] -
+						Vector_of_neuron_values[prev_layer][Number_of_output - r];
+
+					// Diagnostic function
+					if (Diag == true || true)
+					{
+						std::cout << "Vector_of_error_values[" <<
+							error_iter << "]:" <<
+							Vector_of_error_values[error_iter] << std::endl;
+					}
+
+					error_iter -= 1;
+				}
+			}
+
+			// hidden layers (BAD ??? )
+			neu_iter = (Number_of_neurons_in_hidden_layers.capacity() - 1);
+
+			for (neu_iter; neu_iter >= 0; neu_iter--)
+			{
+				for (int s = Number_of_neurons_in_hidden_layers[neu_iter]; s > 0; s--)
+				{
+					Vector_of_error_values[error_iter] = Vector_of_error_values[error_iter] *
+						Vector_of_weights[s];
+
+					// Diagnostic function
+					if (Diag == true || true)
+					{
+						std::cout << "Vector_of_error_values[" <<
+							error_iter << "]:" <<
+							Vector_of_error_values[error_iter] << std::endl;
+					}
+
+					error_iter -= 1;
+				}
+			}
+			/* 
+			// new values of weight
+
+			Vector_of_weights[0] = Vector_of_weights[0] + Learning_rate_factor * error *
+				(Beta * Vector_of_neuron_values[0] * (1 - Vector_of_neuron_values[0])) * Input_x1[i];
+
+			Vector_of_weights[1] = Vector_of_weights[1] + Learning_rate_factor * error *
+				(Beta * Vector_of_neuron_values[0] * (1 - Vector_of_neuron_values[0])) * Input_x2[i];
+
+			Bias = Bias + Learning_rate_factor * error *
+				(Beta * Vector_of_neuron_values[0] * (1 - Vector_of_neuron_values[0]));
+
+			MSE += static_cast<float>(pow((Vector_of_neuron_values[0] - Output_y1[i]), 2));
+			*/
+		}
+		/*
+		MSE = MSE / Amount_of_data;
+
+		float iterator = (e + 1);			// float because MSE_value_vector_x have float type
+
+		std::cout << "MSE(" << iterator << "): " << MSE << std::endl;
+
+		MSE_value_vector_X.push_back(iterator);
+		MSE_value_vector_Y.push_back(MSE);
+		*/
+	}
+
+	//Write_data_MLP(MSE_value_vector_X, MSE_value_vector_Y);
+
+	auto Stop = std::chrono::high_resolution_clock::now();
+
+	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
+
+
+	
+
+
+	/*
+	for (e = 0; e < Number_of_epochs; ++e)
+	{
+		MSE = 0;
+
+		for (i = 0; i < Amount_of_data; ++i)
 		{
 			Vector_of_neuron_values[0] = Unipolar_sigmoidal_function((Input_x1[i] *
 				Vector_of_weights[0]) + (Input_x2[i] * Vector_of_weights[1]) + Bias);
@@ -431,14 +618,15 @@ void Fully_connected_network::Calculating_the_network_MLP(std::vector<float>& In
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
-	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP");
+	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
+	*/
 }
 
 float Fully_connected_network::Unipolar_sigmoidal_function(float e)
 {
 	return static_cast<float>(1.0 / (1.0 + exp(-Beta * e)));
 }
-
+/*
 void Fully_connected_network::Display_results_for_MLP()
 {
 	std::cout << &Input_x1[0] << std::endl;
@@ -512,4 +700,23 @@ void Fully_connected_network::Capacity_of_Vector_of_neuron_values(std::vector<st
 		std::cout << "Capacity of Vector_of_neuron_values[" << i << "] = " <<
 			Vector_of_neuron_values[i].capacity() << std::endl;
 	}
+}
+
+void Fully_connected_network::Print_pseudo_random_numbers(
+	std::vector<float>& Vector_of_weights,
+	std::vector<float>& Vector_of_bias_weights)
+{
+	std::cout << "Vector_of_weights: " << std::endl;
+	for (int i = 0; i < Vector_of_weights.capacity(); i++)
+	{
+		std::cout << "Vector_of_weights[" << i << "]: " << Vector_of_weights[i] << std::endl;
+	}
+
+	std::cout << "Vector_of_bias_weights: " << std::endl;
+	for (int i = 0; i < Vector_of_bias_weights.capacity(); i++)
+	{
+		std::cout << "Vector_of_bias_weights[" << i << "]: " << Vector_of_bias_weights[i] << std::endl;
+	}
+	
+
 }

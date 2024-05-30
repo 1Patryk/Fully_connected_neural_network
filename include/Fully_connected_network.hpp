@@ -25,12 +25,13 @@ public:
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
-	std::vector <int>* Number_of_neuros_in_hidden_layers;
+	std::vector <int>* Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>>* Vector_of_data;
 	std::vector<std::vector<float>>* Vector_of_neuron_values;
 	std::vector<float>* Vector_of_weights;
 	std::vector<float>* Vector_of_bias_weights;
 	std::vector<float>* Range_of_pseudo_numbers_values;
+	std::vector<float>* Vector_of_error_values;
 	std::vector<float>* MSE_value_vector_X;
 	std::vector<float>* MSE_value_vector_Y;
 
@@ -78,13 +79,16 @@ public:
 	void Pseudo_random_numbers(std::vector<float>& Vector_of_weights,
 		std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values);
 
-	// forward and back propagation
-	void Calculating_the_network_MLP(std::vector<std::vector<float>>* Vector_of_data,
+	// main function of Fully_connected_network
+	void Calculating_the_network_MLP(
+		std::vector <int>& Number_of_neuros_in_hidden_layers,
+		std::vector<std::vector<float>>& Vector_of_data,
+		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_neuron_values,
+		std::vector<float>& Vector_of_bias_weights,
+		std::vector<float>& Vector_of_error_values,
 		std::vector<float>& MSE_value_vector_X,
-		std::vector<float>& MSE_value_vector_Y,
-		float& Bias);
+		std::vector<float>& MSE_value_vector_Y);
 
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
@@ -97,13 +101,21 @@ public:
 	// Diagnostic functions
 
 	template<class Vec_of_data, class info>
-	void Print_the_capacity_of_the_vector_of_data(Vec_of_data Vector_of_data, info information);
+	void Print_the_capacity_of_the_vector_of_data(
+		Vec_of_data Vector_of_data, 
+		info information);
 
 	void Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data);
 
-	void Print_the_MIN_MAX_and_individual_values(std::vector<std::vector<float>>& Vector_of_data,
+	void Print_the_MIN_MAX_and_individual_values(
+		std::vector<std::vector<float>>& Vector_of_data,
 		float min, float max, int iterator);
 
-	void Capacity_of_Vector_of_neuron_values(std::vector<std::vector<float>>& Vector_of_neuron_values,
+	void Capacity_of_Vector_of_neuron_values(
+		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		int iterator);
+
+	void Print_pseudo_random_numbers(
+		std::vector<float>& Vector_of_weights,
+		std::vector<float>& Vector_of_bias_weights);
 };

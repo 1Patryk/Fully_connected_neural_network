@@ -13,25 +13,28 @@ class Fully_connected_network
 {
 	//private:
 public:
-	bool Diag;												// Diagnostic mode
-	int Amount_of_data;										// delete this?
-	int Number_of_epochs;									// user specifed
-	int Number_of_input;									// defined in txt. file header
-	int Number_of_output;									// defined in txt. file header
-	int Number_of_hidden_layers;							// user specifed
+	bool Diag;													// Diagnostic mode
+	int Amount_of_data;											// delete this?
+	int Number_of_epochs;										// user specifed
+	int Number_of_input;										// defined in txt. file header
+	int Number_of_output;										// defined in txt. file header
+	int Number_of_hidden_layers;								// user specifed
+	int Number_of_layers;
 	int Number_of_weights;
 	int Total_number_of_neurons;
 	float Beta;
+	float Bias;
 	float Learning_rate_factor;
 	std::string Open_filename;
 	std::string Save_filename;
-	std::vector <int>* Number_of_neurons_in_hidden_layers;
+	std::vector <int> Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>>* Vector_of_data;
 	std::vector<std::vector<float>>* Vector_of_neuron_values;
+	std::vector<float>* Vector_of_neuron_values_one_dim;		// one dimensional Vector_of_neuron_values
+	std::vector<float>* Vector_of_error_values;
 	std::vector<float>* Vector_of_weights;
 	std::vector<float>* Vector_of_bias_weights;
 	std::vector<float>* Range_of_pseudo_numbers_values;
-	std::vector<float>* Vector_of_error_values;
 	std::vector<float>* MSE_value_vector_X;
 	std::vector<float>* MSE_value_vector_Y;
 
@@ -81,12 +84,13 @@ public:
 
 	// main function of Fully_connected_network
 	void Calculating_the_network_MLP(
-		std::vector <int>& Number_of_neuros_in_hidden_layers,
+		std::vector <int> Number_of_neurons_in_hidden_layers,
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::vector<float>& Vector_of_neuron_values_one_dim,
+		std::vector<float>& Vector_of_error_values,
 		std::vector<float>& Vector_of_weights,
 		std::vector<float>& Vector_of_bias_weights,
-		std::vector<float>& Vector_of_error_values,
 		std::vector<float>& MSE_value_vector_X,
 		std::vector<float>& MSE_value_vector_Y);
 

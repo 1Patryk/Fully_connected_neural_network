@@ -9,12 +9,13 @@ int main()
 	DATA.Diag = false;		// Diagnostic mode						
 
 	DATA.Calculating_the_network_MLP(
-		*DATA.Number_of_neurons_in_hidden_layers,
+		DATA.Number_of_neurons_in_hidden_layers,
 		*DATA.Vector_of_data,
 		*DATA.Vector_of_neuron_values,
+		*DATA.Vector_of_neuron_values_one_dim,
+		*DATA.Vector_of_error_values,
 		*DATA.Vector_of_weights,
 		*DATA.Vector_of_bias_weights, 
-		*DATA.Vector_of_error_values,
 		*DATA.MSE_value_vector_X,
 		*DATA.MSE_value_vector_Y);
 

@@ -14,7 +14,7 @@ Fully_connected_network::Fully_connected_network()
 	Beta = 1.0f;
 	Bias = 1.0f;
 	Learning_rate_factor = 1.0f;
-	Open_filename = "Add_100.txt";
+	Open_filename = "Add_1000.txt";
 	Save_filename = "Out_date.txt";
 	Number_of_neurons_in_hidden_layers = { 4, 3 , 2};
 	Vector_of_data = new std::vector<std::vector<float>>(0);
@@ -95,14 +95,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		{
 			std::vector<float> vec(0, 0);
 			Vector_of_data.push_back(vec);
-		}
-
-		// Diagnostic function
-		if (Diag == true || false)
-		{
-			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[Before main loop]");
-		}
-		
+		}	
 
 		for (int i = 0; !file.eof(); i++)
 		{
@@ -112,12 +105,6 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 				Vector_of_data[j].push_back(One_piece_of_data);
 				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
 			}
-		}
-
-		// Diagnostic function
-		if (Diag == true || false)
-		{
-			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After main loop, before shrink]");
 		}
 
 		Vector_of_data.shrink_to_fit();
@@ -138,12 +125,6 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 		Fully_connected_network::Total_number_of_neurons += (Number_of_input + Number_of_output);
 		Fully_connected_network::Number_of_layers = 1 + Number_of_hidden_layers + 1;		// 1 - input / 1 - output
 
-		// Diagnostic function
-		if (Diag == true || false)
-		{
-			Print_the_capacity_of_the_vector_of_data(Vector_of_data, "[After shrink]");
-		}
-
 		file.close();
 	}
 	else
@@ -153,7 +134,7 @@ void Fully_connected_network::Read_data_MLP(std::vector<std::vector<float>>& Vec
 	}
 
 	// Diagnostic function
-	if (Diag == true)
+	if (Diag == true || false)
 	{
 		Print_the_vector_of_data(Vector_of_data);
 	}
@@ -195,6 +176,42 @@ void Fully_connected_network::Write_data_MLP(
 	const auto Stop = std::chrono::high_resolution_clock::now();
 
 	Display_results_counting_time(Start, Stop, "Write_data_MLP", 2);
+}
+
+void Fully_connected_network::Swap_data(std::vector<std::vector<float>>& Vector_of_data)
+{
+	// start counting time 
+	const auto Start = std::chrono::high_resolution_clock::now();
+
+	// Diagnostic function
+	if (Diag == true || false)
+	{
+		Print_the_vector_of_data(Vector_of_data);
+	}
+
+	int ran_d = 0;
+	for (int i = 0; i < Vector_of_data.capacity() - 1; i++)
+	{
+		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
+		{
+			ran_d = std::rand() % Vector_of_data[0].capacity();
+			for (int k = 0; k < Vector_of_data.capacity(); k++)
+			{
+				std::swap(Vector_of_data[k][j], Vector_of_data[k][ran_d]);
+			}
+		}
+	}
+
+	// Diagnostic function
+	if (Diag == true || false)
+	{
+		Print_the_vector_of_data(Vector_of_data);
+	}
+
+	// end counting time 
+	const auto Stop = std::chrono::high_resolution_clock::now();
+
+	Display_results_counting_time(Start, Stop, "Swap_data", 2);
 }
 
 void Fully_connected_network::Min_max_unipolar_scaling(
@@ -404,6 +421,7 @@ void Fully_connected_network::Calculating_the_network_MLP(
 	auto Start = std::chrono::high_resolution_clock::now();
 
 	Read_data_MLP(Vector_of_data);
+	Swap_data(Vector_of_data);
 
 	// changes for user interface (uniporar/bipolar)
 	//Min_max_unipolar_scaling(Vector_of_data);
@@ -942,32 +960,24 @@ void Fully_connected_network::Display_results_for_MLP()
 }
 */
 
-template<class Vec_of_data, class info>
-void Fully_connected_network::Print_the_capacity_of_the_vector_of_data(Vec_of_data Vector_of_data, info information)
+void Fully_connected_network::Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data)
 {
-	std::cout << information << std::endl;
-
 	std::cout << "Capacity(Vector_of_data): " << std::endl;
 	std::cout << Vector_of_data.capacity() << std::endl;
 
-	std::cout << "Capacity(Vector_of_data[0]): " << std::endl;
-	std::cout << Vector_of_data[0].capacity() << std::endl;
-
-	std::cout << "Capacity(Vector_of_data[1]): " << std::endl;
-	std::cout << Vector_of_data[1].capacity() << std::endl;
-
-	std::cout << "Capacity(Vector_of_data[2]): " << std::endl;
-	std::cout << Vector_of_data[2].capacity() << std::endl;
-}
-
-void Fully_connected_network::Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data)
-{
-	for (int i = 0; i < (Number_of_input + Number_of_output); i++)
+	for (int i = 0; i < Vector_of_data.capacity(); i++)
 	{
-		for (int j = 0; j < Vector_of_data[i].capacity(); j++)
+		std::cout << "Capacity(Vector_of_data[" << i << "]: " << std::endl;
+		std::cout << Vector_of_data[i].capacity() << std::endl;
+	}
+	
+	for (int i = 0; i < Vector_of_data[0].capacity(); i++)
+	{
+		for (int j = 0; j < (Number_of_input + Number_of_output); j++)
 		{
-			std::cout << "Vector_of_data[" << i << "][" << j << "]: " << Vector_of_data[i][j] << std::endl;
+			std::cout << "Vector_of_data[" << j << "][" << i << "]: " << Vector_of_data[j][i] << "       __        ";
 		}
+		std::cout << std::endl;
 	}
 }
 

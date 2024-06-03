@@ -59,6 +59,9 @@ public:
 		std::vector<float>& MSE_value_vector_X,
 		std::vector<float>& MSE_value_vector_Y);
 
+	// swap input data (every piece of data together)
+	void Swap_data(std::vector<std::vector<float>>& Vector_of_data);
+
 	// values from 0 to 1
 	void Min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
 
@@ -103,11 +106,6 @@ public:
 
 
 	// Diagnostic functions
-
-	template<class Vec_of_data, class info>
-	void Print_the_capacity_of_the_vector_of_data(
-		Vec_of_data Vector_of_data, 
-		info information);
 
 	void Print_the_vector_of_data(std::vector<std::vector<float>>& Vector_of_data);
 

@@ -11,13 +11,19 @@ int main()
 	DATA.Calculating_the_network_MLP(
 		DATA.Number_of_neurons_in_hidden_layers,
 		*DATA.Vector_of_data,
-		*DATA.Vector_of_neuron_values,
-		*DATA.Vector_of_neuron_values_one_dim,
-		*DATA.Vector_of_error_values,
-		*DATA.Vector_of_weights,
-		*DATA.Vector_of_bias_weights, 
+		*DATA.Vector_of_data_train,
+		*DATA.Vector_of_data_validation,
+		*DATA.Vector_of_data_test,
+		*DATA.Vector_of_neuron_values_train,
+		*DATA.Vector_of_neuron_values_one_dim_train,
+		*DATA.Vector_of_error_values_train,
+		*DATA.Vector_of_weights_train,
+		*DATA.Vector_of_bias_weights_train,
 		*DATA.MSE_value_vector_X,
-		*DATA.MSE_value_vector_Y);
+		*DATA.MSE_value_vector_Y,
+		DATA.Train,
+		DATA.Test,
+		DATA.Validation);
 
 	//DATA.Display_results_for_MLP();
 

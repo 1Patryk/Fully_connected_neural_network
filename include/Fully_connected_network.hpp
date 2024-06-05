@@ -13,7 +13,7 @@ class Fully_connected_network
 {
 	//private:
 public:
-	bool* Diag;														// Diagnostic mode
+	bool Diag;														// Diagnostic mode
 	int* Amount_of_data;												// delete this?
 	int* Number_of_epochs;											// user specifed
 	int* Number_of_input;											// defined in txt. file header
@@ -128,7 +128,8 @@ public:
 		//std::vector<float>& MSE_value_vector_Y,
 		//int Train,
 		//int Test,
-		//int Validation);
+		//int Validation
+		);
 
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);

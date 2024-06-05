@@ -9,6 +9,7 @@ int main()
 	DATA.Diag = false;		// Diagnostic mode						
 
 	DATA.Calculating_the_network_MLP(
+		/*
 		DATA.Number_of_neurons_in_hidden_layers,
 		*DATA.Vector_of_data,
 		*DATA.Vector_of_data_train,
@@ -23,7 +24,9 @@ int main()
 		*DATA.MSE_value_vector_Y,
 		DATA.Train,
 		DATA.Test,
-		DATA.Validation);
+		DATA.Validation
+		*/
+	);
 
 	//DATA.Display_results_for_MLP();
 

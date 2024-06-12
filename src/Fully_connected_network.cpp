@@ -3,7 +3,6 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = new bool{ false };
-	Amount_of_data = new int { 4 };
 	Number_of_epochs = new int{ 10 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
@@ -101,9 +100,9 @@ void Fully_connected_network::Read_data_MLP(
 	{
 		// read 2 int of data which specifying amound of input and output
 		file >> One_piece_of_data;
-		*Fully_connected_network::Number_of_input = One_piece_of_data;
+		*Fully_connected_network::Number_of_input = static_cast<int>(One_piece_of_data);
 		file >> One_piece_of_data;
-		*Fully_connected_network::Number_of_output = One_piece_of_data;
+		*Fully_connected_network::Number_of_output = static_cast<int>(One_piece_of_data);
 
 		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
 		for (int i = 0; i < (*Number_of_input + *Fully_connected_network::Number_of_output); i++)
@@ -143,8 +142,9 @@ void Fully_connected_network::Read_data_MLP(
 			*Fully_connected_network::Total_number_of_neurons += 
 				Number_of_neurons_in_hidden_layers_ref[i];
 		}
-		Fully_connected_network::Total_number_of_neurons += (*Number_of_input + *Number_of_output);
-		Fully_connected_network::Number_of_layers = 1 + Number_of_hidden_layers + 1;						// 1 - input / 1 - output
+		*Fully_connected_network::Total_number_of_neurons += (*Fully_connected_network::Number_of_input + 
+			*Fully_connected_network::Number_of_output);
+		*Fully_connected_network::Number_of_layers = 1 + *Fully_connected_network::Number_of_hidden_layers + 1;						// 1 - input / 1 - output
 
 		file.close();
 	}
@@ -525,22 +525,7 @@ void Fully_connected_network::Pseudo_random_numbers(
 	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers", 2);
 }
 
-void Fully_connected_network::Calculating_the_network_MLP(
-	//std::vector <int> Number_of_neurons_in_hidden_layers,
-	//std::vector<std::vector<float>>& Vector_of_data,
-	//std::vector<std::vector<float>>& Vector_of_data_validation,
-	//std::vector<std::vector<float>>& Vector_of_data_test,
-	//std::vector<std::vector<float>>& Vector_of_neuron_values,
-	//std::vector<float>& Vector_of_neuron_values_one_dim,
-	//std::vector<float>& Vector_of_error_values,
-	//std::vector<float>& Vector_of_weights,
-	//std::vector<float>& Vector_of_bias_weights,
-	//std::vector<float>& MSE_value_vector_X,
-	//std::vector<float>& MSE_value_vector_Y,
-	//int Learn,
-	//int Test,
-	//int Validation
-	)
+void Fully_connected_network::Calculating_the_network_MLP()
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 

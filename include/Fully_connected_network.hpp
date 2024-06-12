@@ -14,7 +14,6 @@ class Fully_connected_network
 	//private:
 public:
 	bool Diag;														// Diagnostic mode
-	int* Amount_of_data;												// delete this?
 	int* Number_of_epochs;											// user specifed
 	int* Number_of_input;											// defined in txt. file header
 	int* Number_of_output;											// defined in txt. file header
@@ -114,28 +113,13 @@ public:
 		std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values);
 
 	// main function of Fully_connected_network
-	void Calculating_the_network_MLP(
-		//std::vector <int> Number_of_neurons_in_hidden_layers,
-		//std::vector<std::vector<float>>& Vector_of_data,
-		//std::vector<std::vector<float>>& Vector_of_data_validation,
-		//std::vector<std::vector<float>>& Vector_of_data_test,
-		//std::vector<std::vector<float>>& Vector_of_neuron_values,
-		//std::vector<float>& Vector_of_neuron_values_one_dim,
-		//std::vector<float>& Vector_of_error_values,
-		//std::vector<float>& Vector_of_weights,
-		//std::vector<float>& Vector_of_bias_weights,
-		//std::vector<float>& MSE_value_vector_X,
-		//std::vector<float>& MSE_value_vector_Y,
-		//int Train,
-		//int Test,
-		//int Validation
-		);
+	void Calculating_the_network_MLP();
 
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
 
 	// display results in main function
-	void Display_results_for_MLP();
+	// void Display_results_for_MLP();
 
 
 

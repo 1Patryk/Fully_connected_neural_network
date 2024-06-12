@@ -134,6 +134,7 @@ void Fully_connected_network::Read_data_MLP(
 			Fully_connected_network::Number_of_neurons_in_hidden_layers->capacity();
 
 		Fully_connected_network::Vector_of_neuron_values_train->resize(*Fully_connected_network::Number_of_hidden_layers + 2);
+		Fully_connected_network::Vector_of_neuron_values_validation->resize(*Fully_connected_network::Number_of_hidden_layers + 2);
 
 		auto& Number_of_neurons_in_hidden_layers_ref = *Number_of_neurons_in_hidden_layers;
 
@@ -317,7 +318,7 @@ void Fully_connected_network::Divide_data_to_training_test_and_validation(
 		Vector_of_data_validation.shrink_to_fit();
 
 		// Diagnostic function
-		if (Diag == true || true)
+		if (Diag == true || false)
 		{
 			std::string name_of_function = "Vector_of_data_validation";
 			Print_the_vector_of_data(Vector_of_data_validation, name_of_function);
@@ -544,7 +545,7 @@ void Fully_connected_network::Calculating_the_network_MLP(
 	auto Start = std::chrono::high_resolution_clock::now();
 
 	Read_data_MLP(*Fully_connected_network::Vector_of_data);
-	Swap_data(*Fully_connected_network::Vector_of_data);
+	//Swap_data(*Fully_connected_network::Vector_of_data);
 	Divide_data_to_training_test_and_validation(
 		*Fully_connected_network::Vector_of_data,
 		*Fully_connected_network::Vector_of_data_train,
@@ -555,7 +556,7 @@ void Fully_connected_network::Calculating_the_network_MLP(
 		*Fully_connected_network::Validation);
 
 	// changes for user interface (uniporar/bipolar)
-	Min_max_unipolar_scaling(*Fully_connected_network::Vector_of_data_train);
+	//Min_max_unipolar_scaling(*Fully_connected_network::Vector_of_data_train);
 	Min_max_unipolar_scaling(*Vector_of_data_validation);
 
 	Create_vector_of_neurons_values(
@@ -587,12 +588,10 @@ void Fully_connected_network::Calculating_the_network_MLP(
 		*Fully_connected_network::Vector_of_bias_weights_train, 
 		*Range_of_pseudo_numbers_values);
 
-	// create errors vector
+	// creating one-dimensional vector of neurons values 
 
-	Fully_connected_network::Vector_of_neuron_values_train->resize(Total_number_of_neurons - Number_of_input);
 	Fully_connected_network::Vector_of_neuron_values_one_dim_train->resize(*Total_number_of_neurons);
 
-	Fully_connected_network::Vector_of_neuron_values_validation->resize(Total_number_of_neurons - Number_of_input);
 	Fully_connected_network::Vector_of_neuron_values_one_dim_validation->resize(*Total_number_of_neurons);
 
 	float MSE = 0;
@@ -632,7 +631,7 @@ void Fully_connected_network::Calculating_the_network_MLP(
 					Vector_of_data_train_ref[j][dat];
 
 				// Diagnostic function
-				if (Diag == true || false)
+				if (Diag == true || true)
 				{
 					std::cout << "Vector_of_neuron_values_train[0][" << j << "]: " <<
 						Vector_of_neuron_values_train_ref[0][j] << std::endl;
@@ -646,11 +645,11 @@ void Fully_connected_network::Calculating_the_network_MLP(
 
 			for (int k = 1; k < *Number_of_hidden_layers + 1; k++)
 			{
-				for (int l = 0; l < Vector_of_neuron_values_train[k].capacity(); l++)
+				for (int l = 0; l < Vector_of_neuron_values_train[k - 1].capacity(); l++)
 				{
 					for (int m = 0; m < Vector_of_neuron_values_train[k - 1].capacity(); m++)
 					{
-						Vector_of_neuron_values_train_ref[k][l] +=
+						Vector_of_neuron_values_train_ref[k - 1][l] +=
 							((Vector_of_neuron_values_train_ref[k - 1][m] *
 								Vector_of_weights_train_ref[weight]));
 						weight += 1;
@@ -663,9 +662,9 @@ void Fully_connected_network::Calculating_the_network_MLP(
 					bias_iter += 1;
 
 					// Diagnostic function
-					if (Diag == true || false)
+					if (Diag == true || true)
 					{
-						std::cout << "Vector_of_neuron_values[" <<
+						std::cout << "Vector_of_neuron_values_train[" <<
 							k << "][" << l << "]: " <<
 							Vector_of_neuron_values_train_ref[k][l] << std::endl;
 					}

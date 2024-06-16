@@ -16,29 +16,54 @@ Fully_connected_network::Fully_connected_network()
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
 	Learning_rate_factor = new float { 1.0f };
+
 	Open_filename = new std::string{ "Add_1000.txt" };
 	Save_filename = new std::string{ "Out_date.txt" };
-	Number_of_neurons_in_hidden_layers = new std::vector<int>{  4 ,  3 ,  2  };
-	Vector_of_data = new std::vector<std::vector<float>>(0);
-	Vector_of_data_train = new std::vector<std::vector<float>>(0);
-	Vector_of_data_validation = new std::vector<std::vector<float>>(0);
-	Vector_of_data_test = new std::vector<std::vector<float>>(0);
+	Number_of_neurons_in_hidden_layers = std::vector<int>{  4 ,  3 ,  2  };
+	Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layers;
+	Vector_of_data = std::vector<std::vector<float>>(0);
+	Vector_of_data_ref = Vector_of_data;
+	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
+	Range_of_pseudo_numbers_values_ref = Range_of_pseudo_numbers_values;
+	MSE_value_vector_X = std::vector<float>(*Number_of_epochs);
+	MSE_value_vector_X_ref = MSE_value_vector_X;
+	MSE_value_vector_Y = std::vector<float>(*Number_of_epochs);
+	MSE_value_vector_Y_ref = MSE_value_vector_Y;
 
-	Vector_of_neuron_values_train = new std::vector<std::vector<float>> (*Number_of_hidden_layers + 2);
-	Vector_of_neuron_values_one_dim_train = new std::vector<float>(0, 0);
-	Vector_of_error_values_train = new std::vector<float>(0, 0);
-	Vector_of_weights_train = new std::vector<float>(0, 0);
-	Vector_of_bias_weights_train = new std::vector<float>(0, 0);
+	// TRAINING
 
-	Vector_of_neuron_values_validation = new std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
-	Vector_of_neuron_values_one_dim_validation = new std::vector<float>(0, 0);
-	Vector_of_error_values_validation = new std::vector<float>(0, 0);
-	Vector_of_weights_validation = new std::vector<float>(0, 0);
-	Vector_of_bias_weights_validation = new std::vector<float>(0, 0);
+	Vector_of_data_training = std::vector<std::vector<float>>(0);
+	Vector_of_data_training_ref = Vector_of_data_training;
+	Vector_of_neuron_values_training = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
+	Vector_of_neuron_values_training_ref = Vector_of_neuron_values_training;
+	Vector_of_neuron_values_one_dim_training = std::vector<float>(0, 0);
+	Vector_of_neuron_values_one_dim_training_ref = Vector_of_neuron_values_one_dim_training;
+	Vector_of_error_values_training = std::vector<float>(0, 0);
+	Vector_of_error_values_training_ref = Vector_of_error_values_training;
+	Vector_of_weights_training = std::vector<float>(0, 0);
+	Vector_of_weights_training_ref = Vector_of_weights_training;
+	Vector_of_bias_weights_training = std::vector<float>(0, 0);
+	Vector_of_bias_weights_training_ref = Vector_of_bias_weights_training;
 
-	Range_of_pseudo_numbers_values = new std::vector<float>{ -0.5, 0.5 };
-	MSE_value_vector_X = new std::vector<float>(*Number_of_epochs);
-	MSE_value_vector_Y = new std::vector<float>(*Number_of_epochs);
+	// VALIDATION
+
+	Vector_of_data_validation = std::vector<std::vector<float>>(0);
+	Vector_of_data_validation_ref = Vector_of_data_validation;
+	Vector_of_neuron_values_validation = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
+	Vector_of_neuron_values_validation_ref = Vector_of_neuron_values_validation;
+	Vector_of_neuron_values_one_dim_validation = std::vector<float>(0, 0);
+	Vector_of_neuron_values_one_dim_validation_ref = Vector_of_neuron_values_one_dim_validation;
+	Vector_of_error_values_validation = std::vector<float>(0, 0);
+	Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
+	Vector_of_weights_validation = std::vector<float>(0, 0);
+	Vector_of_weights_validation_ref = Vector_of_weights_validation;
+	Vector_of_bias_weights_validation = std::vector<float>(0, 0);
+	Vector_of_bias_weights_validation_ref = Vector_of_bias_weights_validation;
+
+	// TEST
+
+	Vector_of_data_test = std::vector<std::vector<float>>(0);
+	Vector_of_data_test_ref = Vector_of_data_test;
 }
 
 template<class start, class stop, class name, class unit>
@@ -592,13 +617,7 @@ void Fully_connected_network::Calculating_the_network_MLP()
 	int back_neuron_iter = 0;
 	int value_neuron_iter = 0;
 
-	auto& Number_of_neurons_in_hidden_layers_ref = *Number_of_neurons_in_hidden_layers;
-	auto& Vector_of_data_train_ref = *Vector_of_data_train;
-	auto& Vector_of_neuron_values_train_ref = *Vector_of_neuron_values_train;
-	auto& Vector_of_neuron_values_one_dim_train_ref = *Vector_of_neuron_values_one_dim_train;
-	auto& Vector_of_error_values_train_ref = *Vector_of_error_values_train;
-	auto& Vector_of_weights_train_ref = *Vector_of_weights_train;
-	auto& Vector_of_bias_weights_train_ref = *Vector_of_bias_weights_train;
+	
 
 	for (e = 0; e < *Number_of_epochs; ++e)
 	{

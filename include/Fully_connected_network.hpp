@@ -11,9 +11,9 @@
 
 class Fully_connected_network
 {
-	//private:
-public:
-	bool Diag;														// Diagnostic mode
+private:
+
+	bool* Diag;														// Diagnostic mode
 	int* Number_of_epochs;											// user specifed
 	int* Number_of_input;											// defined in txt. file header
 	int* Number_of_output;											// defined in txt. file header
@@ -27,32 +27,55 @@ public:
 	float* Beta;
 	float* Bias;
 	float* Learning_rate_factor;
+
 	std::string* Open_filename;
 	std::string* Save_filename;
-	std::vector <int>* Number_of_neurons_in_hidden_layers;
-	std::vector<std::vector<float>>* Vector_of_data;
-	std::vector<float>* Range_of_pseudo_numbers_values;
-	std::vector<float>* MSE_value_vector_X;
-	std::vector<float>* MSE_value_vector_Y;
+	std::vector <int> Number_of_neurons_in_hidden_layers;
+	static std::vector <int>& Number_of_neurons_in_hidden_layers_ref;
+	std::vector<std::vector<float>> Vector_of_data;
+	static std::vector<std::vector<float>>& Vector_of_data_ref;
+	std::vector<float> Range_of_pseudo_numbers_values;
+	static std::vector<float>& Range_of_pseudo_numbers_values_ref;
+	std::vector<float> MSE_value_vector_X;
+	static std::vector<float>& MSE_value_vector_X_ref;
+	std::vector<float> MSE_value_vector_Y;
+	static std::vector<float>& MSE_value_vector_Y_ref;
 
+	// TRAINING
 
-	std::vector<std::vector<float>>* Vector_of_data_train;
-	std::vector<std::vector<float>>* Vector_of_neuron_values_train;
-	std::vector<float>* Vector_of_neuron_values_one_dim_train;		// one dimensional Vector_of_neuron_values
-	std::vector<float>* Vector_of_error_values_train;
-	std::vector<float>* Vector_of_weights_train;
-	std::vector<float>* Vector_of_bias_weights_train;
+	std::vector<std::vector<float>> Vector_of_data_training;
+	static std::vector<std::vector<float>>& Vector_of_data_training_ref;
+	std::vector<std::vector<float>> Vector_of_neuron_values_training;
+	static std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref;
+	std::vector<float> Vector_of_neuron_values_one_dim_training;		// one dimensional Vector_of_neuron_values
+	static std::vector<float>& Vector_of_neuron_values_one_dim_training_ref;
+	std::vector<float> Vector_of_error_values_training;
+	static std::vector<float>& Vector_of_error_values_training_ref;
+	std::vector<float> Vector_of_weights_training;
+	static std::vector<float>& Vector_of_weights_training_ref;
+	std::vector<float> Vector_of_bias_weights_training;
+	static std::vector<float>& Vector_of_bias_weights_training_ref;
 
-	std::vector<std::vector<float>>* Vector_of_data_validation;
-	std::vector<std::vector<float>>* Vector_of_neuron_values_validation;
-	std::vector<float>* Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
-	std::vector<float>* Vector_of_error_values_validation;
-	std::vector<float>* Vector_of_weights_validation;
-	std::vector<float>* Vector_of_bias_weights_validation;
+	// VALIDATION
 
+	std::vector<std::vector<float>> Vector_of_data_validation;
+	static std::vector<std::vector<float>>& Vector_of_data_validation_ref;
+	std::vector<std::vector<float>> Vector_of_neuron_values_validation;
+	static std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref;
+	std::vector<float> Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
+	static std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref;
+	std::vector<float> Vector_of_error_values_validation;
+	static std::vector<float>& Vector_of_error_values_validation_ref;
+	std::vector<float> Vector_of_weights_validation;
+	static std::vector<float>& Vector_of_weights_validation_ref;
+	std::vector<float> Vector_of_bias_weights_validation;
+	static std::vector<float>& Vector_of_bias_weights_validation_ref;
 
-	std::vector<std::vector<float>>* Vector_of_data_test;
-	
+	// TEST
+
+	std::vector<std::vector<float>> Vector_of_data_test;
+	static std::vector<std::vector<float>>& Vector_of_data_test_ref;
+
 public:
 
 	// constructor

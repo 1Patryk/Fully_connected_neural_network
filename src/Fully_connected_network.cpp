@@ -2,7 +2,7 @@
 
 Fully_connected_network::Fully_connected_network()
 {
-	Diag = new bool{ false };
+	Diag = bool{ false };
 	Number_of_epochs = new int{ 10 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
@@ -146,7 +146,7 @@ void Fully_connected_network::Read_data_MLP(
 			}
 		}
 
-		Fully_connected_network::Vector_of_data->shrink_to_fit();
+		Fully_connected_network::Vector_of_data_ref.shrink_to_fit();
 
 		for (int i = 0; i < (*Number_of_input + *Fully_connected_network::Number_of_output); i++)
 		{
@@ -155,14 +155,12 @@ void Fully_connected_network::Read_data_MLP(
 
 		// initialization of variable
 		*Fully_connected_network::Number_of_hidden_layers = 
-			Fully_connected_network::Number_of_neurons_in_hidden_layers->capacity();
+			Fully_connected_network::Number_of_neurons_in_hidden_layers_ref.capacity();
 
-		Fully_connected_network::Vector_of_neuron_values_train->resize(*Fully_connected_network::Number_of_hidden_layers + 2);
-		Fully_connected_network::Vector_of_neuron_values_validation->resize(*Fully_connected_network::Number_of_hidden_layers + 2);
+		Fully_connected_network::Vector_of_neuron_values_training_ref.resize(*Fully_connected_network::Number_of_hidden_layers + 2);
+		Fully_connected_network::Vector_of_neuron_values_validation_ref.resize(*Fully_connected_network::Number_of_hidden_layers + 2);
 
-		auto& Number_of_neurons_in_hidden_layers_ref = *Number_of_neurons_in_hidden_layers;
-
-		for (int i = 0; i < Number_of_neurons_in_hidden_layers->capacity(); i++)
+		for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref.capacity(); i++)
 		{
 			*Fully_connected_network::Total_number_of_neurons += 
 				Number_of_neurons_in_hidden_layers_ref[i];
@@ -180,7 +178,7 @@ void Fully_connected_network::Read_data_MLP(
 	}
 
 	// Diagnostic function
-	if (Diag == true || false)
+	if (Diag == true || 0)
 	{
 		std::string name_of_function = "Vector_of_data";
 		Print_the_vector_of_data(Vector_of_data, name_of_function);
@@ -557,10 +555,10 @@ void Fully_connected_network::Calculating_the_network_MLP()
 	Read_data_MLP(*Fully_connected_network::Vector_of_data);
 	//Swap_data(*Fully_connected_network::Vector_of_data);
 	Divide_data_to_training_test_and_validation(
-		*Fully_connected_network::Vector_of_data,
-		*Fully_connected_network::Vector_of_data_train,
-		*Fully_connected_network::Vector_of_data_validation,
-		*Fully_connected_network::Vector_of_data_test,
+		Fully_connected_network::Vector_of_data_ref,
+		Fully_connected_network::Vector_of_data_training_ref,
+		Fully_connected_network::Vector_of_data_validation_ref,
+		Fully_connected_network::Vector_of_data_test_ref,
 		*Fully_connected_network::Train,
 		*Fully_connected_network::Test,
 		*Fully_connected_network::Validation);

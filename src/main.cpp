@@ -4,9 +4,7 @@ int main()
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	Fully_connected_network DATA;
-
-	DATA.Diag = false;		// Diagnostic mode						
+	Fully_connected_network DATA;				
 
 	DATA.Calculating_the_network_MLP();
 

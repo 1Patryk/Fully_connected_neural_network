@@ -13,7 +13,7 @@ class Fully_connected_network
 {
 private:
 
-	bool* Diag;														// Diagnostic mode
+	static bool Diag;												// Diagnostic mode
 	int* Number_of_epochs;											// user specifed
 	int* Number_of_input;											// defined in txt. file header
 	int* Number_of_output;											// defined in txt. file header

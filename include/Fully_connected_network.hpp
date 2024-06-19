@@ -30,50 +30,50 @@ private:
 
 	std::string* Open_filename;
 	std::string* Save_filename;
-	std::vector <int> Number_of_neurons_in_hidden_layers;
+	std::vector <int> Number_of_neurons_in_hidden_layersQ;
 	static std::vector <int>& Number_of_neurons_in_hidden_layers_ref;
-	std::vector<std::vector<float>> Vector_of_data;
+	std::vector<std::vector<float>> Vector_of_dataQ;
 	static std::vector<std::vector<float>>& Vector_of_data_ref;
-	std::vector<float> Range_of_pseudo_numbers_values;
+	std::vector<float> Range_of_pseudo_numbers_valuesQ;
 	static std::vector<float>& Range_of_pseudo_numbers_values_ref;
-	std::vector<float> MSE_value_vector_X;
+	std::vector<float> MSE_value_vector_XQ;
 	static std::vector<float>& MSE_value_vector_X_ref;
-	std::vector<float> MSE_value_vector_Y;
+	std::vector<float> MSE_value_vector_YQ;
 	static std::vector<float>& MSE_value_vector_Y_ref;
 
 	// TRAINING
 
-	std::vector<std::vector<float>> Vector_of_data_training;
+	std::vector<std::vector<float>> Vector_of_data_trainingQ;
 	static std::vector<std::vector<float>>& Vector_of_data_training_ref;
-	std::vector<std::vector<float>> Vector_of_neuron_values_training;
+	std::vector<std::vector<float>> Vector_of_neuron_values_trainingQ;
 	static std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref;
-	std::vector<float> Vector_of_neuron_values_one_dim_training;		// one dimensional Vector_of_neuron_values
+	std::vector<float> Vector_of_neuron_values_one_dim_trainingQ;		// one dimensional Vector_of_neuron_values
 	static std::vector<float>& Vector_of_neuron_values_one_dim_training_ref;
-	std::vector<float> Vector_of_error_values_training;
-	static std::vector<float>& Vector_of_error_values_training_ref;
-	std::vector<float> Vector_of_weights_training;
+	std::vector<float> Vector_of_weights_trainingQ;
 	static std::vector<float>& Vector_of_weights_training_ref;
-	std::vector<float> Vector_of_bias_weights_training;
+	std::vector<float> Vector_of_bias_weights_trainingQ;
 	static std::vector<float>& Vector_of_bias_weights_training_ref;
+	std::vector<float> Vector_of_error_values_trainingQ;
+	static std::vector<float>& Vector_of_error_values_training_ref;
 
 	// VALIDATION
 
-	std::vector<std::vector<float>> Vector_of_data_validation;
+	std::vector<std::vector<float>> Vector_of_data_validationQ;
 	static std::vector<std::vector<float>>& Vector_of_data_validation_ref;
-	std::vector<std::vector<float>> Vector_of_neuron_values_validation;
+	std::vector<std::vector<float>> Vector_of_neuron_values_validationQ;
 	static std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref;
-	std::vector<float> Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
+	std::vector<float> Vector_of_neuron_values_one_dim_validationQ;		// one dimensional Vector_of_neuron_values
 	static std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref;
-	std::vector<float> Vector_of_error_values_validation;
-	static std::vector<float>& Vector_of_error_values_validation_ref;
-	std::vector<float> Vector_of_weights_validation;
+	std::vector<float> Vector_of_weights_validationQ;
 	static std::vector<float>& Vector_of_weights_validation_ref;
-	std::vector<float> Vector_of_bias_weights_validation;
+	std::vector<float> Vector_of_bias_weights_validationQ;
 	static std::vector<float>& Vector_of_bias_weights_validation_ref;
+	std::vector<float> Vector_of_error_values_validationQ;
+	static std::vector<float>& Vector_of_error_values_validation_ref;
 
 	// TEST
 
-	std::vector<std::vector<float>> Vector_of_data_test;
+	std::vector<std::vector<float>> Vector_of_data_testQ;
 	static std::vector<std::vector<float>>& Vector_of_data_test_ref;
 
 public:
@@ -90,53 +90,54 @@ public:
 	void Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time);
 
 	// reading input data from file
-	void Read_data_MLP(
-		std::vector<std::vector<float>>& Vector_of_data);
+	void Read_data_MLP();
 
 	// write output data to file
-	void Write_data_MLP(
-		std::vector<float>& MSE_value_vector_X,
-		std::vector<float>& MSE_value_vector_Y);
+	void Write_data_MLP();
 
-	// swap input data (every piece of data together)
-	void Swap_data(std::vector<std::vector<float>>& Vector_of_data);
+	// swap input data 
+	void Swap_data();
 
-	// dividing data to train, test and validation sets. 3 next parameters is a 
-	// participations percent  on Vector_of_data (unit %)
-	void Divide_data_to_training_test_and_validation(
-		std::vector<std::vector<float>>& Vector_of_data,
-		std::vector<std::vector<float>>& Vector_of_data_train,
-		std::vector<std::vector<float>>& Vector_of_data_validation,
-		std::vector<std::vector<float>>& Vector_of_data_test,
-		int Train,
-		int Test,
-		int Validation);
+	// dividing data to train, test and validation sets.
+	void Divide_data_to_training_test_and_validation();
 
 	// values from 0 to 1
-	void Min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
+	void Min_max_unipolar_scaling(
+		static std::vector<std::vector<float>>& Vector_of_data,
+		std::string name_of_vector);
 
 	// values from -1 to 1
-	void Min_max_bipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
-
-	// ???
-	void Reversal_min_max_unipolar_scaling(std::vector<std::vector<float>>& Vector_of_data);
+	void Min_max_bipolar_scaling(
+		static std::vector<std::vector<float>>& Vector_of_data,
+		std::string name_of_vector);
 
 	// create vector of neuron values
-	void Create_vector_of_neurons_values(std::vector<std::vector<float>>& Vector_of_neuron_values, 
-		std::vector <int>& Number_of_neuros_in_hidden_layers);
+	void Create_vector_of_neurons_values(
+		static std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::string name_of_vector);
 
 	void Create_vector_of_weights(std::vector<float>& Vector_of_weights, 
-		std::vector<std::vector<float>>& Vector_of_neuron_values);
+		std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::string name_of_vector);
 
 	void Create_vector_of_bias(std::vector<float>& Vector_of_bias_weights,
-		std::vector<std::vector<float>>& Vector_of_neuron_values);
+		std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::string name_of_vector);
 
 	// for first weights wector
-	void Pseudo_random_numbers(std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_bias_weights, std::vector<float>& Range_of_pseudo_numbers_values);
+	void Pseudo_random_numbers(std::vector<float>& Vector,
+		std::string name_of_vector);
 
 	// main function of Fully_connected_network
 	void Calculating_the_network_MLP();
+
+	// forward propagation
+	void Forward_propagation_the_network_MLP(
+		static std::vector<std::vector<float>>& Vector_of_data,
+		static std::vector<std::vector<float>>& Vector_of_neuron_values,
+		static std::vector<float>& Vector_of_weights,
+		static std::vector<float>& Vector_of_bias_weights
+		);
 
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
@@ -161,6 +162,5 @@ public:
 		int iterator);
 
 	void Print_pseudo_random_numbers(
-		std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_bias_weights);
+		std::vector<float>& Vector);
 };

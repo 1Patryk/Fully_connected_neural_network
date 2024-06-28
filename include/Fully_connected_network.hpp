@@ -8,10 +8,11 @@
 #include <algorithm>			// min - max scaler
 #include <string>
 #include <random>				// pseudo random numbers
+#include <cmath>				// absolute values
 
 class Fully_connected_network
 {
-//private:
+	//private:
 public:
 
 	bool Diag;												// Diagnostic mode
@@ -28,11 +29,11 @@ public:
 	float* Beta;
 	float* Bias;
 	float* Learning_rate_factor;
-	float MSE_training;
-	float MSE_validation;
+	float MAPE_training;
+	float MAPE_validation;
 
-	float& MSE_training_ref = MSE_training;
-	float& MSE_validation_ref = MSE_validation;
+	float& MAPE_training_ref = MAPE_training;
+	float& MAPE_validation_ref = MAPE_validation;
 
 	std::string* Open_filename;
 	std::string* Save_filename;
@@ -40,14 +41,14 @@ public:
 	std::vector <int> Number_of_neurons_in_hidden_layersQ;
 	std::vector<std::vector<float>> Vector_of_dataQ;
 	std::vector<float> Range_of_pseudo_numbers_valuesQ;
-	std::vector<float> MSE_value_vector_XQ;
-	std::vector<float> MSE_value_vector_YQ;
+	std::vector<float> MAPE_value_vector_XQ;
+	std::vector<float> MAPE_value_vector_YQ;
 
 	std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layersQ;
 	std::vector<std::vector<float>>& Vector_of_data_ref = Vector_of_dataQ;
 	std::vector<float>& Range_of_pseudo_numbers_values_ref = Range_of_pseudo_numbers_valuesQ;
-	std::vector<float>& MSE_value_vector_X_ref = MSE_value_vector_XQ;
-	std::vector<float>& MSE_value_vector_Y_ref = MSE_value_vector_YQ;
+	std::vector<float>& MSE_value_vector_X_ref = MAPE_value_vector_XQ;
+	std::vector<float>& MSE_value_vector_Y_ref = MAPE_value_vector_YQ;
 
 	// TRAINING
 
@@ -133,7 +134,7 @@ public:
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::string name_of_vector);
 
-	void Create_vector_of_weights(std::vector<float>& Vector_of_weights, 
+	void Create_vector_of_weights(std::vector<float>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::string name_of_vector);
 
@@ -178,31 +179,11 @@ public:
 		int it_iterator_one_dim,
 		int it_value_neuron,
 		int it_back_neuron,
-		float& MSE
+		float& MAPE
 	);
 
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
 
-	// display results in main function
-	// void Display_results_for_MLP();
-
-
-
-	// Diagnostic functions
-
-	void Print_the_vector_of_data(
-		std::vector<std::vector<float>>& Vector_of_data,
-		std::string name_of_vector);
-
-	void Print_the_MIN_MAX_and_individual_values(
-		std::vector<std::vector<float>>& Vector_of_data,
-		float min, float max, int iterator);
-
-	void Capacity_of_Vector_of_neuron_values(
-		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		int iterator);
-
-	void Print_pseudo_random_numbers(
-		std::vector<float>& Vector);
+	void Print_MLP_data();
 };

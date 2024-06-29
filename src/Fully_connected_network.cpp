@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 10 };
+	Number_of_epochs = new int{ 5 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -21,9 +21,9 @@ Fully_connected_network::Fully_connected_network()
 
 	// DELETE Q !!!
 
-	Open_filename = new std::string{ "Load.txt" };
+	Open_filename = new std::string{ "Add_100.txt" };
 	Save_filename = new std::string{ "Out_date.txt" };
-	Number_of_neurons_in_hidden_layersQ = std::vector<int>{  4 ,  3 ,  2  };
+	Number_of_neurons_in_hidden_layersQ = std::vector<int>{  4 ,  3 };
 	Vector_of_dataQ = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_valuesQ = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_vector_XQ = std::vector<float>(*Number_of_epochs);
@@ -201,6 +201,8 @@ void Fully_connected_network::Swap_data()
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
+	std::srand(time(NULL));
+
 	int ran_d = 0;
 	for (int i = 0; i < Vector_of_data_ref.capacity() - 1; i++)
 	{
@@ -225,13 +227,13 @@ void Fully_connected_network::Divide_data_to_training_test_and_validation()
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
-	if (*Train + *Test + *Validation == 100)
+	if (*Train + *Validation + *Test == 100)
 	{
 		float x = static_cast<float>((Vector_of_data_ref[0].capacity()) / 100);
 		
 		float train_cap = x * static_cast<float>(*Train);
-		float test_cap = x * static_cast<float>(*Test);
 		float validation_cap = x * static_cast<float>(*Validation);
+		float test_cap = x * static_cast<float>(*Test);
 
 		std::vector<float> zero_vector = { 0 };
 
@@ -250,21 +252,6 @@ void Fully_connected_network::Divide_data_to_training_test_and_validation()
 
 		Vector_of_data_training_ref.shrink_to_fit();
 
-		// test
-		for (int i = 0; i < Vector_of_data_ref.capacity(); i++)
-		{
-			Vector_of_data_test_ref.push_back(zero_vector);
-			Vector_of_data_test_ref.shrink_to_fit();
-			for (int j = static_cast<int>(train_cap); j < (train_cap + test_cap); j++)
-			{
-				Vector_of_data_test_ref[i].push_back(Vector_of_data_ref[i][j]);
-			}
-			Vector_of_data_test_ref[i].erase(Vector_of_data_test_ref[i].begin());
-			Vector_of_data_test_ref[i].shrink_to_fit();
-		}
-
-		Vector_of_data_test_ref.shrink_to_fit();
-
 		// validation
 		for (int i = 0; i < Vector_of_data_ref.capacity(); i++)
 		{
@@ -279,10 +266,25 @@ void Fully_connected_network::Divide_data_to_training_test_and_validation()
 		}
 
 		Vector_of_data_validation_ref.shrink_to_fit();
+
+		// test
+		for (int i = 0; i < Vector_of_data_ref.capacity(); i++)
+		{
+			Vector_of_data_test_ref.push_back(zero_vector);
+			Vector_of_data_test_ref.shrink_to_fit();
+			for (int j = static_cast<int>(train_cap); j < (train_cap + test_cap); j++)
+			{
+				Vector_of_data_test_ref[i].push_back(Vector_of_data_ref[i][j]);
+			}
+			Vector_of_data_test_ref[i].erase(Vector_of_data_test_ref[i].begin());
+			Vector_of_data_test_ref[i].shrink_to_fit();
+		}
+
+		Vector_of_data_test_ref.shrink_to_fit();
 	}
 	else
 	{
-		std::cout << "Sum of 3 parameters is not equal 100%.";
+		std::cout << "Sum train, validation and test is not equal 100%.";
 		exit(3);
 	}
 	
@@ -560,17 +562,17 @@ void Fully_connected_network::Calculating_the_network_MLP()
 	int it_iterator_one_dim = 0;
 	int it_value_neuron = 0;
 	int it_back_neuron = 0;
-
+	
 	// Diagnostic function
-	if (Diag == true || true)
+	if (Diag == true || false)
 	{
 		Print_MLP_data();
 	}
-	
+
 	for (int epoch = 0; epoch < *Number_of_epochs; epoch++)
 	{
-		MAPE_training = 0.0f;
-		MAPE_validation = 0.0f;
+		//MAPE_training_ref = 0.0f;
+		//MAPE_validation_ref = 0.0f;
 
 		// TRAINING DATA
 
@@ -608,20 +610,19 @@ void Fully_connected_network::Calculating_the_network_MLP()
 				it_iterator_one_dim,
 				it_value_neuron,
 				it_back_neuron, 
-				MAPE_training
+				MAPE_training_ref
 			);
-
 		}
 
 		std::cout << "BEFORE" << std::endl;
-		std::cout << "MAPE_training(" << epoch << "): " << MAPE_training << std::endl;
+		std::cout << "MAPE_training(" << epoch << "): " << MAPE_training_ref << std::endl;
 
-		MAPE_training = ((1.0f / Vector_of_data_training_ref[0].capacity()) * 
-			MAPE_training * 100.0f);
+		std::cout << "Count" << Vector_of_neuron_values_one_dim_training_ref[9] << std::endl;
+		MAPE_training_ref = ((1.0f / Vector_of_data_training_ref[0].capacity()) *
+			MAPE_training_ref * 100.0f);
 
-		std::cout << "Vector_of_data_training_ref[0].capacity(): " << Vector_of_data_training_ref[0].capacity() << std::endl;
 		std::cout << "AFTER" << std::endl;
-		std::cout << "MAPE_training(" << epoch << "): " << MAPE_training << std::endl;
+		std::cout << "MAPE_training(" << epoch << "): " << MAPE_training_ref << std::endl;
 
 		// VALIDATION DATA
 
@@ -655,25 +656,24 @@ void Fully_connected_network::Calculating_the_network_MLP()
 				it_iterator_one_dim,
 				it_value_neuron,
 				it_back_neuron,
-				MAPE_validation
-			);
+				MAPE_validation_ref
+			); 
 		}
 
-		std::cout << "BEFORE" << std::endl;
-		std::cout << "MAPE_validation(" << epoch << "): " << MAPE_validation << std::endl;
+		//std::cout << "BEFORE" << std::endl;
+		//std::cout << "MAPE_validation(" << epoch << "): " << MAPE_validation_ref << std::endl;
 
-		MAPE_validation = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
-			MAPE_validation * 100.0f);
+		MAPE_validation_ref = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
+			MAPE_validation_ref * 100.0f);
 
-		std::cout << "Vector_of_data_validation_ref[0].capacity(): " << Vector_of_data_validation_ref[0].capacity() << std::endl;
-		std::cout << "AFTER" << std::endl;
-		std::cout << "MAPE_validation(" << epoch << "): " << MAPE_validation << std::endl;
-	}
+		//std::cout << "AFTER" << std::endl;
+		//std::cout << "MAPE_validation(" << epoch << "): " << MAPE_validation_ref << std::endl;
 
-	// Diagnostic function
-	if (Diag == true || true)
-	{
-		Print_MLP_data();
+		// Diagnostic function
+		if (Diag == true || false)
+		{
+			Print_MLP_data();
+		}
 	}
 
 	auto Stop = std::chrono::high_resolution_clock::now();
@@ -787,6 +787,10 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 			Vector_of_error_values[it_error] =
 				Vector_of_data[Vector_of_data.capacity() - r][it_data] -
 				Vector_of_neuron_values[it_prev_layer][*Number_of_output - r];
+
+			//std::cout << "it_data" << it_data << std::endl;
+			//std::cout << "Vector_of_data[Vector_of_data.capacity() - r][it_data]" << Vector_of_data[Vector_of_data.capacity() - r][it_data] << std::endl;
+			//std::cout << "Vector_of_neuron_values[it_prev_layer][*Number_of_output - r]" << Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] << std::endl;
 
 			MAPE += std::abs(Vector_of_error_values[it_error] /
 				Vector_of_data[Vector_of_data.capacity() - r][it_data]);
@@ -927,7 +931,7 @@ void Fully_connected_network::Print_MLP_data()
 	 
 	std::cout << "<< << << << TRAINING >> >> >> >>" << std::endl;
 
-	if (false)
+	if (true)
 	{
 		std::cout << "====================================================" << std::endl;
 		std::cout << "Vector_of_data_training_ref.Capacity(): " << std::endl;
@@ -973,7 +977,7 @@ void Fully_connected_network::Print_MLP_data()
 		}
 	}
 	
-	if (false)
+	if (true)
 	{
 		std::cout << "====================================================" << std::endl;
 		std::cout << "Vector_of_neuron_values_one_dim_training_ref.capacity(): "
@@ -1088,7 +1092,7 @@ void Fully_connected_network::Print_MLP_data()
 		}
 	}
 
-	if (true)
+	if (false)
 	{
 		std::cout << "====================================================" << std::endl;
 		std::cout << "Vector_of_weights_validation_ref.capacity(): "
@@ -1101,7 +1105,7 @@ void Fully_connected_network::Print_MLP_data()
 		}
 	}
 
-	if (true)
+	if (false)
 	{
 		std::cout << "====================================================" << std::endl;
 		std::cout << "Vector_of_bias_weights_validation_ref.capacity(): "
@@ -1114,7 +1118,7 @@ void Fully_connected_network::Print_MLP_data()
 		}
 	}
 
-	if (true)
+	if (false)
 	{
 		std::cout << "====================================================" << std::endl;
 		std::cout << "Vector_of_error_values_validation_ref.capacity(): "

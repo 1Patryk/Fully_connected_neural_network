@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>				// adding standard input/output library
+#include <filesystem>			// operations on file systems (since c++ 17)
 #include <vector>				// STL - Standard template library
 #include <fstream>				// adding posibility connect with .txt files
 #include <chrono>				// time executive in program 
@@ -12,10 +13,9 @@
 
 class Fully_connected_network
 {
-	//private:
-public:
+private:
 
-	bool Diag;												// Diagnostic mode
+	bool Diag;														// Diagnostic mode
 	int* Number_of_epochs;											// user specifed
 	int* Number_of_input;											// defined in txt. file header
 	int* Number_of_output;											// defined in txt. file header

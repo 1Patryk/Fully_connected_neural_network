@@ -6,6 +6,9 @@ An artificial neural network is a simplified model of the human brain. Neurons a
 
 $`f(u) = f(sum_{i = 0}^{m} w_{i} x_{j} + b)`$
 
+$`\[ \sum_{i=1}^{\infty} \frac{1}{n^s} 
+= \prod_p \frac{1}{1 - p^{-s}} \]`$
+
 $`where: `$
 
 $`f(u) - activation function`$

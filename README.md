@@ -6,19 +6,19 @@ An artificial neural network is a simplified model of the human brain. Neurons a
 
 $`f(u) = f(\sum_{i = 0}^{m} w_{i} x_{j} + b)`$
 
-$`where: `$
+where:
 
-$`f(u) - activation function`$
+f(u) - activation function
 
-$`u - output value`$
+u - output value
 
-$`m - amound of input data`$
+m - amound of input data
 
-$`w_{i} - i-th weight`$
+w_{i} - i-th weight
 
-$`x_{i} - i-th input value`$
+x_{i} - i-th input value
 
-$`b - bias`$
+b - bias
 
 Avaliable activation function:
 - Unipolar sigmoidal function

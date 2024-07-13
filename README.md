@@ -10,7 +10,7 @@ $\ where: \$
 
 $\ f(u) - activation \\ function \$
 
-$\ u - output value \$
+$\ u - output \\ value \$
 
 $\ m - amound of input data \$
 

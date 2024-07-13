@@ -10,15 +10,15 @@ $\ where: \$
 
 $\ f(u) - activation function \$
 
-u - output value
+$\ u - output value \$
 
-m - amound of input data
+$\ m - amound of input data \$
 
-w_{i} - i-th weight
+$\ w_{i} - i-th weight \$
 
-x_{i} - i-th input value
+$\ x_{i} - i-th input value \$
 
-b - bias
+$\ b - bias \$
 
 Avaliable activation function:
 - Unipolar sigmoidal function

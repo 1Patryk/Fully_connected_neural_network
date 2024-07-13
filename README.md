@@ -8,7 +8,7 @@ $$ f(u) = f(\sum_{i=0}^m w_i x_j + b) $$
 
 $\ where: \$
 
-$\ f(u) - activation <br /> function \$
+$\ f(u) - activation &nbsp function \$
 
 $\ u - output value \$
 

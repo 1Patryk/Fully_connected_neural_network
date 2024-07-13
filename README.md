@@ -6,6 +6,8 @@ An artificial neural network is a simplified model of the human brain. Neurons a
 
 $`f(u) = f(\sum_{i = 0}^m w_{i} x_{j} + b)`$
 
+$$ f(u) = f(\sum_{i=0}^m w_i x_j + b $$
+
 where:
 
 f(u) - activation function

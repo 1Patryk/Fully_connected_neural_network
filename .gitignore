@@ -1,3 +1,5 @@
 .vs/
 out/
 build/
+/QT_widgets_network/build-Network_visualization-Android_Qt_6_6_1_Clang_x86_64-Debug
+/QT_widgets_network/build-Network_visualization-Desktop_Qt_6_6_1_MinGW_64_bit-Debug

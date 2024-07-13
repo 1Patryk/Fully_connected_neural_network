@@ -19,37 +19,34 @@ Fully_connected_network::Fully_connected_network()
 	MAPE_training = float{ 0.0f };
 	MAPE_validation = float{ 0.0f };
 
-	// DELETE Q !!!
-
 	Open_filename = new std::string{ "Add_1000.txt" };
-	Save_filename = new std::string{ "Out_date.txt" };
-	Number_of_neurons_in_hidden_layersQ = std::vector<int>{  6 ,  5 };
-	Vector_of_dataQ = std::vector<std::vector<float>>(0);
-	Range_of_pseudo_numbers_valuesQ = std::vector<float>{ -0.5, 0.5 };
-	MAPE_value_vector_XQ = std::vector<float>(*Number_of_epochs);
-	MAPE_value_vector_YQ = std::vector<float>(*Number_of_epochs);
+	Number_of_neurons_in_hidden_layers = std::vector<int>{  6 ,  5 };
+	Vector_of_data = std::vector<std::vector<float>>(0);
+	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
+	MAPE_value_vector_X = std::vector<float>(*Number_of_epochs);
+	MAPE_value_vector_Y = std::vector<float>(*Number_of_epochs);
 
 	// TRAINING
 
-	Fully_connected_network::Vector_of_data_trainingQ = std::vector<std::vector<float>>(0);
-	Fully_connected_network::Vector_of_neuron_values_trainingQ = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
-	Fully_connected_network::Vector_of_neuron_values_one_dim_trainingQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_weights_trainingQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_bias_weights_trainingQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_error_values_trainingQ = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_data_training = std::vector<std::vector<float>>(0);
+	Fully_connected_network::Vector_of_neuron_values_training = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
+	Fully_connected_network::Vector_of_neuron_values_one_dim_training = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_weights_training = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_bias_weights_training = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_error_values_training = std::vector<float>(0, 0);
 
 	// VALIDATION
 
-	Fully_connected_network::Vector_of_data_validationQ = std::vector<std::vector<float>>(0);
-	Fully_connected_network::Vector_of_neuron_values_validationQ = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
-	Fully_connected_network::Vector_of_neuron_values_one_dim_validationQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_weights_validationQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_bias_weights_validationQ = std::vector<float>(0, 0);
-	Fully_connected_network::Vector_of_error_values_validationQ = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_data_validation = std::vector<std::vector<float>>(0);
+	Fully_connected_network::Vector_of_neuron_values_validation = std::vector<std::vector<float>>(*Number_of_hidden_layers + 2);
+	Fully_connected_network::Vector_of_neuron_values_one_dim_validation = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_weights_validation = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_bias_weights_validation = std::vector<float>(0, 0);
+	Fully_connected_network::Vector_of_error_values_validation = std::vector<float>(0, 0);
 
 	// TEST
 
-	Fully_connected_network::Vector_of_data_testQ = std::vector<std::vector<float>>(0);;
+	Fully_connected_network::Vector_of_data_test = std::vector<std::vector<float>>(0);;
 }
 
 template<class start, class stop, class name, class unit>
@@ -170,49 +167,48 @@ void Fully_connected_network::Write_data_MLP()
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
-	//time_t now = time(0);
-	//std::string date = ctime(&now);
+	auto now = std::chrono::system_clock::now();
 
-	std::time_t now = std::time(nullptr);
-	std::tm* date = std::localtime(std::addressof(now));
+	auto localTime = std::chrono::system_clock::to_time_t(now);
+
+	const char* extension = ".txt";
+
+	std::stringstream ss;
+
+	ss << "MLP [" << *Number_of_input; 
+
+	for (int i = 0; i < *Number_of_hidden_layers; i++)
+	{
+		ss << "-";
+		ss << Number_of_neurons_in_hidden_layers[i];
+	}
+
+	ss << "] " << std::put_time(std::localtime(&localTime), "%F_%H_%M_%S") << extension;
 
 	std::string directory_path = { "../../../Output_data_(MSE)/" };
 
-	namespace fs = std::filesystem;
-
-	if (!fs::exists(directory_path))
+	if (!std::filesystem::exists(directory_path))
 	{
-		fs::create_directory(directory_path);
+		std::filesystem::create_directory(directory_path);
 	}
 
-	std::cout << std::asctime(date) << std::endl;
+	std::string file_date = ss.str();
 
-	//date->tm_year += 1900;
+	file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
 
-	//std::string date_a = { directory_path + *Save_filename + std::asctime };
-
-	//std::cout << directory_path + *Save_filename + date << std::endl;
-
-	//static char year = reinterpret_cast<char>(date->tm_year);
-
-	//std::string filename_and_date = *Save_filename + year;
-
-	//std::cout << filename_and_date << std::endl;
-
-	fs::path filepath = directory_path + *Save_filename;
-
+	std::cout << directory_path + file_date << std::endl;
 
 	// ofstream only can write file
-	std::ofstream file(filepath);
+	std::ofstream file(directory_path + file_date);
 
-	if (file)
+	if (file.is_open())
 	{
 		for (int i = 0; i < *Number_of_epochs; ++i)
 		{
+			file << "\n";
 			file << MSE_value_vector_X_ref[i];
 			file << " ";
 			file << MSE_value_vector_Y_ref[i];
-			file << "\n";
 		}
 		file.close();
 	}
@@ -695,13 +691,11 @@ void Fully_connected_network::Calculating_the_network_MLP()
 	std::cout << "MAPE_training(" << 20000 << "): " << MAPE_training_ref << std::endl;
 	std::cout << "MAPE_validation(" << 20000 << "): " << MAPE_validation_ref << std::endl;
 
-	Write_data_MLP();
-
 	auto Stop = std::chrono::high_resolution_clock::now();
 
 	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
 
-
+	Write_data_MLP();
 }
 
 void Fully_connected_network::Forward_propagation_the_network_MLP

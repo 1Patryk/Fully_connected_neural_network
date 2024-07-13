@@ -5,6 +5,7 @@
 #include <vector>				// STL - Standard template library
 #include <fstream>				// adding posibility connect with .txt files
 #include <chrono>				// time executive in program 
+#include <sstream> 
 #include <ctime>				// ...
 #include <algorithm>			// min - max scaler
 #include <string>
@@ -36,63 +37,62 @@ private:
 	float& MAPE_validation_ref = MAPE_validation;
 
 	std::string* Open_filename;
-	std::string* Save_filename;
 
-	std::vector <int> Number_of_neurons_in_hidden_layersQ;
-	std::vector<std::vector<float>> Vector_of_dataQ;
-	std::vector<float> Range_of_pseudo_numbers_valuesQ;
-	std::vector<float> MAPE_value_vector_XQ;
-	std::vector<float> MAPE_value_vector_YQ;
+	std::vector <int> Number_of_neurons_in_hidden_layers;
+	std::vector<std::vector<float>> Vector_of_data;
+	std::vector<float> Range_of_pseudo_numbers_values;
+	std::vector<float> MAPE_value_vector_X;
+	std::vector<float> MAPE_value_vector_Y;
 
-	std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layersQ;
-	std::vector<std::vector<float>>& Vector_of_data_ref = Vector_of_dataQ;
-	std::vector<float>& Range_of_pseudo_numbers_values_ref = Range_of_pseudo_numbers_valuesQ;
-	std::vector<float>& MSE_value_vector_X_ref = MAPE_value_vector_XQ;
-	std::vector<float>& MSE_value_vector_Y_ref = MAPE_value_vector_YQ;
+	std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layers;
+	std::vector<std::vector<float>>& Vector_of_data_ref = Vector_of_data;
+	std::vector<float>& Range_of_pseudo_numbers_values_ref = Range_of_pseudo_numbers_values;
+	std::vector<float>& MSE_value_vector_X_ref = MAPE_value_vector_X;
+	std::vector<float>& MSE_value_vector_Y_ref = MAPE_value_vector_Y;
 
 	// TRAINING
 
-	std::vector<std::vector<float>> Vector_of_data_trainingQ;
-	std::vector<std::vector<float>> Vector_of_neuron_values_trainingQ;
-	std::vector<float> Vector_of_neuron_values_one_dim_trainingQ;		// one dimensional Vector_of_neuron_values
-	std::vector<float> Vector_of_weights_trainingQ;
-	std::vector<float> Vector_of_bias_weights_trainingQ;
-	std::vector<float> Vector_of_error_values_trainingQ;
+	std::vector<std::vector<float>> Vector_of_data_training;
+	std::vector<std::vector<float>> Vector_of_neuron_values_training;
+	std::vector<float> Vector_of_neuron_values_one_dim_training;		// one dimensional Vector_of_neuron_values
+	std::vector<float> Vector_of_weights_training;
+	std::vector<float> Vector_of_bias_weights_training;
+	std::vector<float> Vector_of_error_values_training;
 
 	// TRAINING (REFERENCE)
 
-	std::vector<std::vector<float>>& Vector_of_data_training_ref = Vector_of_data_trainingQ;
-	std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref = Vector_of_neuron_values_trainingQ;
-	std::vector<float>& Vector_of_neuron_values_one_dim_training_ref = Vector_of_neuron_values_one_dim_trainingQ;
-	std::vector<float>& Vector_of_weights_training_ref = Vector_of_weights_trainingQ;
-	std::vector<float>& Vector_of_bias_weights_training_ref = Vector_of_bias_weights_trainingQ;
-	std::vector<float>& Vector_of_error_values_training_ref = Vector_of_error_values_trainingQ;
+	std::vector<std::vector<float>>& Vector_of_data_training_ref = Vector_of_data_training;
+	std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref = Vector_of_neuron_values_training;
+	std::vector<float>& Vector_of_neuron_values_one_dim_training_ref = Vector_of_neuron_values_one_dim_training;
+	std::vector<float>& Vector_of_weights_training_ref = Vector_of_weights_training;
+	std::vector<float>& Vector_of_bias_weights_training_ref = Vector_of_bias_weights_training;
+	std::vector<float>& Vector_of_error_values_training_ref = Vector_of_error_values_training;
 
 	// VALIDATION
 
-	std::vector<std::vector<float>> Vector_of_data_validationQ;
-	std::vector<std::vector<float>> Vector_of_neuron_values_validationQ;
-	std::vector<float> Vector_of_neuron_values_one_dim_validationQ;		// one dimensional Vector_of_neuron_values
-	std::vector<float> Vector_of_weights_validationQ;
-	std::vector<float> Vector_of_bias_weights_validationQ;
-	std::vector<float> Vector_of_error_values_validationQ;
+	std::vector<std::vector<float>> Vector_of_data_validation;
+	std::vector<std::vector<float>> Vector_of_neuron_values_validation;
+	std::vector<float> Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
+	std::vector<float> Vector_of_weights_validation;
+	std::vector<float> Vector_of_bias_weights_validation;
+	std::vector<float> Vector_of_error_values_validation;
 
 	// VALIDATION (REFERENCE)
 
-	std::vector<std::vector<float>>& Vector_of_data_validation_ref = Vector_of_data_validationQ;
-	std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref = Vector_of_neuron_values_validationQ;
-	std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref = Vector_of_neuron_values_one_dim_validationQ;
-	std::vector<float>& Vector_of_weights_validation_ref = Vector_of_weights_validationQ;
-	std::vector<float>& Vector_of_bias_weights_validation_ref = Vector_of_bias_weights_validationQ;
-	std::vector<float>& Vector_of_error_values_validation_ref = Vector_of_error_values_validationQ;
+	std::vector<std::vector<float>>& Vector_of_data_validation_ref = Vector_of_data_validation;
+	std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref = Vector_of_neuron_values_validation;
+	std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref = Vector_of_neuron_values_one_dim_validation;
+	std::vector<float>& Vector_of_weights_validation_ref = Vector_of_weights_validation;
+	std::vector<float>& Vector_of_bias_weights_validation_ref = Vector_of_bias_weights_validation;
+	std::vector<float>& Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
 
 	// TEST
 
-	std::vector<std::vector<float>> Vector_of_data_testQ;
+	std::vector<std::vector<float>> Vector_of_data_test;
 
 	// TEST (REFERENCE)
 
-	std::vector<std::vector<float>>& Vector_of_data_test_ref = Vector_of_data_testQ;
+	std::vector<std::vector<float>>& Vector_of_data_test_ref = Vector_of_data_test;
 
 public:
 

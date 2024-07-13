@@ -13,9 +13,3 @@ int main()
 	auto Stop = std::chrono::high_resolution_clock::now();
 	DATA.Display_results_counting_time(Start, Stop, "Cumulatively", 2);
 }
-
-
-// Add to program value like: number of epochs, amount of data, from file, not from manualy-writen constructor.
-
-// jumble and validation
-// after that, count up on paper all network

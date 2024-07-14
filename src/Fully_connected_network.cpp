@@ -19,7 +19,8 @@ Fully_connected_network::Fully_connected_network()
 	MAPE_training = float{ 0.0f };
 	MAPE_validation = float{ 0.0f };
 
-	Open_filename = new std::string{ "Add_1000.txt" };
+    Open_filename = new std::string{ "" };
+    Output_filename_path = new std::string{ "" };
 	Number_of_neurons_in_hidden_layers = std::vector<int>{  6 ,  5 };
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
@@ -162,7 +163,7 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 	Display_results_counting_time(Start, Stop, "Read_data_MLP()", 2);
 }
 
-void Fully_connected_network::Write_data_MLP()
+void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -173,33 +174,26 @@ void Fully_connected_network::Write_data_MLP()
 
 	const char* extension = ".txt";
 
-	std::stringstream ss;
+    std::stringstream ss;
 
-	ss << "MLP [" << *Number_of_input; 
+    ss << "MLP [" << *Number_of_input;
 
-	for (int i = 0; i < *Number_of_hidden_layers; i++)
-	{
-		ss << "-";
-		ss << Number_of_neurons_in_hidden_layers[i];
-	}
+    for (int i = 0; i < *Number_of_hidden_layers; i++)
+    {
+        ss << "-";
+        ss << Number_of_neurons_in_hidden_layers[i];
+    }
 
-	ss << "] " << std::put_time(std::localtime(&localTime), "%F_%H_%M_%S") << extension;
+    ss << "] " << std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << extension;
 
-	std::string directory_path = { "../../../Output_data_(MSE)/" };
+    std::string file_date = ss.str();
 
-	if (!std::filesystem::exists(directory_path))
-	{
-		std::filesystem::create_directory(directory_path);
-	}
+    file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
 
-	std::string file_date = ss.str();
+    std::cout << *Output_filename_path + file_date << std::endl;
 
-	file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
-
-	std::cout << directory_path + file_date << std::endl;
-
-	// ofstream only can write file
-	std::ofstream file(directory_path + file_date);
+    // ofstream only can write file
+    std::ofstream file(*Output_filename_path + file_date);
 
 	if (file.is_open())
 	{
@@ -505,12 +499,12 @@ void Fully_connected_network::Pseudo_random_numbers(
 	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_filename)
+void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_filename, std::string* Output_filename_path)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
     Read_data_MLP(Open_filename);
-	Swap_data();
+    Swap_data();
 	Divide_data_to_training_test_and_validation();
 
 	// TRAINING
@@ -695,7 +689,7 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 
 	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
 
-	Write_data_MLP();
+    Write_data_MLP(Output_filename_path);
 }
 
 void Fully_connected_network::Forward_propagation_the_network_MLP

@@ -37,6 +37,7 @@ private:
 	float& MAPE_validation_ref = MAPE_validation;
 
 	std::string* Open_filename;
+    std::string* Output_filename_path;
 
 	std::vector <int> Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>> Vector_of_data;
@@ -111,7 +112,7 @@ public:
     void Read_data_MLP(std::string* Open_filename);
 
 	// write output data to file
-	void Write_data_MLP();
+    void Write_data_MLP(std::string* Output_filename_path);
 
 	// swap input data 
 	void Swap_data();
@@ -147,7 +148,7 @@ public:
 		std::string name_of_vector);
 
 	// main function of Fully_connected_network
-    void Calculating_the_network_MLP(std::string* Open_filename);
+    void Calculating_the_network_MLP(std::string* Open_filename, std::string* Output_filename_path);
 
 	// forward propagation
 	void Forward_propagation_the_network_MLP

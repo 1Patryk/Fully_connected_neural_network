@@ -108,7 +108,7 @@ public:
 	void Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time);
 
 	// reading input data from file
-	void Read_data_MLP();
+    void Read_data_MLP(std::string* Open_filename);
 
 	// write output data to file
 	void Write_data_MLP();
@@ -147,7 +147,7 @@ public:
 		std::string name_of_vector);
 
 	// main function of Fully_connected_network
-	void Calculating_the_network_MLP();
+    void Calculating_the_network_MLP(std::string* Open_filename);
 
 	// forward propagation
 	void Forward_propagation_the_network_MLP

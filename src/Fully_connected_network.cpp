@@ -93,13 +93,13 @@ void Fully_connected_network::Display_results_counting_time(
 	}
 }
 
-void Fully_connected_network::Read_data_MLP()
+void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
 	// ifstream only can open file
-	std::ifstream file("../../../Data/" + *Open_filename);
+    std::ifstream file(*Open_filename);
 
 	float One_piece_of_data = 0.0f;
 
@@ -505,11 +505,11 @@ void Fully_connected_network::Pseudo_random_numbers(
 	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Calculating_the_network_MLP()
+void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_filename)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
-	Read_data_MLP();
+    Read_data_MLP(Open_filename);
 	Swap_data();
 	Divide_data_to_training_test_and_validation();
 

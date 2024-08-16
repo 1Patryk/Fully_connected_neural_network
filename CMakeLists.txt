@@ -9,5 +9,3 @@ add_executable(NeuralNetwork
 	Src/main.cpp
 	Src/Fully_connected_network.cpp
 )
-
-CMAKE_CXX_FLAGS="-std=c++17"

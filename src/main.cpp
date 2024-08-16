@@ -1,15 +1,13 @@
 #include "../Include/Fully_connected_network.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-	auto Start = std::chrono::high_resolution_clock::now();
+	Fully_connected_network DATA;
 
-	Fully_connected_network DATA;				
+	std::string *Open_filename = new std::string{"../Data/Add_1000.txt"};
+	std::string *Output_filename_path = new std::string{"../Output_data_(MSE)/"};
 
-	DATA.Calculating_the_network_MLP();
+	DATA.Calculating_the_network_MLP(Open_filename, Output_filename_path);
 
-	//DATA.Display_results_for_MLP();
-
-	auto Stop = std::chrono::high_resolution_clock::now();
-	DATA.Display_results_counting_time(Start, Stop, "Cumulatively", 2);
+	// DATA.Display_results_for_MLP();
 }

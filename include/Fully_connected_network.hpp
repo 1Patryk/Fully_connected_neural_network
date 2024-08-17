@@ -30,26 +30,20 @@ private:
 	float* Beta;
 	float* Bias;
 	float* Learning_rate_factor;
-	float MAPE_training;
-	float MAPE_validation;
-
-	float& MAPE_training_ref = MAPE_training;
-	float& MAPE_validation_ref = MAPE_validation;
 
 	std::string* Open_filename;
     std::string* Output_filename_path;
-
 	std::vector <int> Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>> Vector_of_data;
 	std::vector<float> Range_of_pseudo_numbers_values;
-	std::vector<float> MAPE_value_vector_X;
-	std::vector<float> MAPE_value_vector_Y;
+	std::vector<float> MAPE_value_training;
+	std::vector<float> MAPE_value_validation;
 
 	std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>>& Vector_of_data_ref = Vector_of_data;
 	std::vector<float>& Range_of_pseudo_numbers_values_ref = Range_of_pseudo_numbers_values;
-	std::vector<float>& MSE_value_vector_X_ref = MAPE_value_vector_X;
-	std::vector<float>& MSE_value_vector_Y_ref = MAPE_value_vector_Y;
+	std::vector<float>& MAPE_value_training_ref = MAPE_value_training;
+	std::vector<float>& MAPE_value_validation_ref = MAPE_value_validation;
 
 	// TRAINING
 
@@ -172,6 +166,7 @@ public:
 		std::vector<float>& Vector_of_weights,
 		std::vector<float>& Vector_of_bias_weights,
 		std::vector<float>& Vector_of_error_values,
+		std::vector<float>& MAPE_value,
 		int it_data,
 		int it_weight,
 		int it_bias,
@@ -180,7 +175,7 @@ public:
 		int it_iterator_one_dim,
 		int it_value_neuron,
 		int it_back_neuron,
-		float& MAPE
+		int epoch
 	);
 
 	// values from 0 to 1 

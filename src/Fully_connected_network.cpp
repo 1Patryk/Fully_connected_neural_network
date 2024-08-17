@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 10 };
+	Number_of_epochs = new int{ 100 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -16,16 +16,14 @@ Fully_connected_network::Fully_connected_network()
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
 	Learning_rate_factor = new float { 0.001f };
-	MAPE_training = float{ 0.0f };
-	MAPE_validation = float{ 0.0f };
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
 	Number_of_neurons_in_hidden_layers = std::vector<int>{  6 ,  5 };
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
-	MAPE_value_vector_X = std::vector<float>(*Number_of_epochs);
-	MAPE_value_vector_Y = std::vector<float>(*Number_of_epochs);
+	MAPE_value_training = std::vector<float>(*Number_of_epochs);
+	MAPE_value_validation = std::vector<float>(*Number_of_epochs);
 
 	// TRAINING
 
@@ -197,12 +195,19 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 
 	if (file.is_open())
 	{
+		file << file_date;
 		for (int i = 0; i < *Number_of_epochs; ++i)
 		{
 			file << "\n";
-			file << MSE_value_vector_X_ref[i];
+			file << "Number of epochs";
+			file << " {}{}{} ";
+			file << "MAPE_value_training";
+			file << " {}{}{} ";
+			file << "MAPE_value_validation";
+			file << "\n";
+			file << MAPE_value_training_ref[i];
 			file << " ";
-			file << MSE_value_vector_Y_ref[i];
+			file << MAPE_value_validation_ref[i];
 		}
 		file.close();
 	}
@@ -587,9 +592,7 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 
 	for (int epoch = 0; epoch < *Number_of_epochs; epoch++)
 	{
-		//std::cout << "##### START [" << epoch << "] EPOCH #####" << std::endl;
-		MAPE_training_ref = 0.0f;
-		MAPE_validation_ref = 0.0f;
+		std::cout << "##### START [" << epoch << "] EPOCH #####" << std::endl;
 
 		// TRAINING DATA
 
@@ -619,6 +622,7 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 				Vector_of_weights_training_ref,
 				Vector_of_bias_weights_training_ref,
 				Vector_of_error_values_training_ref,
+				MAPE_value_training_ref,
 				it_data,
 				it_weight,
 				it_bias,
@@ -626,13 +630,13 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 				it_error,
 				it_iterator_one_dim,
 				it_value_neuron,
-				it_back_neuron, 
-				MAPE_training_ref
+				it_back_neuron,
+				epoch
 			);
 		}
 
-		MAPE_training_ref = ((1.0f / Vector_of_data_training_ref[0].capacity()) *
-			MAPE_training_ref);
+		MAPE_value_training_ref[epoch]= ((1.0f / Vector_of_data_training_ref[0].capacity()) *
+			MAPE_value_training_ref[epoch]);
 
 		// VALIDATION DATA
 
@@ -658,6 +662,7 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 				Vector_of_weights_validation_ref,
 				Vector_of_bias_weights_validation_ref,
 				Vector_of_error_values_validation_ref,
+				MAPE_value_validation_ref,
 				it_data,
 				it_weight,
 				it_bias,
@@ -666,12 +671,12 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 				it_iterator_one_dim,
 				it_value_neuron,
 				it_back_neuron,
-				MAPE_validation_ref
+				epoch
 			); 
 		}
 
-		MAPE_validation_ref = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
-			MAPE_validation_ref);
+		MAPE_value_validation_ref[epoch] = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
+			MAPE_value_validation_ref[epoch]);
 
 		// Diagnostic function
 		if (Diag == true || false)
@@ -682,8 +687,8 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 		//std::cout << "##### END [" << epoch << "] EPOCH #####" << std::endl;
 	}
 
-	std::cout << "MAPE_training(" << 20000 << "): " << MAPE_training_ref << std::endl;
-	std::cout << "MAPE_validation(" << 20000 << "): " << MAPE_validation_ref << std::endl;
+	std::cout << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
+	std::cout << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
@@ -762,6 +767,7 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 	std::vector<float>& Vector_of_weights,
 	std::vector<float>& Vector_of_bias_weights,
 	std::vector<float>& Vector_of_error_values,
+	std::vector<float>& MAPE_value,
 	int it_data,
 	int it_weight,
 	int it_bias,
@@ -770,7 +776,7 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 	int it_iterator_one_dim,
 	int it_value_neuron,
 	int it_back_neuron,
-	float& MAPE
+	int epoch
 )
 {
 	it_prev_layer = 1 + *Number_of_hidden_layers;		// previous layers
@@ -801,12 +807,12 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 			if (Vector_of_data[Vector_of_data.capacity() - r][it_data] == 0 ||
 				Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] == 0)
 			{
-				MAPE += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
+				MAPE_value[epoch] += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
 					Vector_of_neuron_values[it_prev_layer][*Number_of_output - r]));
 			}
 			else
 			{
-				MAPE += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
+				MAPE_value[epoch] += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
 					Vector_of_neuron_values[it_prev_layer][*Number_of_output - r]) /
 					(Vector_of_data[Vector_of_data.capacity() - r][it_data])) * 100.0f;
 			}

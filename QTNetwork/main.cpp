@@ -5,7 +5,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    MainWindow x;
+    x.resize(300, 300);
+    x.show();
     return a.exec();
 }

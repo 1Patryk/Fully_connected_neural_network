@@ -1,0 +1,3 @@
+#define NeuralNetwork_VERSION_MAJOR @NeuralNetwork_VERSION_MAJOR@
+#define NeuralNetwork_VERSION_MINOR @NeuralNetwork_VERSION_MINOR@
+#define PROJECT_SOURCE_DIR @PROJECT_SOURCE_DIR@

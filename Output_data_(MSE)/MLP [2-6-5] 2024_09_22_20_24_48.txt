@@ -1,0 +1,201 @@
+MLP [2-6-5] 2024_09_22_20_24_48.txt
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+426.528 315.335
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+423.058 316.396
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+419.592 315.605
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+416.175 314.812
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+412.811 314.019
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+409.504 313.228
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+406.254 312.435
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+403.067 311.642
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+399.947 310.847
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+396.891 310.051
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+393.906 309.255
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+390.994 308.457
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+388.159 307.659
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+385.401 306.861
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+382.719 306.061
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+380.12 305.263
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+377.601 304.471
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+375.16 303.681
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+372.797 302.89
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+370.511 302.099
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+368.304 301.308
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+366.172 300.518
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+364.117 299.728
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+362.136 298.939
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+360.228 298.15
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+358.389 297.362
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+356.62 296.574
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+354.919 295.788
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+353.286 295.002
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+351.716 294.218
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+350.21 293.435
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+348.765 292.653
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+347.38 291.873
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+346.051 291.094
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+344.778 290.316
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+343.559 289.541
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+342.393 288.767
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+341.275 287.998
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+340.205 287.237
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+339.181 286.478
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+338.201 285.721
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+337.264 284.967
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+336.368 284.215
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+335.51 283.465
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+334.69 282.718
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+333.906 281.976
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+333.156 281.238
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+332.441 280.503
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+331.756 279.771
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+331.103 279.042
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+330.479 278.316
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+329.883 277.592
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+329.314 276.872
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+328.771 276.155
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+328.252 275.44
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+327.757 274.73
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+327.285 274.022
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+326.834 273.318
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+326.403 272.618
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+325.993 271.92
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+325.6 271.227
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+325.226 270.537
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+324.869 269.85
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+324.527 269.168
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+324.202 268.489
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+323.891 267.814
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+323.594 267.142
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+323.311 266.478
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+323.041 265.822
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+322.784 265.175
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+322.538 264.532
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+322.303 263.894
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+322.079 263.263
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+321.866 262.637
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+321.662 262.014
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+321.468 261.396
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+321.283 260.781
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+321.106 260.171
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.937 259.565
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.776 258.963
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.623 258.365
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.477 257.771
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.337 257.185
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.204 256.606
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+320.077 256.033
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.955 255.464
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.84 254.899
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.729 254.339
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.624 253.783
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.523 253.231
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.427 252.683
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.336 252.139
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.249 251.6
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.165 251.067
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.086 250.541
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+319.01 250.022
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+318.938 249.507
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+318.868 248.996
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+318.803 248.49
+Number of epochs {}{}{} MAPE_value_training {}{}{} MAPE_value_validation
+318.74 247.988

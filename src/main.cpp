@@ -1,4 +1,4 @@
-#include "../Include/Fully_connected_network.hpp"
+#include "../include/Fully_connected_network.hpp"
 
 int main(int argc, char *argv[])
 {

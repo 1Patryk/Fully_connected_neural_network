@@ -1,4 +1,4 @@
-#include "../Include/Fully_connected_network.hpp"
+#include "../include/Fully_connected_network.hpp"
 
 Fully_connected_network::Fully_connected_network()
 {

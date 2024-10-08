@@ -7,12 +7,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB ALL_SOURCE
 	"${PROJECT_SOURCE_DIR}/include/*.h"
-    "${PROJECT_SOURCE_DIR}/include/*.hpp"
-    "${PROJECT_SOURCE_DIR}/src/*.cpp"
-    "${PROJECT_SOURCE_DIR}/src/*.c"
+	"${PROJECT_SOURCE_DIR}/include/*.hpp"
+	"${PROJECT_SOURCE_DIR}/src/*.cpp"
+	"${PROJECT_SOURCE_DIR}/src/*.c"
 )
 
 add_executable(NeuralNetwork ${ALL_SOURCE})
+
+configure_file(
+	${CMAKE_SOURCE_DIR}/NetworkConfig.h.in
+	${CMAKE_SOURCE_DIR}/NetworkConfig.h)
 
 install(TARGETS NeuralNetwork RUNTIME DESTINATION Binary)
 

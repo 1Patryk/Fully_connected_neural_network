@@ -19,7 +19,7 @@ Fully_connected_network::Fully_connected_network()
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
-	Number_of_neurons_in_hidden_layers = std::vector<int>{  6 ,  5 };
+	Number_of_neurons_in_hidden_layers = std::vector<int>{  1 ,  1 };
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_training = std::vector<float>(*Number_of_epochs);
@@ -195,20 +195,83 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 
 	if (file.is_open())
 	{
+		// head
 		file << file_date;
+		file << "\n" << "\n";
+		file << "Number of epochs || MAPE_value_training || MAPE_value_validation";
+		file << "\n" << "\n";
+
+		// data
 		for (int i = 0; i < *Number_of_epochs; ++i)
 		{
-			file << "\n";
-			file << "Number of epochs";
-			file << " {}{}{} ";
-			file << "MAPE_value_training";
-			file << " {}{}{} ";
-			file << "MAPE_value_validation";
-			file << "\n";
+			file << i + 1;
+			file << "\t" << "\t";
 			file << MAPE_value_training_ref[i];
-			file << " ";
+			file << "\t" << "\t";
 			file << MAPE_value_validation_ref[i];
+			file << "\n";
 		}
+
+		file << "\n" << "\n";
+
+		file << "Vector_of_weights_training";
+		file << "\n" << "\n";
+		file << "Lp. || value";
+		file << "\n" << "\n";
+
+		for (int i = 0; i < Vector_of_weights_training_ref.capacity(); ++i)
+		{
+			file << i + 1;
+			file << "\t" << "\t";
+			file << Vector_of_weights_training_ref[i];
+			file << "\n";
+		}
+
+		file << "\n" << "\n";
+
+		file << "Vector_of_bias_weights_training";
+		file << "\n" << "\n";
+		file << "Lp. || value";
+		file << "\n" << "\n";
+
+		for (int i = 0; i < Vector_of_bias_weights_training_ref.capacity(); ++i)
+		{
+			file << i + 1;
+			file << "\t" << "\t";
+			file << Vector_of_bias_weights_training_ref[i];
+			file << "\n";
+		}
+		
+		file << "\n" << "\n";
+
+		file << "Vector_of_weights_validation";
+		file << "\n" << "\n";
+		file << "Lp. || value";
+		file << "\n" << "\n";
+
+		for (int i = 0; i < Vector_of_weights_validation_ref.capacity(); ++i)
+		{
+			file << i + 1;
+			file << "\t" << "\t";
+			file << Vector_of_weights_validation_ref[i];
+			file << "\n";
+		}
+
+		file << "\n" << "\n";
+
+		file << "Vector_of_bias_weights_validation";
+		file << "\n" << "\n";
+		file << "Lp. || value";
+		file << "\n" << "\n";
+
+		for (int i = 0; i < Vector_of_bias_weights_validation_ref.capacity(); ++i)
+		{
+			file << i + 1;
+			file << "\t" << "\t";
+			file << Vector_of_bias_weights_validation_ref[i];
+			file << "\n";
+		}
+
 		file.close();
 	}
 	else
@@ -264,7 +327,7 @@ void Fully_connected_network::Divide_data_to_training_test_and_validation()
 
 		std::vector<float> zero_vector = { 0 };
 
-		// train
+		// training
 		for (int i = 0; i < Vector_of_data_ref.capacity(); i++)
 		{
 			Vector_of_data_training_ref.push_back(zero_vector);
@@ -566,7 +629,7 @@ void Fully_connected_network::Calculating_the_network_MLP(std::string* Open_file
 	Pseudo_random_numbers(
 		Vector_of_bias_weights_validation_ref,
 		"Vector_of_bias_weights_validation_ref");
-
+	
 	// creating one-dimensional vector of neuron values 
 
 	// TRAINING

@@ -182,4 +182,7 @@ public:
 	float Unipolar_sigmoidal_function(float e);
 
 	void Print_MLP_data();
+
+	// destructor
+	~Fully_connected_network();
 };

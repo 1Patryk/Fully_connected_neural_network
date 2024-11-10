@@ -1,4 +1,9 @@
+Number_of_input || Number_of_output
+
 2	1
+
+First_number || Second_Number || Result
+
 1	1000	1001
 2	998	1000
 3	996	999

@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 100 };
+	Number_of_epochs = new int{ 10000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -19,7 +19,7 @@ Fully_connected_network::Fully_connected_network()
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
-	Number_of_neurons_in_hidden_layers = std::vector<int>{  1 ,  1 };
+	Number_of_neurons_in_hidden_layers = std::vector<int>{5, 3, 6, 8, 3};
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_training = std::vector<float>(*Number_of_epochs);
@@ -104,11 +104,22 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 
 	if (file)
 	{
+		// skip header
+		std::string head = {};
+		getline(file, head);
+		getline(file, head);
+
 		// read 2 int of data which specifying amound of input and output
 		file >> One_piece_of_data;
 		*Number_of_input = static_cast<int>(One_piece_of_data);
 		file >> One_piece_of_data;
 		*Number_of_output = static_cast<int>(One_piece_of_data);
+
+		// skip describe columns
+		std::string describe = {};
+		getline(file, describe);
+		getline(file, describe);
+		getline(file, describe);
 
 		// adding 'inp_out' vectors to data, where 'inp_out' is determined as amound of input and output signals
 		for (int i = 0; i < (*Number_of_input + *Number_of_output); i++)
@@ -182,7 +193,8 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
         ss << Number_of_neurons_in_hidden_layers[i];
     }
 
-    ss << "] " << std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << extension;
+    ss << "] " << " [" << *Number_of_epochs << " Epochs] " <<
+	std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << extension;
 
     std::string file_date = ss.str();
 
@@ -196,10 +208,13 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 	if (file.is_open())
 	{
 		// head
-		file << file_date;
-		file << "\n" << "\n";
-		file << "Number of epochs || MAPE_value_training || MAPE_value_validation";
-		file << "\n" << "\n";
+		file << file_date << std::endl;
+		file << std::endl;
+		file << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
+		file << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
+		file << std::endl;
+		file << "Number of epochs || MAPE_value_training || MAPE_value_validation" << std::endl;
+		file << std::endl;
 
 		// data
 		for (int i = 0; i < *Number_of_epochs; ++i)
@@ -209,7 +224,7 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 			file << MAPE_value_training_ref[i];
 			file << "\t" << "\t";
 			file << MAPE_value_validation_ref[i];
-			file << "\n";
+			file << std::endl;
 		}
 
 		file << "\n" << "\n";
@@ -493,6 +508,7 @@ void Fully_connected_network::Create_vector_of_weights(
 	{
 		Add += Vector_of_neuron_values[i].capacity() * 
 			   Vector_of_neuron_values[i + 1].capacity();
+
 	}
 	
 	// create vector of weights
@@ -1215,4 +1231,9 @@ void Fully_connected_network::Print_MLP_data()
 				<< Vector_of_error_values_validation_ref[i] << std::endl;
 		}
 	}
+}
+
+Fully_connected_network::~Fully_connected_network()
+{
+
 }

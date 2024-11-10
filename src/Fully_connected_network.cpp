@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 10000 };
+	Number_of_epochs = new int{ 100 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -181,11 +181,13 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
 
 	auto localTime = std::chrono::system_clock::to_time_t(now);
 
+	// Creating .txt file with output data
+
 	const char* extension = ".txt";
 
     std::stringstream ss;
 
-    ss << "MLP [" << *Number_of_input;
+    ss << "MLP_" << *Number_of_input;
 
     for (int i = 0; i < *Number_of_hidden_layers; i++)
     {
@@ -193,7 +195,7 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
         ss << Number_of_neurons_in_hidden_layers[i];
     }
 
-    ss << "] " << " [" << *Number_of_epochs << " Epochs] " <<
+    ss << "_" << "_" << *Number_of_epochs << "_Epochs_" <<
 	std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << extension;
 
     std::string file_date = ss.str();
@@ -203,97 +205,203 @@ void Fully_connected_network::Write_data_MLP(std::string* Output_filename_path)
     std::cout << *Output_filename_path + file_date << std::endl;
 
     // ofstream only can write file
-    std::ofstream file(*Output_filename_path + file_date);
+    std::ofstream file_txt(*Output_filename_path + file_date);
 
-	if (file.is_open())
+	if (file_txt.is_open())
 	{
 		// head
-		file << file_date << std::endl;
-		file << std::endl;
-		file << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
-		file << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
-		file << std::endl;
-		file << "Number of epochs || MAPE_value_training || MAPE_value_validation" << std::endl;
-		file << std::endl;
+		file_txt << file_date << std::endl;
+		file_txt << std::endl;
+		file_txt << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
+		file_txt << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
+		file_txt << std::endl;
+		file_txt << "Number of epochs || MAPE_value_training || MAPE_value_validation" << std::endl;
+		file_txt << std::endl;
 
 		// data
 		for (int i = 0; i < *Number_of_epochs; ++i)
 		{
-			file << i + 1;
-			file << "\t" << "\t";
-			file << MAPE_value_training_ref[i];
-			file << "\t" << "\t";
-			file << MAPE_value_validation_ref[i];
-			file << std::endl;
+			file_txt << i + 1;
+			file_txt << "\t" << "\t";
+			file_txt << MAPE_value_training_ref[i];
+			file_txt << "\t" << "\t";
+			file_txt << MAPE_value_validation_ref[i];
+			file_txt << std::endl;
 		}
 
-		file << "\n" << "\n";
+		file_txt << "\n" << "\n";
 
-		file << "Vector_of_weights_training";
-		file << "\n" << "\n";
-		file << "Lp. || value";
-		file << "\n" << "\n";
+		file_txt << "Vector_of_weights_training";
+		file_txt << "\n" << "\n";
+		file_txt << "Lp. || value";
+		file_txt << "\n" << "\n";
 
 		for (int i = 0; i < Vector_of_weights_training_ref.capacity(); ++i)
 		{
-			file << i + 1;
-			file << "\t" << "\t";
-			file << Vector_of_weights_training_ref[i];
-			file << "\n";
+			file_txt << i + 1;
+			file_txt << "\t" << "\t";
+			file_txt << Vector_of_weights_training_ref[i];
+			file_txt << "\n";
 		}
 
-		file << "\n" << "\n";
+		file_txt << "\n" << "\n";
 
-		file << "Vector_of_bias_weights_training";
-		file << "\n" << "\n";
-		file << "Lp. || value";
-		file << "\n" << "\n";
+		file_txt << "Vector_of_bias_weights_training";
+		file_txt << "\n" << "\n";
+		file_txt << "Lp. || value";
+		file_txt << "\n" << "\n";
 
 		for (int i = 0; i < Vector_of_bias_weights_training_ref.capacity(); ++i)
 		{
-			file << i + 1;
-			file << "\t" << "\t";
-			file << Vector_of_bias_weights_training_ref[i];
-			file << "\n";
+			file_txt << i + 1;
+			file_txt << "\t" << "\t";
+			file_txt << Vector_of_bias_weights_training_ref[i];
+			file_txt << "\n";
 		}
 		
-		file << "\n" << "\n";
+		file_txt << "\n" << "\n";
 
-		file << "Vector_of_weights_validation";
-		file << "\n" << "\n";
-		file << "Lp. || value";
-		file << "\n" << "\n";
+		file_txt << "Vector_of_weights_validation";
+		file_txt << "\n" << "\n";
+		file_txt << "Lp. || value";
+		file_txt << "\n" << "\n";
 
 		for (int i = 0; i < Vector_of_weights_validation_ref.capacity(); ++i)
 		{
-			file << i + 1;
-			file << "\t" << "\t";
-			file << Vector_of_weights_validation_ref[i];
-			file << "\n";
+			file_txt << i + 1;
+			file_txt << "\t" << "\t";
+			file_txt << Vector_of_weights_validation_ref[i];
+			file_txt << "\n";
 		}
 
-		file << "\n" << "\n";
+		file_txt << "\n" << "\n";
 
-		file << "Vector_of_bias_weights_validation";
-		file << "\n" << "\n";
-		file << "Lp. || value";
-		file << "\n" << "\n";
+		file_txt << "Vector_of_bias_weights_validation";
+		file_txt << "\n" << "\n";
+		file_txt << "Lp. || value";
+		file_txt << "\n" << "\n";
 
 		for (int i = 0; i < Vector_of_bias_weights_validation_ref.capacity(); ++i)
 		{
-			file << i + 1;
-			file << "\t" << "\t";
-			file << Vector_of_bias_weights_validation_ref[i];
-			file << "\n";
+			file_txt << i + 1;
+			file_txt << "\t" << "\t";
+			file_txt << Vector_of_bias_weights_validation_ref[i];
+			file_txt << "\n";
 		}
 
-		file.close();
+		file_txt.close();
 	}
 	else
 	{
-		std::cout << "Error, file not created. Check if name of file is correct.";
+		std::cout << "Error, file '.txt' not created. Check if name of file is correct.";
 		exit(3);
 	}
+
+	// Creating .c file for drawing plot (root cern)
+
+	extension = ".c";
+
+	std::stringstream cc;
+	
+    cc << "MLP_" << *Number_of_input;
+
+    for (int i = 0; i < *Number_of_hidden_layers; i++)
+    {
+        cc << "-";
+        cc << Number_of_neurons_in_hidden_layers[i];
+    }
+
+    cc << "_" << "_" << *Number_of_epochs << "_Epochs_";
+	cc << std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << "_Plot" << extension;
+
+    file_date = cc.str();
+
+    file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
+
+    std::cout << *Output_filename_path + file_date << std::endl;
+
+    // ofstream only can write file
+    std::ofstream file_c(*Output_filename_path + "../build/" + file_date);
+
+	if (file_c.is_open())
+	{	
+		//file_c << "void multigraphpalettecolor()" << std::endl;
+		file_c << "{" << std::endl;
+		
+		/*
+		file_c << "\t" << "float x[" << *Number_of_epochs << "] = {" << std::endl;
+
+		for(int i = 0; i < *Number_of_epochs; i++)
+		{
+			file_c << "\t" << i + 1 << "," << std::endl;
+		}
+
+		file_c << "\t" << "};" << std::endl;
+		file_c << std::endl;
+		*/
+
+		file_c << "\t" << "float y_training[" << *Number_of_epochs << "] = {" << std::endl;
+
+		for(int i = 0; i < *Number_of_epochs; i++)
+		{
+			file_c << "\t" <<  MAPE_value_training_ref[i] << "," << std::endl;
+		}
+
+		file_c << "\t" << "};" << std::endl;
+		file_c << std::endl;
+
+		file_c << "\t" << "float y_validation[" << *Number_of_epochs << "] = {" << std::endl;
+
+		for(int i = 0; i < *Number_of_epochs; i++)
+		{
+			file_c << "\t" <<  MAPE_value_validation_ref[i] << "," << std::endl;
+		}
+
+		file_c << "\t" << "};" << std::endl;
+		file_c << std::endl;
+
+		file_c << "\t" << "auto mg  = new TMultiGraph();" << std::endl;
+		file_c << std::endl;
+
+		file_c << "\t" << "auto gr1 = new TGraph(); gr1->SetMarkerStyle(20);" << std::endl;
+		file_c << "\t" << "auto gr2 = new TGraph(); gr2->SetMarkerStyle(21);" << std::endl;
+
+		file_c << "\t" << "for (int i=0; i <= " << *Number_of_epochs << "; i++)" << std::endl;
+		file_c << "\t" << "{" << std::endl;
+		file_c << "\t" << "\t" <<"gr1->SetPoint(i,i,y_training[i]);" << std::endl;
+		file_c << "\t" << "\t" <<"gr2->SetPoint(i,i,y_validation[i]);" << std::endl;
+		file_c << "\t" << "}" << std::endl;
+
+		file_c << "\t" << "mg->Add(gr2,\"PL\");" << std::endl;
+   		file_c << "\t" << "mg->Add(gr1,\"PL\");" << std::endl;
+
+		file_c << "\t" << "TCanvas c1;" << std::endl;
+
+		file_c << "\t" << "mg->Draw(\"A pmc plc\");" << std::endl;
+
+		file_c << "\t" << "c1.Print(" << "\"" << file_date << ".pdf" << "\"" << ");" << std::endl;
+		/*
+		file_c << "\t" << "TGraph gr(" << *Number_of_epochs;
+		file_c << ", x, y);" << std::endl;
+		file_c << std::endl;
+		//file_c << "\t" << "TCanvas c1;" << std::endl;
+		file_c << "\t" << "gr.Draw(" << "\"" << "Ac*" << "\"" << ");" << std::endl;
+		file_c << "\t" << "c1.Print(" << "\"" << file_date << ".pdf" << "\"" << ");" << std::endl;
+		file_c << std::endl;
+		*/
+		file_c << "}";
+
+		file_c.close();
+	}
+	else
+	{
+		std::cout << "Error, file '.c' not created. Check if name of file is correct.";
+		exit(3);
+	}
+
+	system(("root -q " + file_date).c_str());
+
+	system(("open " + file_date + ".pdf").c_str());
 
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();

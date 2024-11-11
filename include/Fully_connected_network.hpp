@@ -25,7 +25,6 @@ private:
 	int* Number_of_weights;
 	int* Total_number_of_neurons;
 	int* Train;
-	int* Test;
 	int* Validation;
 	float* Beta;
 	float* Bias;
@@ -38,6 +37,16 @@ private:
 	std::vector<float> Range_of_pseudo_numbers_values;
 	std::vector<float> MAPE_value_training;
 	std::vector<float> MAPE_value_validation;
+
+	std::vector<float> Max_training_value_vector;
+	std::vector<float> Min_training_value_vector;
+	std::vector<float> Max_validation_value_vector;
+	std::vector<float> Min_validation_value_vector;
+
+	std::vector<float>& Max_training_value_vector_ref = Max_training_value_vector;
+	std::vector<float>& Min_training_value_vector_ref = Min_training_value_vector;
+	std::vector<float>& Max_validation_value_vector_ref = Max_validation_value_vector;
+	std::vector<float>& Min_validation_value_vector_ref = Min_validation_value_vector;
 
 	std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layers;
 	std::vector<std::vector<float>>& Vector_of_data_ref = Vector_of_data;
@@ -81,14 +90,6 @@ private:
 	std::vector<float>& Vector_of_bias_weights_validation_ref = Vector_of_bias_weights_validation;
 	std::vector<float>& Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
 
-	// TEST
-
-	std::vector<std::vector<float>> Vector_of_data_test;
-
-	// TEST (REFERENCE)
-
-	std::vector<std::vector<float>>& Vector_of_data_test_ref = Vector_of_data_test;
-
 public:
 
 	// constructor
@@ -112,17 +113,21 @@ public:
 	void Swap_data();
 
 	// dividing data to train, test and validation sets.
-	void Divide_data_to_training_test_and_validation();
+	void Divide_data_to_training_and_validation();
 
 	// values from 0 to 1
 	void Min_max_unipolar_scaling(
 		std::vector<std::vector<float>>& Vector_of_data,
-		std::string name_of_vector);
+		std::string name_of_vector,
+		std::vector<float>& Min_data_value_vector,
+		std::vector<float>& Max_data_value_vector);
 
 	// values from -1 to 1
 	void Min_max_bipolar_scaling(
 		std::vector<std::vector<float>>& Vector_of_data,
-		std::string name_of_vector);
+		std::string name_of_vector,
+		std::vector<float>& Min_data_value_vector,
+		std::vector<float>& Max_data_value_vector);
 
 	// create vector of neuron values
 	void Create_vector_of_neurons_values(
@@ -181,7 +186,18 @@ public:
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
 
-	void Print_MLP_data();
+	// test
+	void Testing_network
+	(
+		std::vector<std::vector<float>>& Vector_of_data,
+		std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::vector<float>& Vector_of_weights,
+		std::vector<float>& Vector_of_bias_weights,
+		int it_data,
+		int it_weight,
+		int it_bias,
+		int it_prev_layer
+	);
 
 	// destructor
 	~Fully_connected_network();

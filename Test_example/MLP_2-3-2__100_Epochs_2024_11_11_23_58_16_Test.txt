@@ -1,0 +1,92 @@
+MLP_2-3-2__100_Epochs_2024_11_11_23_58_16_Test.txt
+
+Vector_of_weights_training
+
+Lp. || value
+
+1		-4.7773
+2		5.03471
+3		1.60876
+4		-2.58804
+5		-1.52746
+6		1.5288
+7		-1.57988
+8		0.650502
+9		-0.962222
+10		2.9313
+11		-1.50403
+12		0.0770904
+13		1.01166
+14		-1.98683
+
+Vector_of_bias_weights_training
+
+Lp. || value
+
+1		-0.734825
+2		-0.0351134
+3		-0.275745
+4		0.149869
+5		-1.10803
+6		-0.636859
+
+Vector_of_weights_validation
+
+Lp. || value
+
+1		0.525261
+2		-0.359041
+3		-1.16887
+4		0.843123
+5		-1.50573
+6		1.491
+7		0.217475
+8		-0.736472
+9		-1.11815
+10		-0.479932
+11		0.491914
+12		0.434288
+13		0.639094
+14		-0.270815
+
+Vector_of_bias_weights_validation
+
+Lp. || value
+
+1		-0.171504
+2		-0.140611
+3		-0.430559
+4		0.194574
+5		-0.0277181
+6		-0.520306
+
+MAPE_training(100): 178.789
+MAPE_validation(100): 134.993
+
+*Max_training_value[0]: 81
+*Min_training_value[0]: -0.00118075
+
+*Max_training_value[1]: 4
+*Min_training_value[1]: -0.00118075
+
+*Max_training_value[2]: -0.00118075
+*Min_training_value[2]: -0.0467309
+
+
+*Max_validation_value[0]: 81
+*Min_validation_value[0]: 8
+
+*Max_validation_value[1]: 4
+*Min_validation_value[1]: 0.5
+
+*Max_validation_value[2]: -0.00196733
+*Min_validation_value[2]: -0.0464897
+
+
+C++ formula
+
+void main()
+{
+	float imput_0 = 	//enter value
+	float imput_1 = 	//enter value
+}

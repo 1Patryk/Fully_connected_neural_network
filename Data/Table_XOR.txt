@@ -2,9 +2,9 @@ Number_of_input || Number_of_output
 
 2	1
 
-No. || First_number || Second_Number || Third_number
+First_number || Second_Number || Third_number
 
-1   0	0	0
-2   1	0	1
-3   0	1	1
-4   1	1	0
+0	0	0
+1	0	1
+0	1	1
+1	1	0

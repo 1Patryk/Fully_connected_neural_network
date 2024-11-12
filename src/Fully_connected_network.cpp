@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 100 };
+	Number_of_epochs = new int{ 1000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };

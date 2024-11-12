@@ -127,8 +127,19 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 			std::vector<float> vec(0);
 			Vector_of_data_ref.push_back(vec);
 		}	
+		/*
+		for (int i = 0; !file.eof(); ++i)
+		{
+			for (int j = 0; j < (*Number_of_input + *Number_of_output); j++)
+			{
+				file >> One_piece_of_data;
+				Vector_of_data_ref[j].push_back(One_piece_of_data);
+				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
+			}
+		}
+		*/
 
-		for (int i = 0; !file.eof(); i++)
+		while(!file.eof())
 		{
 			for (int j = 0; j < (*Number_of_input + *Number_of_output); j++)
 			{
@@ -140,10 +151,22 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 
 		Vector_of_data_ref.shrink_to_fit();
 
+		std::cout <<"UNO:" <<  std::setprecision(10) << Vector_of_data_ref[0][0] << std::endl;
+		std::cout << "UNO:" <<  std::setprecision(10) << Vector_of_data_ref[1][0]  << std::endl;
+		std::cout << "UNO:" <<  std::setprecision(10) << Vector_of_data_ref[2][0]  << std::endl;
+
 		for (int i = 0; i < (*Number_of_input + *Number_of_output); i++)
 		{
+			Vector_of_data_ref[i].erase(Vector_of_data_ref[i].end());
 			Vector_of_data_ref[i].shrink_to_fit();
 		}
+
+		std::cout << std::setprecision(10);
+
+
+		std::cout << "UNO:" << 	std::setprecision(10) << *Vector_of_data_ref[0].end()  << std::endl;
+		std::cout << "UNO:" <<  std::setprecision(10) << *Vector_of_data_ref[1].end()   << std::endl;
+		std::cout << "UNO:" <<  std::setprecision(10) << *Vector_of_data_ref[2].end()  << std::endl;
 
 		// initialization of variable
 		*Number_of_hidden_layers = Number_of_neurons_in_hidden_layers_ref.capacity();

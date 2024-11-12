@@ -11,5 +11,3 @@ int main()
 
 	return(0);
 }
-
-// Wrong creating vector of data, one addiional value for last row (min max value in test .txt !!)

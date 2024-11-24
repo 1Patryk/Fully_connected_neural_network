@@ -1,0 +1,85 @@
+MLP_2-3-2__10000_Epochs_2024_11_24_20_42_47_Test.txt
+
+Vector_of_weights_training
+
+Lp. || value
+
+1		-10.0332
+2		17.7442
+3		-0.716364
+4		29.3788
+5		27.8967
+6		-5.23701
+7		2.55629
+8		0.849061
+9		-2.37819
+10		-1.11506
+11		-8.98815
+12		15.8103
+13		-8.78837
+14		11.3578
+
+Vector_of_bias_weights_training
+
+Lp. || value
+
+1		-9.38954
+2		-5.29474
+3		-20.6252
+4		2.12945
+5		10.3714
+6		-2.26703
+
+Vector_of_weights_validation
+
+Lp. || value
+
+1		-2.26656
+2		-15.4536
+3		-23.6844
+4		6.24693
+5		10.9523
+6		-36.3939
+7		-10.0887
+8		9.66998
+9		-9.2274
+10		-2.59204
+11		6.01933
+12		0.317525
+13		-8.95363
+14		-4.33707
+
+Vector_of_bias_weights_validation
+
+Lp. || value
+
+1		2.55917
+2		15.0548
+3		0.563563
+4		-11.1288
+5		-0.177612
+6		4.94381
+
+MAPE_training(10000): 30.5006
+MAPE_validation(10000): 113.585
+
+*Max_training_value[0]: 81
+*Min_training_value[0]: 8
+
+*Max_training_value[1]: 4
+*Min_training_value[1]: 0.5
+
+*Max_training_value[2]: -0.00138063
+*Min_training_value[2]: -0.0465985
+
+
+*Max_validation_value[0]: 81
+*Min_validation_value[0]: 8
+
+*Max_validation_value[1]: 4
+*Min_validation_value[1]: 0.5
+
+*Max_validation_value[2]: -0.00118075
+*Min_validation_value[2]: -0.0467309
+
+

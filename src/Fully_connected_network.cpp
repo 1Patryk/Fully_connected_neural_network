@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 1000 };
+	Number_of_epochs = new int{ 10000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -553,19 +553,6 @@ void Fully_connected_network::Write_data_MLP(
 
 		file_test << std::endl;
 
-		file_test << "C++ formula" << std::endl;
-		file_test << std::endl;
-
-		file_test << "void main()" << std::endl;
-		file_test << "{" << std::endl;
-
-		for(int i = 0; i < *Number_of_input; i++)
-		{
-			file_test << "\t" << "float imput_" << i << " = 	//enter value" << std::endl;
-		}
-
-		file_test << "}" << std::endl;
-
 		file_test.close();
 	}
 	else
@@ -574,6 +561,297 @@ void Fully_connected_network::Write_data_MLP(
 		exit(3);
 	}
 
+	// Creating .cpp file for a trained network
+
+	extension = ".cpp";
+
+	std::stringstream cpp;
+	
+    cpp << "MLP_" << *Number_of_input;
+
+	for (int i = 0; i < *Number_of_hidden_layers; i++)
+    {
+        cpp << "-";
+        cpp << Number_of_neurons_in_hidden_layers[i];
+    }
+
+	cpp << "_" << "_" << *Number_of_epochs << "_Epochs_";
+	cpp << std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << "_Test" << extension;
+
+    file_date = cpp.str();
+
+    file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
+
+    std::cout << *Output_filename_path + file_date << std::endl;
+
+    // ofstream only can write file
+    std::ofstream file_cpp(*Output_filename_path + "../Test_example/" + file_date);
+
+	if (file_cpp.is_open())
+	{	
+		file_cpp << "#include <iostream>" << std::endl;
+		file_cpp << "#include <vector>" << std::endl;
+		file_cpp << "#include <cmath>" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "int Beta = " << *Beta << ";" << std::endl;
+
+		file_cpp << std::endl;
+		
+		file_cpp << "float Unipolar_sigmoidal_function(float e)" << std::endl;
+		file_cpp << "{" << std::endl;
+		file_cpp << "\t" << "return static_cast<float>(1.0 / (1.0 + exp(-(Beta) * e)));" << std::endl;
+		file_cpp << "}" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "int main()" << std::endl;
+		file_cpp << "{" << std::endl;
+
+		file_cpp << "\t" << "std::vector <float> input = {  }; // enter value" << std::endl;
+		file_cpp << "\t" << "std::vector <float> output =" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		for(int i = 0; i < *Number_of_output; i++)
+		{
+			file_cpp << "\t" << "\t" << "0," << std::endl;
+		}
+
+		file_cpp << "\t" << "};" << std::endl;
+
+		file_cpp << std::endl;
+
+		for(int i = 0; i < *Number_of_input; i++)
+		{
+			file_cpp << "\t" << "float input_" << i << "_max = " << Max_training_value_vector[i] << ";" << std::endl;
+			file_cpp << "\t" << "float input_" << i << "_min = " << Min_training_value_vector[i] << ";" << std::endl;
+		}
+
+		file_cpp << std::endl;
+
+		for(int i = 0; i < *Number_of_output; i++)
+		{
+			file_cpp << "\t" << "float output_" << i << "_max = " <<
+			Max_training_value_vector[(*Number_of_input + (*Number_of_output - i)) - 1] << ";" << std::endl;
+			file_cpp << "\t" << "float output_" << i << "_min = " <<
+			Min_training_value_vector[(*Number_of_input + (*Number_of_output - i)) - 1] << ";" << std::endl;
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "std::vector <int> Number_of_neurons_in_hidden_layers =" << std::endl;
+		file_cpp << "\t" << "{";
+
+		for (int i = 0; i < Number_of_neurons_in_hidden_layers.capacity(); ++i)
+		{
+			file_cpp << std::endl;
+			file_cpp << "\t" << "\t" << Number_of_neurons_in_hidden_layers[i] << ",";
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "};" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "std::vector <int>& Number_of_neurons_in_hidden_layers_ref = Number_of_neurons_in_hidden_layers;" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "float Vector_of_weights_training[" << Vector_of_weights_training_ref.capacity() << "] =" << std::endl; 
+		file_cpp << "\t" << "{";
+
+		for (int i = 0; i < Vector_of_weights_training_ref.capacity(); ++i)
+		{
+			file_cpp << std::endl;
+			file_cpp << "\t" << "\t" << Vector_of_weights_training_ref[i] << ",";
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "};" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "float Vector_of_bias_weights_training[" << Vector_of_bias_weights_training.capacity() << "] =" << std::endl; 
+		file_cpp << "\t" << "{";
+
+		for (int i = 0; i < Vector_of_bias_weights_training.capacity(); ++i)
+		{
+			file_cpp << std::endl;
+			file_cpp << "\t" << "\t" << Vector_of_bias_weights_training[i] << ",";
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "};" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// iterator" << std::endl << "\t" << "int iter = 0;" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "std::vector <float> Vector_of_neuron_values[" << *Total_number_of_neurons << "] = { };" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// input layer of neurons" << std::endl; 
+		file_cpp << "\t" << "for (int i = 0; i <" << *Number_of_input << "; i++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "Vector_of_neuron_values[iter].push_back(0);" << std::endl;
+		file_cpp << "\t" << "}"	<< std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "iter += 1;" << std::endl; 
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// hidden layers of neurons" << std::endl; 
+		
+		file_cpp << "\t" << "for (iter; iter <= " << *Number_of_hidden_layers << "; iter++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref[iter - 1]; j++)" << std::endl;
+		file_cpp << "\t" << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "Vector_of_neuron_values[iter].push_back(0);" << std::endl;
+		file_cpp << "\t" << "\t" << "}" << std::endl;
+		file_cpp << "\t" << "}"	<< std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// output layer of neurons"<< std::endl; 
+
+		file_cpp << "\t" << "for (int i = 0; i < " << *Number_of_output << "; i++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" <<	"\t" <<	"Vector_of_neuron_values[iter].push_back(0);" << std::endl;
+		file_cpp << "\t" << "}"	<< std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "Vector_of_neuron_values->shrink_to_fit();"<< std::endl; 
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// capacity = amount of neurons"<< std::endl; 
+
+		file_cpp << "\t" << "for (int i = 0; i < Vector_of_neuron_values->capacity(); i++)"<< std::endl; 
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "Vector_of_neuron_values[i].shrink_to_fit();" << std::endl;
+		file_cpp << "\t" << "}"	<< std::endl;
+		
+		file_cpp << std::endl;
+
+		for(int i = 0; i < *Number_of_input; i++)
+		{
+			file_cpp << "\t" << "input[" << i << "] = (input[" << i << "]  -";
+			file_cpp << " " << "input_" << i << "_min) / (input_" << i << "_max - ";
+			file_cpp << " " << "input_" << i << "_min);" << std::endl;
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// Forward propagation"<< std::endl; 
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// input layer"<< std::endl; 
+
+		file_cpp << "\t" << "for (int j = 0; j < " << Vector_of_neuron_values_training_ref[0].capacity() << "; j++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "Vector_of_neuron_values[0][j] = input[j];" << std::endl;
+		file_cpp << "\t" << "}" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "// hidden layers"<< std::endl; 
+		// hidden layers
+		file_cpp << "\t" << "int it_weight = 0;" << std::endl;
+		file_cpp << "\t" << "int it_bias = 0;" << std::endl;
+
+		file_cpp << "\t" << "for (int k = 1; k < " << *Number_of_hidden_layers << " + 1; k++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "for (int l = 0; l < Vector_of_neuron_values[k].capacity(); l++)" << std::endl;
+		file_cpp << "\t" << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "for (int m = 0; m < Vector_of_neuron_values[k - 1].capacity(); m++)" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" <<	"{" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "\t" << "Vector_of_neuron_values[k][l] +=" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "\t" << "((Vector_of_neuron_values[k - 1][m] *" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "\t" << "Vector_of_weights_training[it_weight]));" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "\t" << "it_weight += 1;" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" <<	"}" << std::endl;
+		file_cpp << std::endl;
+		file_cpp << "\t" << "\t" << "\t" <<	"Vector_of_neuron_values[k][l] = Unipolar_sigmoidal_function(" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" <<	"\t" << "Vector_of_neuron_values[k][l] +" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" <<	"\t" << "Vector_of_bias_weights_training[it_bias]);" << std::endl;
+
+		file_cpp << std::endl;
+		
+		file_cpp << "\t" << "\t" << "\t" <<	"it_bias += 1;" << std::endl;
+		file_cpp << "\t" << "\t" << "}" << std::endl;
+		file_cpp << "\t" << "}" << std::endl;
+
+		
+		file_cpp << "\t" << "// output layer"<< std::endl; 
+
+		file_cpp << "\t" << "int it_prev_layer = 1 + " << *Number_of_hidden_layers << ";" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "for (int n = 0; n < " << *Number_of_output << "; n++)" << std::endl;
+		file_cpp << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "for (int o = 0; o < Vector_of_neuron_values[it_prev_layer - 1].capacity(); o++)" << std::endl;
+		file_cpp << "\t" << "\t" << "{" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "Vector_of_neuron_values[it_prev_layer][n] +=" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "(" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "\t" << "(Vector_of_neuron_values[it_prev_layer - 1][o] * Vector_of_weights_training[it_weight])" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << ");" << std::endl;
+		file_cpp << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "it_weight += 1;" << std::endl;
+		file_cpp << "\t" << "\t" << "}" << std::endl;
+		file_cpp << std::endl;
+		file_cpp << "\t" << "\t" << "Vector_of_neuron_values[it_prev_layer][n] = Unipolar_sigmoidal_function" << std::endl;
+		file_cpp << "\t" << "\t" << "(" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "Vector_of_neuron_values[it_prev_layer][n] +" << std::endl;
+		file_cpp << "\t" << "\t" << "\t" << "Vector_of_bias_weights_training[it_bias]" << std::endl;
+		file_cpp << "\t" << "\t" << ");" << std::endl;
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" <<	"\t" << "it_bias += 1;" << std::endl;
+		file_cpp << "\t" << "}" << std::endl;
+
+		file_cpp << std::endl;
+
+		for(int i = 0; i < *Number_of_output; i++)
+		{
+			file_cpp << "\t" << "output[" << i << "] = Vector_of_neuron_values[it_prev_layer][" << 
+			i << "];" << std::endl;
+		}
+
+		file_cpp << std::endl;
+
+		for(int i = 0; i < *Number_of_output; i++)
+		{
+			file_cpp << "\t" << "output[" << i << "] = output[" << i << "]  *";
+			file_cpp << " (output_" << i << "_max - output_" << i << "_min) + ";
+			file_cpp << " output_" << i << "_min;" << std::endl;
+			file_cpp << "\t" << "std::cout << \"output[" << i << "] = \" << " << "output[" << i << "] << std::endl;" << std::endl;
+		}
+
+		file_cpp << std::endl;
+
+		file_cpp << "\t" << "return 0;" << std::endl;
+
+		file_cpp << "}" << std::endl;
+
+		file_cpp.close();
+	}
+	else
+	{
+		std::cout << "Error, file '.cpp' (trained) not created. Check if name of file is correct.";
+		exit(3);
+	}
 
 	// end counting time 
 	const auto Stop = std::chrono::high_resolution_clock::now();
@@ -1099,7 +1377,7 @@ void Fully_connected_network::Forward_propagation_the_network_MLP
 	it_prev_layer = 1 + *Number_of_hidden_layers;		// previous layers
 	for (int n = 0; n < *Number_of_output; n++)
 	{
-		for (int o = 0; o < Vector_of_neuron_values[it_prev_layer].capacity(); o++)
+		for (int o = 0; o < Vector_of_neuron_values[it_prev_layer - 1].capacity(); o++)
 		{
 			Vector_of_neuron_values[it_prev_layer][n] +=
 				((Vector_of_neuron_values[it_prev_layer - 1][o] * Vector_of_weights[it_weight]));

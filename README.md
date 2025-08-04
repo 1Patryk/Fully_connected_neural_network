@@ -1,6 +1,8 @@
-## Fully-connected-neural-networks
+# Project name: Fully-connected-neural-networks
 
 This project is a simulation of an artificial neural network.
+
+## Main concept
 
 An artificial neural network is a simplified model of the human brain. Neurons are a description of a mathematical formula:
 
@@ -20,5 +22,5 @@ $\ x_{i} - i-th \\ input \\ value \$
 
 $\ b - bias \$
 
-Avaliable activation function:
+## Avaliable activation function:
 - Unipolar sigmoidal function

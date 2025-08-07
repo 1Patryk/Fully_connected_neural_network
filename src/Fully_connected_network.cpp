@@ -3,7 +3,7 @@
 Fully_connected_network::Fully_connected_network()
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 2000 };
+	Number_of_epochs = new int{ 20000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -14,11 +14,11 @@ Fully_connected_network::Fully_connected_network()
 	Validation = new int{ 40 };
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
-	Learning_rate_factor = new float { 0.01f };
+	Learning_rate_factor = new float { 0.001f };
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
-	Number_of_neurons_in_hidden_layers = std::vector<int>{4, 8, 16};
+	Number_of_neurons_in_hidden_layers = std::vector<int>{6, 5};
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_training = std::vector<float>(*Number_of_epochs);

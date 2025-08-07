@@ -2,6 +2,10 @@
 
 This project is a simulation of an artificial neural network.
 
+## Requirements
+
+- Graphical environment for drawing diagrams https://root.cern/install/all_releases
+
 ## Main concept
 
 An artificial neural network is a simplified model of the human brain. Neurons are a description of a mathematical formula:

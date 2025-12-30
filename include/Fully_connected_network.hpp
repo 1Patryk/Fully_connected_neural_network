@@ -33,6 +33,7 @@ private:
 	std::string* Open_filename;
     std::string* Output_filename_path;
 	std::vector <int> Number_of_neurons_in_hidden_layers;
+	std::vector <int> Activation_functions;
 	std::vector<std::vector<float>> Vector_of_data;
 	std::vector<float> Range_of_pseudo_numbers_values;
 	std::vector<float> MAPE_value_training;
@@ -105,9 +106,6 @@ public:
 
 	// reading input data from file
     void Read_data_MLP(std::string* Open_filename);
-
-	// write output data to file
-    void Write_data_MLP(std::string* Output_filename_path);
 
 	// swap input data 
 	void Swap_data();
@@ -183,8 +181,14 @@ public:
 		int epoch
 	);
 
+	// linear activation funcion
+	float Linear_activation_function(float e);
+
 	// values from 0 to 1 
 	float Unipolar_sigmoidal_function(float e);
+
+	// values from -1 to 1 
+	float Bipolar_sigmoidal_function(float e);
 
 	// test
 	void Testing_network
@@ -198,6 +202,9 @@ public:
 		int it_bias,
 		int it_prev_layer
 	);
+
+	// write output data to file
+    void Write_data_MLP(std::string* Output_filename_path);
 
 	// destructor
 	~Fully_connected_network();

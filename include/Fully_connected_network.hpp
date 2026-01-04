@@ -26,6 +26,7 @@ private:
 	int* Total_number_of_neurons;
 	int* Train;
 	int* Validation;
+	int* Optimizer_function;
 	float* Beta;
 	float* Bias;
 	float* Learning_rate_factor;
@@ -94,7 +95,10 @@ private:
 public:
 
 	// constructor
-	Fully_connected_network();
+	Fully_connected_network
+	(
+
+	);
 
 	// display times wich during from start to end function 
 	// auto Start, Stop = value now() function of chrono library
@@ -102,50 +106,89 @@ public:
 	// const char[] = unit (Unit of time) : 0 - nano, 1 - micro, 
 	// 2 - mili, 3 - seconds, 4 - minutes, 5 - hours
 	template<class start, class stop, class name, class unit>
-	void Display_results_counting_time(start Start, stop Stop, name name_of_function, unit unit_of_time);
+	void Display_results_counting_time
+	(
+		start Start, stop Stop, 
+		name name_of_function, 
+		unit unit_of_time
+	);
+
+	// initial parameter check
+	void Startup_check_function
+	(
+
+	);
 
 	// reading input data from file
-    void Read_data_MLP(std::string* Open_filename);
+    void Read_data_MLP
+	(
+		std::string* Open_filename
+	);
 
 	// swap input data 
-	void Swap_data();
+	void Swap_data
+	(
+
+	);
 
 	// dividing data to train, test and validation sets.
-	void Divide_data_to_training_and_validation();
+	void Divide_data_to_training_and_validation
+	(
+
+	);
 
 	// values from 0 to 1
-	void Min_max_unipolar_scaling(
+	void Min_max_unipolar_scaling
+	(
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::string name_of_vector,
 		std::vector<float>& Min_data_value_vector,
-		std::vector<float>& Max_data_value_vector);
+		std::vector<float>& Max_data_value_vector
+	);
 
 	// values from -1 to 1
-	void Min_max_bipolar_scaling(
+	void Min_max_bipolar_scaling
+	(
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::string name_of_vector,
 		std::vector<float>& Min_data_value_vector,
-		std::vector<float>& Max_data_value_vector);
+		std::vector<float>& Max_data_value_vector
+	);
 
 	// create vector of neuron values
-	void Create_vector_of_neurons_values(
+	void Create_vector_of_neurons_values
+	(
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::string name_of_vector);
+		std::string name_of_vector
+	);
 
-	void Create_vector_of_weights(std::vector<float>& Vector_of_weights,
+	void Create_vector_of_weights
+	(
+		std::vector<float>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::string name_of_vector);
+		std::string name_of_vector
+	);
 
-	void Create_vector_of_bias(std::vector<float>& Vector_of_bias_weights,
+	void Create_vector_of_bias
+	(
+		std::vector<float>& Vector_of_bias_weights,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::string name_of_vector);
+		std::string name_of_vector
+	);
 
 	// for first weights wector
-	void Pseudo_random_numbers(std::vector<float>& Vector,
-		std::string name_of_vector);
+	void Pseudo_random_numbers
+	(
+		std::vector<float>& Vector,
+		std::string name_of_vector
+	);
 
 	// main function of Fully_connected_network
-    void Calculating_the_network_MLP(std::string* Open_filename, std::string* Output_filename_path);
+    void Calculating_the_network_MLP
+	(
+		std::string* Open_filename, 
+		std::string* Output_filename_path
+	);
 
 	// forward propagation
 	void Forward_propagation_the_network_MLP
@@ -182,13 +225,22 @@ public:
 	);
 
 	// linear activation funcion
-	float Linear_activation_function(float e);
+	float Linear_activation_function
+	(
+		float e
+	);
 
 	// values from 0 to 1 
-	float Unipolar_sigmoidal_function(float e);
+	float Unipolar_sigmoidal_function
+	(
+		float e
+	);
 
 	// values from -1 to 1 
-	float Bipolar_sigmoidal_function(float e);
+	float Bipolar_sigmoidal_function
+	(
+		float e
+	);
 
 	// test
 	void Testing_network
@@ -204,8 +256,14 @@ public:
 	);
 
 	// write output data to file
-    void Write_data_MLP(std::string* Output_filename_path);
+    void Write_data_MLP
+	(
+		std::string* Output_filename_path
+	);
 
 	// destructor
-	~Fully_connected_network();
+	~Fully_connected_network
+	(
+
+	);
 };

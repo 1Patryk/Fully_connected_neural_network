@@ -4,7 +4,7 @@ Number_of_input || Number_of_output
 
 First_number || Second_Number || Third_number
 
-0	0	0
 1	0	1
 0	1	1
 1	1	0
+0   0   0

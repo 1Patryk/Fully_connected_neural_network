@@ -1,9 +1,12 @@
 #include "../include/Fully_connected_network.hpp"
 
-Fully_connected_network::Fully_connected_network()
+Fully_connected_network::Fully_connected_network
+(
+
+)
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 100 };
+	Number_of_epochs = new int{ 1000000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -12,14 +15,15 @@ Fully_connected_network::Fully_connected_network()
 	Total_number_of_neurons = new int{ 0 };
 	Train = new int{ 60 };
 	Validation = new int{ 40 };
+	Optimizer_function = new int{ 0 };	// 0 - SGD, 1 - ADAM
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
 	Learning_rate_factor = new float { 0.0001f };
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
-	Number_of_neurons_in_hidden_layers = std::vector<int>{20, 18, 15, 8, 2};
-	Activation_functions = std::vector<int>{ 1, 1, 1, 1, 1 }; // 0 - linear, 1 - unipolar sigmoidal, 2 - bipolar sigmoidal
+	Number_of_neurons_in_hidden_layers = std::vector<int>{6, 5};
+	Activation_functions = std::vector<int>{ 1, 1}; // 0 - linear, 1 - unipolar sigmoidal, 2 - bipolar sigmoidal
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_training = std::vector<float>(*Number_of_epochs);
@@ -50,9 +54,12 @@ Fully_connected_network::Fully_connected_network()
 }
 
 template<class start, class stop, class name, class unit>
-void Fully_connected_network::Display_results_counting_time(
-	start Start, stop Stop, name name_of_function, 
-	unit unit_of_time)
+void Fully_connected_network::Display_results_counting_time
+(
+	start Start, stop Stop, 
+	name name_of_function, 
+	unit unit_of_time
+)
 	{
 		switch (unit_of_time)
 		{
@@ -93,7 +100,24 @@ void Fully_connected_network::Display_results_counting_time(
 		}
 	}
 
-void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
+void Fully_connected_network::Startup_check_function
+(
+
+)
+{
+	if (Number_of_neurons_in_hidden_layers.capacity() != 
+	Activation_functions.capacity())
+	{
+		std::cout << "ERROR: Number of elements 'Number_of_neurons_in_hidden_layers'" <<
+		" is not equal to 'Activation_functions'" << std::endl;
+		exit(3);
+	}
+}
+
+void Fully_connected_network::Read_data_MLP
+(
+	std::string* Open_filename
+)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -146,15 +170,10 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 			{
 				file >> One_piece_of_data;
 				Vector_of_data_ref[j].push_back(One_piece_of_data);
-				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
 			}
 		}
 
 		Vector_of_data_ref.shrink_to_fit();
-
-		std::cout <<"UNO:" <<  std::setprecision(10) << Vector_of_data_ref[0][0] << std::endl;
-		std::cout << "UNO:" <<  std::setprecision(10) << Vector_of_data_ref[1][0]  << std::endl;
-		std::cout << "UNO:" <<  std::setprecision(10) << Vector_of_data_ref[2][0]  << std::endl;
 
 		for (int i = 0; i < (*Number_of_input + *Number_of_output); i++)
 		{
@@ -163,11 +182,6 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 		}
 
 		std::cout << std::setprecision(10);
-
-
-		std::cout << "UNO:" << 	std::setprecision(10) << *Vector_of_data_ref[0].end()  << std::endl;
-		std::cout << "UNO:" <<  std::setprecision(10) << *Vector_of_data_ref[1].end()   << std::endl;
-		std::cout << "UNO:" <<  std::setprecision(10) << *Vector_of_data_ref[2].end()  << std::endl;
 
 		// initialization of variable
 		*Number_of_hidden_layers = Number_of_neurons_in_hidden_layers_ref.capacity();
@@ -196,7 +210,10 @@ void Fully_connected_network::Read_data_MLP(std::string* Open_filename)
 	Display_results_counting_time(Start, Stop, "Read_data_MLP()", 2);
 }
 
-void Fully_connected_network::Swap_data()
+void Fully_connected_network::Swap_data
+(
+	
+)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -222,15 +239,18 @@ void Fully_connected_network::Swap_data()
 	Display_results_counting_time(Start, Stop, "Swap_data()", 2);
 }
 
-void Fully_connected_network::Divide_data_to_training_and_validation()
+void Fully_connected_network::Divide_data_to_training_and_validation
+(	
+	
+)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
 
 	if (*Train + *Validation == 100)
 	{
-		float x = static_cast<float>((Vector_of_data_ref[0].capacity()) / 100);
-		
+		float x = static_cast<float>((Vector_of_data_ref[0].capacity()) / 100.0f);
+
 		float train_cap = x * static_cast<float>(*Train);
 		float validation_cap = x * static_cast<float>(*Validation);
 
@@ -278,11 +298,13 @@ void Fully_connected_network::Divide_data_to_training_and_validation()
 	Display_results_counting_time(Start, Stop, "Divide_data_to_training_and_validation()", 2);
 }
 
-void Fully_connected_network::Min_max_unipolar_scaling(
+void Fully_connected_network::Min_max_unipolar_scaling
+(
 	std::vector<std::vector<float>>& Vector_of_data,
 	std::string name_of_vector,
 	std::vector<float>& Min_data_value_vector,
-	std::vector<float>& Max_data_value_vector)
+	std::vector<float>& Max_data_value_vector
+)
 {
 	// start counting time 
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -311,11 +333,13 @@ void Fully_connected_network::Min_max_unipolar_scaling(
 	Display_results_counting_time(Start, Stop, "Min_max_unipolar_scaling: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Min_max_bipolar_scaling(
+void Fully_connected_network::Min_max_bipolar_scaling
+(
 	std::vector<std::vector<float>>& Vector_of_data,
 	std::string name_of_vector,
 	std::vector<float>& Min_data_value_vector,
-	std::vector<float>& Max_data_value_vector)
+	std::vector<float>& Max_data_value_vector
+)
 {
 	// start counting time 
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -337,9 +361,11 @@ void Fully_connected_network::Min_max_bipolar_scaling(
 	Display_results_counting_time(Start, Stop, "Min_max_bipolar_scaling: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Create_vector_of_neurons_values(
+void Fully_connected_network::Create_vector_of_neurons_values
+(
 	std::vector<std::vector<float>>& Vector_of_neuron_values,
-	std::string name_of_vector)
+	std::string name_of_vector
+)
 {
 	// start counting time 
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -383,10 +409,12 @@ void Fully_connected_network::Create_vector_of_neurons_values(
 	Display_results_counting_time(Start, Stop, "Create_vector_of_neurons_values: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Create_vector_of_weights(
+void Fully_connected_network::Create_vector_of_weights
+(
 	std::vector<float>& Vector_of_weights, 
 	std::vector<std::vector<float>>& Vector_of_neuron_values,
-	std::string name_of_vector)
+	std::string name_of_vector
+)
 {
 	// start counting time 
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -415,10 +443,12 @@ void Fully_connected_network::Create_vector_of_weights(
 	Display_results_counting_time(Start, Stop, "Create_vector_of_weights: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Create_vector_of_bias(
+void Fully_connected_network::Create_vector_of_bias
+(
 	std::vector<float>& Vector_of_bias_weights,
 	std::vector<std::vector<float>>& Vector_of_neuron_values,
-	std::string name_of_vector)
+	std::string name_of_vector
+)
 {
 	// start counting time 
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -445,9 +475,11 @@ void Fully_connected_network::Create_vector_of_bias(
 	Display_results_counting_time(Start, Stop, "Create_vector_of_bias: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Pseudo_random_numbers(
+void Fully_connected_network::Pseudo_random_numbers
+(
 	std::vector<float>& Vector,
-	std::string name_of_vector)
+	std::string name_of_vector
+)
 {
 	// start counting time
 	auto Start = std::chrono::high_resolution_clock::now();
@@ -473,15 +505,25 @@ void Fully_connected_network::Pseudo_random_numbers(
 	Display_results_counting_time(Start, Stop, "Pseudo_random_numbers: " + name_of_vector, 2);
 }
 
-void Fully_connected_network::Calculating_the_network_MLP(
+void Fully_connected_network::Calculating_the_network_MLP
+(
 	std::string* Open_filename, 
-	std::string* Output_filename_path)
+	std::string* Output_filename_path
+)
 {
 	auto Start = std::chrono::high_resolution_clock::now();
 
+	Startup_check_function();
     Read_data_MLP(Open_filename);
     Swap_data();
-	Divide_data_to_training_and_validation();
+	if(Validation != 0)
+	{
+		Divide_data_to_training_and_validation();
+	}
+	else
+	{
+		Vector_of_data_training_ref = Vector_of_data_ref;
+	}
 
 	// TRAINING
 	Min_max_unipolar_scaling(
@@ -491,42 +533,57 @@ void Fully_connected_network::Calculating_the_network_MLP(
 		Max_training_value_vector);
 
 	// VALIDATION
-	Min_max_unipolar_scaling(
+	if(Validation != 0)
+	{
+		Min_max_unipolar_scaling(
 		Vector_of_data_validation_ref, 
 		"Vector_of_data_validation_ref",
 		Min_validation_value_vector,
 		Max_validation_value_vector);
+	}
 	
 	// TRAINING
 	Create_vector_of_neurons_values(
 		Vector_of_neuron_values_training_ref, 
 		"Vector_of_neuron_values_training_ref");
+
 	// VALIDATION
-	Create_vector_of_neurons_values(
+	if(Validation != 0)
+	{
+		Create_vector_of_neurons_values(
 		Vector_of_neuron_values_validation_ref, 
 		"Vector_of_neuron_values_validation_ref");
+	}
 
 	// TRAINING
 	Create_vector_of_weights(
 		Vector_of_weights_training_ref,
 		Vector_of_neuron_values_training_ref,
 		"Vector_of_weights_training_ref");
+
 	// VALIDATION
-	Create_vector_of_weights(
+	if(Validation != 0)
+	{
+		Create_vector_of_weights(
 		Vector_of_weights_validation_ref,
 		Vector_of_neuron_values_validation_ref,
 		"Vector_of_weights_validation_ref");
-
+	}
+	
 	// TRAINING
 	Create_vector_of_bias(
 		Vector_of_bias_weights_training_ref,
 		Vector_of_neuron_values_training_ref,
 		"Vector_of_bias_weights_training_ref");
+
 	// VALIDATION
-	Create_vector_of_bias(
+	if(Validation != 0)
+	{
+		Create_vector_of_bias(
 		Vector_of_bias_weights_validation_ref,
 		Vector_of_neuron_values_validation_ref,
 		"Vector_of_bias_weights_validation_ref");
+	}
 
 	// TRAINING
 	Pseudo_random_numbers(
@@ -537,26 +594,37 @@ void Fully_connected_network::Calculating_the_network_MLP(
 		"Vector_of_bias_weights_training_ref");
 
 	// VALIDATION
-	Pseudo_random_numbers(
+	if(Validation != 0)
+	{
+		Pseudo_random_numbers(
 		Vector_of_weights_validation_ref,
 		"Vector_of_weights_validation_ref");
-	Pseudo_random_numbers(
+		Pseudo_random_numbers(
 		Vector_of_bias_weights_validation_ref,
 		"Vector_of_bias_weights_validation_ref");
+	}
 
 	// creating one-dimensional vector of neuron values 
 
 	// TRAINING
 	Vector_of_neuron_values_one_dim_training_ref.resize(*Total_number_of_neurons);
+
 	// VALIDATION
-	Vector_of_neuron_values_one_dim_validation_ref.resize(*Total_number_of_neurons);
+	if(Validation != 0)
+	{
+		Vector_of_neuron_values_one_dim_validation_ref.resize(*Total_number_of_neurons);
+	}
 
 	// creating vectors of error values
 	// 
 	// TRAINING
 	Vector_of_error_values_training_ref.resize(*Total_number_of_neurons - *Number_of_input);
+
 	// VALIDATION
-	Vector_of_error_values_validation_ref.resize(*Total_number_of_neurons - *Number_of_input);
+	if(Validation != 0)
+	{
+		Vector_of_error_values_validation_ref.resize(*Total_number_of_neurons - *Number_of_input);
+	}
 
 	int it_weight = 0;						// it_  - iterator
 	int it_bias = 0;
@@ -569,7 +637,7 @@ void Fully_connected_network::Calculating_the_network_MLP(
 
 	for (int epoch = 0; epoch < *Number_of_epochs; epoch++)
 	{
-		std::cout << "##### START [" << epoch << "] EPOCH #####" << std::endl;
+		std::cout << "##### START [" << epoch + 1 << "] EPOCH #####" << std::endl;
 
 		// TRAINING DATA
 
@@ -617,48 +685,55 @@ void Fully_connected_network::Calculating_the_network_MLP(
 
 		// VALIDATION DATA
 
-		for (int it_data = 0; it_data < Vector_of_data_validation_ref[0].capacity(); it_data++)
+		if(Validation != 0)
 		{
-			Forward_propagation_the_network_MLP
-			(
-				Vector_of_data_validation_ref,
-				Vector_of_neuron_values_validation_ref,
-				Vector_of_weights_validation_ref,
-				Vector_of_bias_weights_validation_ref,
-				it_data,
-				it_weight,
-				it_bias,
-				it_prev_layer
-			);
+			for (int it_data = 0; it_data < Vector_of_data_validation_ref[0].capacity(); it_data++)
+			{
+				Forward_propagation_the_network_MLP
+				(
+					Vector_of_data_validation_ref,
+					Vector_of_neuron_values_validation_ref,
+					Vector_of_weights_validation_ref,
+					Vector_of_bias_weights_validation_ref,
+					it_data,
+					it_weight,
+					it_bias,
+					it_prev_layer
+				);
 
-			Backpropagation_the_network_MLP
-			(
-				Vector_of_data_validation_ref,
-				Vector_of_neuron_values_validation_ref,
-				Vector_of_neuron_values_one_dim_validation_ref,
-				Vector_of_weights_validation_ref,
-				Vector_of_bias_weights_validation_ref,
-				Vector_of_error_values_validation_ref,
-				MAPE_value_validation_ref,
-				it_data,
-				it_weight,
-				it_bias,
-				it_prev_layer,
-				it_error,
-				it_iterator_one_dim,
-				it_value_neuron,
-				it_back_neuron,
-				epoch
-			); 
+				Backpropagation_the_network_MLP
+				(
+					Vector_of_data_validation_ref,
+					Vector_of_neuron_values_validation_ref,
+					Vector_of_neuron_values_one_dim_validation_ref,
+					Vector_of_weights_validation_ref,
+					Vector_of_bias_weights_validation_ref,
+					Vector_of_error_values_validation_ref,
+					MAPE_value_validation_ref,
+					it_data,
+					it_weight,
+					it_bias,
+					it_prev_layer,
+					it_error,
+					it_iterator_one_dim,
+					it_value_neuron,
+					it_back_neuron,
+					epoch
+				); 
+			}
+
+			MAPE_value_validation_ref[epoch] = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
+				MAPE_value_validation_ref[epoch]);
 		}
-
-		MAPE_value_validation_ref[epoch] = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
-			MAPE_value_validation_ref[epoch]);
 	}
 
 	std::cout << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
-	std::cout << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
 
+	if(Validation != 0)
+	{
+		std::cout << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
+	}
+	
 	auto Stop = std::chrono::high_resolution_clock::now();
 
 	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
@@ -706,24 +781,30 @@ void Fully_connected_network::Forward_propagation_the_network_MLP
             {
                 case(0):
                 
-                	Vector_of_neuron_values[k][l] = Linear_activation_function(
-                				Vector_of_neuron_values[k][l] +
-                				Vector_of_bias_weights[it_bias]);
-                std::cout << "case(0):" << std::endl;
+                Vector_of_neuron_values[k][l] = Linear_activation_function
+				(
+                	Vector_of_neuron_values[k][l] +
+                	Vector_of_bias_weights[it_bias]
+				);
+                //std::cout << "case(0):" << std::endl;
                 break;
                 case(1):
                 		
-                	Vector_of_neuron_values[k][l] = Unipolar_sigmoidal_function(
-                				Vector_of_neuron_values[k][l] +
-                				Vector_of_bias_weights[it_bias]);
+                Vector_of_neuron_values[k][l] = Unipolar_sigmoidal_function
+				(
+                	Vector_of_neuron_values[k][l] +
+                	Vector_of_bias_weights[it_bias]
+				);
                 //std::cout << "case(1):" << std::endl;
                 break;
                 
                 case(2):
                 		
-                	Vector_of_neuron_values[k][l] = Bipolar_sigmoidal_function(
-                				Vector_of_neuron_values[k][l] +
-                				Vector_of_bias_weights[it_bias]);
+                Vector_of_neuron_values[k][l] = Bipolar_sigmoidal_function
+				(
+                	Vector_of_neuron_values[k][l] +
+                	Vector_of_bias_weights[it_bias]
+				);
                 std::cout << "case(2):" << std::endl;
                 break;
             }
@@ -749,7 +830,7 @@ void Fully_connected_network::Forward_propagation_the_network_MLP
         		Vector_of_neuron_values[it_prev_layer][n] = Linear_activation_function(
         			Vector_of_neuron_values[it_prev_layer][n] +
         			Vector_of_bias_weights[it_bias]);
-        	std::cout << "case(01):" << std::endl;
+        	//std::cout << "case(01):" << std::endl;
         	break;
         
         	case(1):
@@ -884,100 +965,122 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 		}
 	}
 
-	// new values of bias weight
-	// for sigmoidal function only
+	// selection of optimization functions
 
-	// bias weights
-	for (int i = 0; i < Vector_of_bias_weights.capacity(); i++)
+	switch(*Optimizer_function)
 	{
-		Vector_of_bias_weights[i] = Vector_of_bias_weights[i] +
-			*Learning_rate_factor * Vector_of_error_values[i] *
-			(*Beta * Vector_of_neuron_values_one_dim[i + *Number_of_input] *
-				(1 - Vector_of_neuron_values_one_dim[i + *Number_of_input])) * *Bias;
-	}
+		case(0):
 
-	// new values of Vector_of_weights
-	// first hidden layer
+		// new values of bias weight
+		// for sigmoidal function only
 
-	it_iterator_one_dim = 0;
-	for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref[0]; i++)
-	{
-		for (int j = 0; j < *Number_of_input; j++)
+		// bias weights
+		for (int i = 0; i < Vector_of_bias_weights.capacity(); i++)
 		{
-			Vector_of_weights[it_iterator_one_dim + j] =
-				Vector_of_weights[it_iterator_one_dim + j] +
-				(*Learning_rate_factor *
-					Vector_of_error_values[i] *
-					(*Beta *
-						Vector_of_neuron_values_one_dim[*Number_of_input + i] *
-						(1 - Vector_of_neuron_values_one_dim[*Number_of_input + i])) *
-					Vector_of_neuron_values_one_dim[j]);
+			Vector_of_bias_weights[i] = Vector_of_bias_weights[i] +
+				*Learning_rate_factor * Vector_of_error_values[i] *
+				(*Beta * Vector_of_neuron_values_one_dim[i + *Number_of_input] *
+					(1 - Vector_of_neuron_values_one_dim[i + *Number_of_input])) * *Bias;
 		}
-		it_iterator_one_dim += *Number_of_input;
-	}
+		// new values of Vector_of_weights
+		// first hidden layer
 
-	// reaminder hidden layers
-
-	it_value_neuron += *Number_of_input;
-	it_back_neuron += *Number_of_input;
-
-	for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref.capacity() - 1; i++)
-	{
-		it_value_neuron += Number_of_neurons_in_hidden_layers_ref[i];
-		for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref[i + 1]; j++)
+		it_iterator_one_dim = 0;
+		for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref[0]; i++)
 		{
-			for (int k = 0; k < Number_of_neurons_in_hidden_layers_ref[i]; k++)
+			for (int j = 0; j < *Number_of_input; j++)
 			{
-				Vector_of_weights[it_iterator_one_dim + k] =
-					Vector_of_weights[it_iterator_one_dim + k] +
-					*Learning_rate_factor *
-					Vector_of_error_values[it_value_neuron + j - *Number_of_input] *
-					(*Beta * Vector_of_neuron_values_one_dim[it_value_neuron + j] *
-						(1 - Vector_of_neuron_values_one_dim[it_value_neuron + j])) *
-					Vector_of_neuron_values_one_dim[it_back_neuron + k];
+				Vector_of_weights[it_iterator_one_dim + j] =
+					Vector_of_weights[it_iterator_one_dim + j] +
+					(*Learning_rate_factor *
+						Vector_of_error_values[i] *
+						(*Beta *
+							Vector_of_neuron_values_one_dim[*Number_of_input + i] *
+							(1 - Vector_of_neuron_values_one_dim[*Number_of_input + i])) *
+						Vector_of_neuron_values_one_dim[j]);
 			}
-			it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref[i];
+			it_iterator_one_dim += *Number_of_input;
 		}
-		it_back_neuron += Number_of_neurons_in_hidden_layers_ref[i];
-	}
 
-	// output layer
+		// reaminder hidden layers
 
-	it_value_neuron += Number_of_neurons_in_hidden_layers_ref.back();
-	for (int i = 0; i < *Number_of_output; i++)
-	{
-		for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref.back(); j++)
+		it_value_neuron += *Number_of_input;
+		it_back_neuron += *Number_of_input;
+
+		for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref.capacity() - 1; i++)
 		{
-			Vector_of_weights[it_iterator_one_dim + j] =
-				Vector_of_weights[it_iterator_one_dim + j] +
-				(*Learning_rate_factor *
-					Vector_of_error_values[it_value_neuron + i - Number_of_neurons_in_hidden_layers_ref.back()] *
-					(*Beta *
-						Vector_of_neuron_values_one_dim[it_value_neuron + i] *
-						(1 - Vector_of_neuron_values_one_dim[it_value_neuron + i])) *
-					Vector_of_neuron_values_one_dim[it_back_neuron + j]);
+			it_value_neuron += Number_of_neurons_in_hidden_layers_ref[i];
+			for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref[i + 1]; j++)
+			{
+				for (int k = 0; k < Number_of_neurons_in_hidden_layers_ref[i]; k++)
+				{
+					Vector_of_weights[it_iterator_one_dim + k] =
+						Vector_of_weights[it_iterator_one_dim + k] +
+						*Learning_rate_factor *
+						Vector_of_error_values[it_value_neuron + j - *Number_of_input] *
+						(*Beta * Vector_of_neuron_values_one_dim[it_value_neuron + j] *
+							(1 - Vector_of_neuron_values_one_dim[it_value_neuron + j])) *
+						Vector_of_neuron_values_one_dim[it_back_neuron + k];
+				}
+				it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref[i];
+			}
+			it_back_neuron += Number_of_neurons_in_hidden_layers_ref[i];
 		}
-		it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref.back();
+
+		// output layer
+
+		it_value_neuron += Number_of_neurons_in_hidden_layers_ref.back();
+		for (int i = 0; i < *Number_of_output; i++)
+		{
+			for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref.back(); j++)
+			{
+				Vector_of_weights[it_iterator_one_dim + j] =
+					Vector_of_weights[it_iterator_one_dim + j] +
+					(*Learning_rate_factor *
+						Vector_of_error_values[it_value_neuron + i - Number_of_neurons_in_hidden_layers_ref.back()] *
+						(*Beta *
+							Vector_of_neuron_values_one_dim[it_value_neuron + i] *
+							(1 - Vector_of_neuron_values_one_dim[it_value_neuron + i])) *
+						Vector_of_neuron_values_one_dim[it_back_neuron + j]);
+			}
+			it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref.back();
+		}
+
+		break;
+		case(1):
+
+		break;
 	}
 }
 
-float Fully_connected_network::Linear_activation_function(float e)
+float Fully_connected_network::Linear_activation_function
+(
+	float e
+)
 {
 	return static_cast<float>(e);
 }
 
-float Fully_connected_network::Unipolar_sigmoidal_function(float e)
+float Fully_connected_network::Unipolar_sigmoidal_function
+(
+	float e
+)
 {
 	return static_cast<float>(1.0 / (1.0 + exp(-(*Beta) * e)));
 }
 
-float Fully_connected_network::Bipolar_sigmoidal_function(float e)
+float Fully_connected_network::Bipolar_sigmoidal_function
+(
+	float e
+)
 {
 	return static_cast<float>(-1.0 + 2.0 / (1.0 + exp(-(*Beta) * e)));
 }
 
-void Fully_connected_network::Write_data_MLP(
-	std::string* Output_filename_path)
+void Fully_connected_network::Write_data_MLP
+(
+	std::string* Output_filename_path
+)
 {
 	// start counting time 
 	const auto Start = std::chrono::high_resolution_clock::now();
@@ -1648,7 +1751,10 @@ void Fully_connected_network::Write_data_MLP(
 	Display_results_counting_time(Start, Stop, "Write_data_MLP()", 2);
 }
 
-Fully_connected_network::~Fully_connected_network()
+Fully_connected_network::~Fully_connected_network
+(
+	
+)
 {
 
 }

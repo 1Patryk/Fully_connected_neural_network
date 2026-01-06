@@ -6,7 +6,7 @@ Fully_connected_network::Fully_connected_network
 )
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 1000 };
+	Number_of_epochs = new int{ 20000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
@@ -19,7 +19,7 @@ Fully_connected_network::Fully_connected_network
 	Data_normalizer = new int { 0 };	// 0 - Unipolar, 1 - Bipolar
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
-	Learning_rate_factor = new float { 0.01f };
+	Learning_rate_factor = new float { 0.0001f };
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };

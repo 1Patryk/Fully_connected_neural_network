@@ -27,6 +27,7 @@ private:
 	int* Train;
 	int* Validation;
 	int* Optimizer_function;
+	int* Data_normalizer;
 	float* Beta;
 	float* Bias;
 	float* Learning_rate_factor;
@@ -212,6 +213,8 @@ public:
 		std::vector<float>& Vector_of_weights,
 		std::vector<float>& Vector_of_bias_weights,
 		std::vector<float>& Vector_of_error_values,
+		std::vector<float>& Max_value_vector,
+		std::vector<float>& Min_value_vector,
 		std::vector<float>& MAPE_value,
 		int it_data,
 		int it_weight,

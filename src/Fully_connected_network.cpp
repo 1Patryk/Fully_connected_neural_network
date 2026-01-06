@@ -6,24 +6,25 @@ Fully_connected_network::Fully_connected_network
 )
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 1000000 };
+	Number_of_epochs = new int{ 1000 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
 	Number_of_layers = new int{ 0 };
 	Number_of_weights = new int{ 0 };
 	Total_number_of_neurons = new int{ 0 };
-	Train = new int{ 60 };
-	Validation = new int{ 40 };
-	Optimizer_function = new int{ 0 };	// 0 - SGD, 1 - ADAM
+	Train = new int{ 80 };
+	Validation = new int{ 20 };
+	Optimizer_function = new int{ 0 };	// 0 - GD, 1 - ADAM
+	Data_normalizer = new int { 0 };	// 0 - Unipolar, 1 - Bipolar
 	Beta = new float{ 1.0f };
 	Bias = new float{ 1.0f };
-	Learning_rate_factor = new float { 0.0001f };
+	Learning_rate_factor = new float { 0.01f };
 
     Open_filename = new std::string{ "" };
     Output_filename_path = new std::string{ "" };
 	Number_of_neurons_in_hidden_layers = std::vector<int>{6, 5};
-	Activation_functions = std::vector<int>{ 1, 1}; // 0 - linear, 1 - unipolar sigmoidal, 2 - bipolar sigmoidal
+	Activation_functions = std::vector<int>{ 1, 1 }; // 0 - linear, 1 - unipolar sigmoidal, 2 - bipolar sigmoidal
 	Vector_of_data = std::vector<std::vector<float>>(0);
 	Range_of_pseudo_numbers_values = std::vector<float>{ -0.5, 0.5 };
 	MAPE_value_training = std::vector<float>(*Number_of_epochs);
@@ -105,6 +106,9 @@ void Fully_connected_network::Startup_check_function
 
 )
 {
+	// start counting time 
+	const auto Start = std::chrono::high_resolution_clock::now();
+
 	if (Number_of_neurons_in_hidden_layers.capacity() != 
 	Activation_functions.capacity())
 	{
@@ -112,6 +116,11 @@ void Fully_connected_network::Startup_check_function
 		" is not equal to 'Activation_functions'" << std::endl;
 		exit(3);
 	}
+
+	// end counting time 
+	const auto Stop = std::chrono::high_resolution_clock::now();
+
+	Display_results_counting_time(Start, Stop, "Startup_check_function()", 2);
 }
 
 void Fully_connected_network::Read_data_MLP
@@ -152,17 +161,6 @@ void Fully_connected_network::Read_data_MLP
 			std::vector<float> vec(0);
 			Vector_of_data_ref.push_back(vec);
 		}	
-		/*
-		for (int i = 0; !file.eof(); ++i)
-		{
-			for (int j = 0; j < (*Number_of_input + *Number_of_output); j++)
-			{
-				file >> One_piece_of_data;
-				Vector_of_data_ref[j].push_back(One_piece_of_data);
-				// if don't delete last row i txt, one_piece_of data uploads 2x times the same value!
-			}
-		}
-		*/
 
 		while(!file.eof())
 		{
@@ -494,11 +492,6 @@ void Fully_connected_network::Pseudo_random_numbers
 		Vector[i] = dis(gen);
 	}
 
-	for (int i = 0; i < Vector.capacity(); ++i)
-	{
-		Vector[i] = dis(gen);
-	}
-
 	// end counting time 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
@@ -516,7 +509,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 	Startup_check_function();
     Read_data_MLP(Open_filename);
     Swap_data();
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Divide_data_to_training_and_validation();
 	}
@@ -525,30 +518,62 @@ void Fully_connected_network::Calculating_the_network_MLP
 		Vector_of_data_training_ref = Vector_of_data_ref;
 	}
 
-	// TRAINING
-	Min_max_unipolar_scaling(
-		Vector_of_data_training_ref, 
-		"Vector_of_data_training_ref",
-		Min_training_value_vector,
-		Max_training_value_vector);
-
-	// VALIDATION
-	if(Validation != 0)
+	switch(*Optimizer_function)
 	{
-		Min_max_unipolar_scaling(
-		Vector_of_data_validation_ref, 
-		"Vector_of_data_validation_ref",
-		Min_validation_value_vector,
-		Max_validation_value_vector);
+		case(0):
+		// TRAINING
+		Min_max_unipolar_scaling
+		(
+			Vector_of_data_training_ref, 
+			"Vector_of_data_training_ref",
+			Min_training_value_vector,
+			Max_training_value_vector
+		);
+			
+		// VALIDATION
+		if(*Validation != 0)
+		{
+			Min_max_unipolar_scaling
+			(
+			Vector_of_data_validation_ref, 
+			"Vector_of_data_validation_ref",
+			Min_validation_value_vector,
+			Max_validation_value_vector
+			);
+		}
+		break;
+
+		case(1):
+		// TRAINING
+		Min_max_bipolar_scaling
+		(
+			Vector_of_data_training_ref, 
+			"Vector_of_data_training_ref",
+			Min_training_value_vector,
+			Max_training_value_vector
+		);
+			
+		// VALIDATION
+		if(*Validation != 0)
+		{
+			Min_max_bipolar_scaling
+			(
+			Vector_of_data_validation_ref, 
+			"Vector_of_data_validation_ref",
+			Min_validation_value_vector,
+			Max_validation_value_vector
+			);
+		}
+		break;
 	}
-	
+
 	// TRAINING
 	Create_vector_of_neurons_values(
 		Vector_of_neuron_values_training_ref, 
 		"Vector_of_neuron_values_training_ref");
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Create_vector_of_neurons_values(
 		Vector_of_neuron_values_validation_ref, 
@@ -562,7 +587,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 		"Vector_of_weights_training_ref");
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Create_vector_of_weights(
 		Vector_of_weights_validation_ref,
@@ -577,7 +602,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 		"Vector_of_bias_weights_training_ref");
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Create_vector_of_bias(
 		Vector_of_bias_weights_validation_ref,
@@ -594,7 +619,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 		"Vector_of_bias_weights_training_ref");
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Pseudo_random_numbers(
 		Vector_of_weights_validation_ref,
@@ -610,7 +635,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 	Vector_of_neuron_values_one_dim_training_ref.resize(*Total_number_of_neurons);
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Vector_of_neuron_values_one_dim_validation_ref.resize(*Total_number_of_neurons);
 	}
@@ -621,7 +646,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 	Vector_of_error_values_training_ref.resize(*Total_number_of_neurons - *Number_of_input);
 
 	// VALIDATION
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		Vector_of_error_values_validation_ref.resize(*Total_number_of_neurons - *Number_of_input);
 	}
@@ -637,9 +662,11 @@ void Fully_connected_network::Calculating_the_network_MLP
 
 	for (int epoch = 0; epoch < *Number_of_epochs; epoch++)
 	{
-		std::cout << "##### START [" << epoch + 1 << "] EPOCH #####" << std::endl;
+		std::cout << ">> Calculating of the [" << epoch + 1 << "] epoch >";
 
 		// TRAINING DATA
+
+		std::cout << "> Training data MAPE >"; 
 
 		for (int it_data = 0; it_data < Vector_of_data_training_ref[0].capacity(); it_data++)
 		{
@@ -667,6 +694,8 @@ void Fully_connected_network::Calculating_the_network_MLP
 				Vector_of_weights_training_ref,
 				Vector_of_bias_weights_training_ref,
 				Vector_of_error_values_training_ref,
+				Max_training_value_vector,
+				Min_training_value_vector,
 				MAPE_value_training_ref,
 				it_data,
 				it_weight,
@@ -683,10 +712,21 @@ void Fully_connected_network::Calculating_the_network_MLP
 		MAPE_value_training_ref[epoch]= ((1.0f / Vector_of_data_training_ref[0].capacity()) *
 			MAPE_value_training_ref[epoch]);
 
+		std::cout << "> " << std::fixed << std::setprecision(5) << MAPE_value_training_ref[epoch];
+
+		if (epoch > 0)
+		{
+			std::cout << " ( " <<  std::fixed << std::showpos << std::setprecision(5) <<
+			MAPE_value_training_ref[epoch] - MAPE_value_training_ref[epoch - 1] << " )" <<
+			std::noshowpos; 
+		}
+
 		// VALIDATION DATA
 
-		if(Validation != 0)
+		if(*Validation != 0)
 		{
+			std::cout << " >> Validation data MAPE >"; 
+
 			for (int it_data = 0; it_data < Vector_of_data_validation_ref[0].capacity(); it_data++)
 			{
 				Forward_propagation_the_network_MLP
@@ -709,6 +749,8 @@ void Fully_connected_network::Calculating_the_network_MLP
 					Vector_of_weights_validation_ref,
 					Vector_of_bias_weights_validation_ref,
 					Vector_of_error_values_validation_ref,
+					Max_validation_value_vector,
+					Min_validation_value_vector,
 					MAPE_value_validation_ref,
 					it_data,
 					it_weight,
@@ -724,16 +766,30 @@ void Fully_connected_network::Calculating_the_network_MLP
 
 			MAPE_value_validation_ref[epoch] = ((1.0f / Vector_of_data_validation_ref[0].capacity()) *
 				MAPE_value_validation_ref[epoch]);
+			
+			std::cout << "> " << std::fixed << std::setprecision(5) << MAPE_value_validation_ref[epoch];
+			if (epoch > 0)
+			{
+				std::cout << " ( " <<  std::fixed << std::showpos << std::setprecision(5) <<
+				MAPE_value_validation_ref[epoch] - MAPE_value_validation_ref[epoch - 1] << " )" <<
+				std::noshowpos; 
+			}
 		}
+
+		std::cout << std::endl;
 	}
+
+	std::cout << std::endl;
 
 	std::cout << "MAPE_training(" << *Number_of_epochs << "): " << MAPE_value_training_ref[*Number_of_epochs - 1] << std::endl;
 
-	if(Validation != 0)
+	if(*Validation != 0)
 	{
 		std::cout << "MAPE_validation(" << *Number_of_epochs << "): " << MAPE_value_validation_ref[*Number_of_epochs - 1] << std::endl;
 	}
 	
+	std::cout << "Learning rate: " << *Learning_rate_factor << std::endl;
+ 
 	auto Stop = std::chrono::high_resolution_clock::now();
 
 	Display_results_counting_time(Start, Stop, "Calculating_the_network_MLP", 2);
@@ -861,6 +917,8 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 	std::vector<float>& Vector_of_weights,
 	std::vector<float>& Vector_of_bias_weights,
 	std::vector<float>& Vector_of_error_values,
+	std::vector<float>& Max_value_vector,
+	std::vector<float>& Min_value_vector,
 	std::vector<float>& MAPE_value,
 	int it_data,
 	int it_weight,
@@ -896,27 +954,45 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 			Vector_of_error_values[it_error] =
 				Vector_of_data[Vector_of_data.capacity() - r][it_data] -
 				Vector_of_neuron_values[it_prev_layer][*Number_of_output - r];
-			
-			/*
-			std::cout << Vector_of_data[Vector_of_data.capacity() - r][it_data] << std::endl;
-			std::cout << "-" << std::endl;
-			std::cout << Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] << std::endl;
-			std::cout << "=" << std::endl;
-			std::cout << Vector_of_error_values[it_error] << std::endl;
-			*/
 
-			// conditional instruction
-			if (Vector_of_data[Vector_of_data.capacity() - r][it_data] == 0 ||
-				Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] == 0)
+			switch(*Data_normalizer)
 			{
-				MAPE_value[epoch] += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
-					Vector_of_neuron_values[it_prev_layer][*Number_of_output - r]));
-			}
-			else
-			{
-				MAPE_value[epoch] += (std::abs(Vector_of_data[Vector_of_data.capacity() - r][it_data] -
-					Vector_of_neuron_values[it_prev_layer][*Number_of_output - r]) /
-					(Vector_of_data[Vector_of_data.capacity() - r][it_data])) * 100.0f;
+				case(0):
+				{
+					float data_denormalization = Vector_of_data[Vector_of_data.capacity() - r][it_data] *
+						(Max_value_vector[*Number_of_input] - 
+						Min_value_vector[*Number_of_input]) +
+						Min_value_vector[*Number_of_input];
+
+					float prediction_denormalization = Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] *
+						(Max_value_vector[*Number_of_input] - 
+						Min_value_vector[*Number_of_input]) +
+						Min_value_vector[*Number_of_input];
+					
+					MAPE_value[epoch] += (std::abs((data_denormalization - prediction_denormalization) /
+						(data_denormalization))) * 100.0f;
+					
+					break;
+				}
+				
+				case(1):
+				
+				{
+					float data_denormalization = ((Vector_of_data[Vector_of_data.capacity() - r][it_data] + 1) / 2) *
+						(Max_value_vector[*Number_of_input] - 
+						Min_value_vector[*Number_of_input]) +
+						Min_value_vector[*Number_of_input];
+
+					float prediction_denormalization = ((Vector_of_neuron_values[it_prev_layer][*Number_of_output - r] + 1) / 2) *
+						(Max_value_vector[*Number_of_input] - 
+						Min_value_vector[*Number_of_input]) +
+						Min_value_vector[*Number_of_input];
+					
+					MAPE_value[epoch] += (std::abs((data_denormalization - prediction_denormalization) /
+						(data_denormalization))) * 100.0f;
+
+					break;
+				}
 			}
 			
 			it_error -= 1;
@@ -973,10 +1049,17 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 
 		// new values of bias weight
 		// for sigmoidal function only
-
+		
 		// bias weights
 		for (int i = 0; i < Vector_of_bias_weights.capacity(); i++)
 		{
+			/*
+			switch(*Activation_functions)
+			{
+				case(0):
+
+			}
+			*/
 			Vector_of_bias_weights[i] = Vector_of_bias_weights[i] +
 				*Learning_rate_factor * Vector_of_error_values[i] *
 				(*Beta * Vector_of_neuron_values_one_dim[i + *Number_of_input] *
@@ -1048,7 +1131,9 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 
 		break;
 		case(1):
+		
 
+		
 		break;
 	}
 }

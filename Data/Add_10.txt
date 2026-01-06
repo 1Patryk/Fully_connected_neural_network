@@ -1,0 +1,16 @@
+Number_of_input || Number_of_output
+
+2	1
+
+No. || First_number || Second_Number
+
+1	100	101
+2	98	100
+3	96	99
+4	94	98
+5	92	97
+6	90	96
+7	88	95
+8	86	94
+9	84	93
+10	82	92

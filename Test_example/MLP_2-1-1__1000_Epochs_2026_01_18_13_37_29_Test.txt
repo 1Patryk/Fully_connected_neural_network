@@ -1,0 +1,55 @@
+MLP_2-1-1__1000_Epochs_2026_01_18_13_37_29_Test.txt
+
+Vector_of_weights_training
+
+Lp. || value
+
+1		-0.500144
+2		-0.330266
+3		-0.0304417
+
+Vector_of_bias_weights_training
+
+Lp. || value
+
+1		0.166308
+2		0.304936
+
+Vector_of_weights_validation
+
+Lp. || value
+
+1		0.172168
+2		0.335665
+3		0.273558
+
+Vector_of_bias_weights_validation
+
+Lp. || value
+
+1		-0.258741
+2		0.220671
+
+MAPE_training(1000): 2.74214
+MAPE_validation(1000): 2.13068
+
+*Max_training_value[0]: 10
+*Min_training_value[0]: 2
+
+*Max_training_value[1]: 98
+*Min_training_value[1]: 82
+
+*Max_training_value[2]: 100
+*Min_training_value[2]: 92
+
+
+*Max_validation_value[0]: 7
+*Min_validation_value[0]: 1
+
+*Max_validation_value[1]: 100
+*Min_validation_value[1]: 88
+
+*Max_validation_value[2]: 101
+*Min_validation_value[2]: 95
+
+

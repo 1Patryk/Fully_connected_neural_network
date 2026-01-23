@@ -62,36 +62,36 @@ private:
 	std::vector<std::vector<float>> Vector_of_data_training;
 	std::vector<std::vector<float>> Vector_of_neuron_values_training;
 	std::vector<float> Vector_of_neuron_values_one_dim_training;		// one dimensional Vector_of_neuron_values
-	std::vector<float> Vector_of_weights_training;
-	std::vector<float> Vector_of_bias_weights_training;
-	std::vector<float> Vector_of_error_values_training;
+	std::vector<std::vector<float>> Vector_of_weights_training;
+	std::vector<std::vector<float>> Vector_of_bias_training;
+	std::vector<std::vector<float>> Vector_of_error_values_training;
 
 	// TRAINING (REFERENCE)
 
 	std::vector<std::vector<float>>& Vector_of_data_training_ref = Vector_of_data_training;
 	std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref = Vector_of_neuron_values_training;
 	std::vector<float>& Vector_of_neuron_values_one_dim_training_ref = Vector_of_neuron_values_one_dim_training;
-	std::vector<float>& Vector_of_weights_training_ref = Vector_of_weights_training;
-	std::vector<float>& Vector_of_bias_weights_training_ref = Vector_of_bias_weights_training;
-	std::vector<float>& Vector_of_error_values_training_ref = Vector_of_error_values_training;
+	std::vector<std::vector<float>>& Vector_of_weights_training_ref = Vector_of_weights_training;
+	std::vector<std::vector<float>>& Vector_of_bias_training_ref = Vector_of_bias_training;
+	std::vector<std::vector<float>>& Vector_of_error_values_training_ref = Vector_of_error_values_training;
 
 	// VALIDATION
 
 	std::vector<std::vector<float>> Vector_of_data_validation;
 	std::vector<std::vector<float>> Vector_of_neuron_values_validation;
 	std::vector<float> Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
-	std::vector<float> Vector_of_weights_validation;
-	std::vector<float> Vector_of_bias_weights_validation;
-	std::vector<float> Vector_of_error_values_validation;
+	std::vector<std::vector<float>> Vector_of_weights_validation;
+	std::vector<std::vector<float>> Vector_of_bias_validation;
+	std::vector<std::vector<float>> Vector_of_error_values_validation;
 
 	// VALIDATION (REFERENCE)
 
 	std::vector<std::vector<float>>& Vector_of_data_validation_ref = Vector_of_data_validation;
 	std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref = Vector_of_neuron_values_validation;
 	std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref = Vector_of_neuron_values_one_dim_validation;
-	std::vector<float>& Vector_of_weights_validation_ref = Vector_of_weights_validation;
-	std::vector<float>& Vector_of_bias_weights_validation_ref = Vector_of_bias_weights_validation;
-	std::vector<float>& Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
+	std::vector<std::vector<float>>& Vector_of_weights_validation_ref = Vector_of_weights_validation;
+	std::vector<std::vector<float>>& Vector_of_bias_validation_ref = Vector_of_bias_validation;
+	std::vector<std::vector<float>>& Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
 
 public:
 
@@ -157,22 +157,17 @@ public:
 	);
 
 	// create vector of neuron values
-	void Create_vector_of_neurons_values
+	void Create_vector_of_neurons_values_bias_and_errors
 	(
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
+		std::vector<std::vector<float>>& Vector_of_bias, 
+		std::vector<std::vector<float>>& Vector_of_error_values,
 		std::string name_of_vector
 	);
 
 	void Create_vector_of_weights
 	(
-		std::vector<float>& Vector_of_weights,
-		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::string name_of_vector
-	);
-
-	void Create_vector_of_bias
-	(
-		std::vector<float>& Vector_of_bias_weights,
+		std::vector<std::vector<float>>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::string name_of_vector
 	);
@@ -180,7 +175,7 @@ public:
 	// for first weights wector
 	void Pseudo_random_numbers
 	(
-		std::vector<float>& Vector,
+		std::vector<std::vector<float>>& Vector,
 		std::string name_of_vector
 	);
 
@@ -196,8 +191,8 @@ public:
 	(
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_bias_weights,
+		std::vector<std::vector<float>>& Vector_of_weights,
+		std::vector<std::vector<float>>& Vector_of_bias,
 		int it_data,
 		int it_weight,
 		int it_bias,
@@ -210,9 +205,9 @@ public:
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::vector<float>& Vector_of_neuron_values_one_dim,
-		std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_bias_weights,
-		std::vector<float>& Vector_of_error_values,
+		std::vector<std::vector<float>>& Vector_of_weights,
+		std::vector<std::vector<float>>& Vector_of_bias,
+		std::vector<std::vector<float>>& Vector_of_error_values,
 		std::vector<float>& Max_value_vector,
 		std::vector<float>& Min_value_vector,
 		std::vector<float>& MAPE_value,
@@ -250,8 +245,8 @@ public:
 	(
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::vector<float>& Vector_of_weights,
-		std::vector<float>& Vector_of_bias_weights,
+		std::vector<std::vector<float>>& Vector_of_weights,
+		std::vector<std::vector<float>>& Vector_of_bias,
 		int it_data,
 		int it_weight,
 		int it_bias,

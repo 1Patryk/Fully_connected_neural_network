@@ -6,15 +6,15 @@ Fully_connected_network::Fully_connected_network
 )
 {
 	Diag = bool{ false };
-	Number_of_epochs = new int{ 1 };
+	Number_of_epochs = new int{ 100 };
 	Number_of_input = new int{ 0 };
 	Number_of_output = new int{ 0 };
 	Number_of_hidden_layers = new int{ 0 };
 	Number_of_layers = new int{ 0 };
 	Number_of_weights = new int{ 0 };
 	Total_number_of_neurons = new int{ 0 };
-	Train = new int{ 100 };
-	Validation = new int{ 0 };
+	Train = new int{ 60 };
+	Validation = new int{ 40 };
 	Optimizer_function = new int{ 0 };	// 0 - GD, 1 - ADAM
 	Data_normalizer = new int { 0 };	// 0 - Unipolar, 1 - Bipolar
 	Beta = new float{ 1.0f };
@@ -524,7 +524,7 @@ void Fully_connected_network::Calculating_the_network_MLP
 
 	Startup_check_function();
     Read_data_MLP(Open_filename);
-    //Swap_data();
+    Swap_data();
 	if(*Validation != 0)
 	{
 		Divide_data_to_training_and_validation();
@@ -615,7 +615,6 @@ void Fully_connected_network::Calculating_the_network_MLP
 		"Vector_of_weights_validation_ref");
 	}
 
-    /*
 	// TRAINING
 	Pseudo_random_numbers(
 		Vector_of_weights_training_ref,
@@ -635,7 +634,6 @@ void Fully_connected_network::Calculating_the_network_MLP
 		"Vector_of_bias_validation_ref");
 	}
     
-    */
 	// creating one-dimensional vector of neuron values 
 
 	// TRAINING
@@ -648,13 +646,11 @@ void Fully_connected_network::Calculating_the_network_MLP
 	}
 
 	int it_weight = 0;						// it_  - iterator
-	int it_bias = 0;
 	int it_prev_layer = 0;
 	int it_neuron = 0;
 	int it_error = 0;
 	int it_iterator_one_dim = 0;
 	int it_value_neuron = 0;
-	int it_back_neuron = 0;
 
 	for (int epoch = 0; epoch < *Number_of_epochs; epoch++)
 	{
@@ -676,7 +672,6 @@ void Fully_connected_network::Calculating_the_network_MLP
 				Vector_of_bias_training_ref,
 				it_data,
 				it_weight,
-				it_bias,
 				it_prev_layer
 			);
 
@@ -695,12 +690,10 @@ void Fully_connected_network::Calculating_the_network_MLP
 				MAPE_value_training_ref,
 				it_data,
 				it_weight,
-				it_bias,
 				it_prev_layer,
 				it_error,
 				it_iterator_one_dim,
 				it_value_neuron,
-				it_back_neuron,
 				epoch
 			);
 		}
@@ -733,7 +726,6 @@ void Fully_connected_network::Calculating_the_network_MLP
 					Vector_of_bias_validation_ref,
 					it_data,
 					it_weight,
-					it_bias,
 					it_prev_layer
 				);
 
@@ -750,12 +742,10 @@ void Fully_connected_network::Calculating_the_network_MLP
 					MAPE_value_validation_ref,
 					it_data,
 					it_weight,
-					it_bias,
 					it_prev_layer,
 					it_error,
 					it_iterator_one_dim,
 					it_value_neuron,
-					it_back_neuron,
 					epoch
 				); 
 			}
@@ -801,7 +791,6 @@ void Fully_connected_network::Forward_propagation_the_network_MLP
 	std::vector<std::vector<float>>& Vector_of_bias,
 	int it_data, 
 	int it_weight,
-	int it_bias,
 	int it_prev_layer
 )
 {
@@ -823,7 +812,7 @@ void Fully_connected_network::Forward_propagation_the_network_MLP
 			{
 				Vector_of_neuron_values[i][j] +=
 					((Vector_of_neuron_values[i - 1][k] *
-						Vector_of_weights[i][k]));
+						Vector_of_weights[i - 1][j + (k * Vector_of_neuron_values[i].capacity())]));
 			}
 
 			switch (Activation_functions[i - 1])
@@ -904,19 +893,13 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 	std::vector<float>& MAPE_value,
 	int it_data,
 	int it_weight,
-	int it_bias,
 	int it_prev_layer,
 	int it_error, 
 	int it_iterator_one_dim,
 	int it_value_neuron,
-	int it_back_neuron,
 	int epoch
 )
 {
-	//it_prev_layer = 1 + *Number_of_hidden_layers;		// previous layers
-	//it_value_neuron = 0;    // Needed?
-	it_back_neuron = 0;
-
 	// reset error values
 	for (int i = 0; i < Vector_of_error_values.capacity(); i++)
 	{
@@ -1037,11 +1020,8 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 		}
 
 		// new values of Vector_of_weights
-		// first hidden layer
         
         int weights_iterator = 0;
-        
-        std::cout << "Vector_of_neuron_values.capacity(): " << Vector_of_neuron_values[1].capacity() << std::endl;
         
 		for (int i = 1; i < Vector_of_neuron_values.capacity(); i++)
 		{
@@ -1049,19 +1029,46 @@ void Fully_connected_network::Backpropagation_the_network_MLP
 		    {
 		        for (int k = 0; k < Vector_of_neuron_values[i].capacity(); k++)
 		        {
-		           Vector_of_weights[i - 1][k + weights_iterator] =
-    				Vector_of_weights[i - 1][k + weights_iterator] +
-    				(*Learning_rate_factor *
-    					Vector_of_error_values[i - 1][k] *
-    					(*Beta *
-    						Vector_of_neuron_values[i][k] *
+		            switch(Activation_functions[i - 1])
+    				{
+    					case(0):    // linear
+            			Vector_of_weights[i - 1][k + weights_iterator] =
+    				        Vector_of_weights[i - 1][k + weights_iterator] +
+    				        *Learning_rate_factor *
+    					    Vector_of_error_values[i - 1][k] *
+    					    Vector_of_neuron_values[i - 1][j];
+    					
+    					break;
+    
+    					case(1):    // unipolar sigmoidal
+            			Vector_of_weights[i - 1][k + weights_iterator] =
+    				        Vector_of_weights[i - 1][k + weights_iterator] +
+    				        (*Learning_rate_factor *
+    					    Vector_of_error_values[i - 1][k] *
+    					    (*Beta * Vector_of_neuron_values[i][k] *
     						(1 - Vector_of_neuron_values[i][k])) *
-    					Vector_of_neuron_values[i - 1][j]);
-        			std::cout << std::endl;
-        			std::cout << "Vector_of_weights[" << i - 1 << "][" << k + weights_iterator << "]: " << Vector_of_weights[i - 1][k + weights_iterator] << std::endl;
-        			std::cout << "Vector_of_error_values[" << i - 1 << "][" << k << "]: " << Vector_of_error_values[i - 1][k] << std::endl;
-        			std::cout << "Vector_of_neuron_values[" << i << "][" << k << "]: " << Vector_of_neuron_values[i][k]  << std::endl;
-        			std::cout << "Vector_of_neuron_values[" << i - 1 << "][" << j << "]: " << Vector_of_neuron_values[i - 1][j] << std::endl;
+    					    Vector_of_neuron_values[i - 1][j]);
+                			//std::cout << std::endl;
+                			//std::cout << "Vector_of_weights[" << i - 1 << "][" << k + weights_iterator << "]: " << Vector_of_weights[i - 1][k + weights_iterator] << std::endl;
+                			//std::cout << "Vector_of_error_values[" << i - 1 << "][" << k << "]: " << Vector_of_error_values[i - 1][k] << std::endl;
+                			//std::cout << "Vector_of_neuron_values[" << i << "][" << k << "]: " << Vector_of_neuron_values[i][k]  << std::endl;
+                			//std::cout << "Vector_of_neuron_values[" << i - 1 << "][" << j << "]: " << Vector_of_neuron_values[i - 1][j] << std::endl;
+    					
+    					break;
+    
+    					case(2):    // bipolar sigmoidla
+            			Vector_of_weights[i - 1][k + weights_iterator] =
+    				        Vector_of_weights[i - 1][k + weights_iterator] +
+    				        (*Learning_rate_factor *
+    					    Vector_of_error_values[i - 1][k] *
+    					    ((*Beta / 2.0f) * (1.0f - pow((Vector_of_neuron_values[i][k]), 2))) *
+    					    Vector_of_neuron_values[i - 1][j]);
+    					
+    					break;
+    					
+    				}
+    				
+		           
 		        }
 		        weights_iterator += Vector_of_neuron_values[i].capacity();
     		}
@@ -1069,57 +1076,12 @@ void Fully_connected_network::Backpropagation_the_network_MLP
     		weights_iterator = 0;
 		}
 
-		// reaminder hidden layers
-		/*
-		it_value_neuron += *Number_of_input;
-		it_back_neuron += *Number_of_input;
-
-		for (int i = 0; i < Number_of_neurons_in_hidden_layers_ref.capacity() - 1; i++)
-		{
-			it_value_neuron += Number_of_neurons_in_hidden_layers_ref[i];
-			for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref[i + 1]; j++)
-			{
-				for (int k = 0; k < Number_of_neurons_in_hidden_layers_ref[i]; k++)
-				{
-					Vector_of_weights[it_iterator_one_dim + k] =
-						Vector_of_weights[it_iterator_one_dim + k] +
-						*Learning_rate_factor *
-						Vector_of_error_values[it_value_neuron + j - *Number_of_input] *
-						(*Beta * Vector_of_neuron_values_one_dim[it_value_neuron + j] *
-							(1 - Vector_of_neuron_values_one_dim[it_value_neuron + j])) *
-						Vector_of_neuron_values_one_dim[it_back_neuron + k];
-				}
-				it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref[i];
-			}
-			it_back_neuron += Number_of_neurons_in_hidden_layers_ref[i];
-		}
-
-		// output layer
-
-		it_value_neuron += Number_of_neurons_in_hidden_layers_ref.back();
-		for (int i = 0; i < *Number_of_output; i++)
-		{
-			for (int j = 0; j < Number_of_neurons_in_hidden_layers_ref.back(); j++)
-			{
-				Vector_of_weights[it_iterator_one_dim + j] =
-					Vector_of_weights[it_iterator_one_dim + j] +
-					(*Learning_rate_factor *
-						Vector_of_error_values[it_value_neuron + i - Number_of_neurons_in_hidden_layers_ref.back()] *
-						(*Beta *
-							Vector_of_neuron_values_one_dim[it_value_neuron + i] *
-							(1 - Vector_of_neuron_values_one_dim[it_value_neuron + i])) *
-						Vector_of_neuron_values_one_dim[it_back_neuron + j]);
-			}
-			it_iterator_one_dim += Number_of_neurons_in_hidden_layers_ref.back();
-		}
-
 		break;
-		case(1):
+		//case(1):
 		
 
 		
-		break;
-		*/
+		//break;
 	}
 }
 

@@ -195,7 +195,6 @@ public:
 		std::vector<std::vector<float>>& Vector_of_bias,
 		int it_data,
 		int it_weight,
-		int it_bias,
 		int it_prev_layer
 	);
 
@@ -213,12 +212,10 @@ public:
 		std::vector<float>& MAPE_value,
 		int it_data,
 		int it_weight,
-		int it_bias,
 		int it_prev_layer,
 		int it_error,
 		int it_iterator_one_dim,
 		int it_value_neuron,
-		int it_back_neuron,
 		int epoch
 	);
 
@@ -249,7 +246,6 @@ public:
 		std::vector<std::vector<float>>& Vector_of_bias,
 		int it_data,
 		int it_weight,
-		int it_bias,
 		int it_prev_layer
 	);
 

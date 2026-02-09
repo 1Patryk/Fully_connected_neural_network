@@ -1,0 +1,67 @@
+MLP_2-2-1-1__100_Epochs_2026_02_04_17_57_27_Test.txt
+
+Vector_of_weights_training
+
+Pos. || value
+
+[0][0]		0.390158
+[0][1]		-0.369193
+[0][2]		-0.460235
+[0][3]		0.326537
+[1][0]		0.0323991
+[1][1]		0.456542
+[2][0]		-0.0601465
+
+Vector_of_bias_training
+
+Pos. || value
+
+[0][0]		0.390165
+[0][1]		-0.369092
+[1][0]		-0.459808
+[2][0]		0.289722
+
+Vector_of_weights_validation
+
+Pos. || value
+
+[0][0]		0.39016
+[0][1]		-0.36917
+[0][2]		-0.460237
+[0][3]		0.326516
+[1][0]		0.0324099
+[1][1]		0.456532
+[2][0]		-0.0600645
+
+Vector_of_bias_validation
+
+Pos. || value
+
+[0][0]		0.390164
+[0][1]		-0.36909
+[1][0]		-0.459806
+[2][0]		0.289651
+
+MAPE_training(100): 3.22573
+MAPE_validation(100): 2.21728
+
+*Max_training_value[0]: 10
+*Min_training_value[0]: 1
+
+*Max_training_value[1]: 100
+*Min_training_value[1]: 82
+
+*Max_training_value[2]: 101
+*Min_training_value[2]: 92
+
+
+*Max_validation_value[0]: 8
+*Min_validation_value[0]: 2
+
+*Max_validation_value[1]: 98
+*Min_validation_value[1]: 86
+
+*Max_validation_value[2]: 100
+*Min_validation_value[2]: 94
+
+

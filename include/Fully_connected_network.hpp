@@ -21,15 +21,11 @@ private:
 	int* Number_of_input;											// defined in txt. file header
 	int* Number_of_output;											// defined in txt. file header
 	int* Number_of_hidden_layers;									// user specifed
-	int* Number_of_layers;
-	int* Number_of_weights;
-	int* Total_number_of_neurons;
 	int* Train;
 	int* Validation;
 	int* Optimizer_function;
 	int* Data_normalizer;
 	float* Beta;
-	float* Bias;
 	float* Learning_rate_factor;
 
 	std::string* Open_filename;
@@ -61,7 +57,6 @@ private:
 
 	std::vector<std::vector<float>> Vector_of_data_training;
 	std::vector<std::vector<float>> Vector_of_neuron_values_training;
-	std::vector<float> Vector_of_neuron_values_one_dim_training;		// one dimensional Vector_of_neuron_values
 	std::vector<std::vector<float>> Vector_of_weights_training;
 	std::vector<std::vector<float>> Vector_of_bias_training;
 	std::vector<std::vector<float>> Vector_of_error_values_training;
@@ -70,7 +65,6 @@ private:
 
 	std::vector<std::vector<float>>& Vector_of_data_training_ref = Vector_of_data_training;
 	std::vector<std::vector<float>>& Vector_of_neuron_values_training_ref = Vector_of_neuron_values_training;
-	std::vector<float>& Vector_of_neuron_values_one_dim_training_ref = Vector_of_neuron_values_one_dim_training;
 	std::vector<std::vector<float>>& Vector_of_weights_training_ref = Vector_of_weights_training;
 	std::vector<std::vector<float>>& Vector_of_bias_training_ref = Vector_of_bias_training;
 	std::vector<std::vector<float>>& Vector_of_error_values_training_ref = Vector_of_error_values_training;
@@ -79,7 +73,6 @@ private:
 
 	std::vector<std::vector<float>> Vector_of_data_validation;
 	std::vector<std::vector<float>> Vector_of_neuron_values_validation;
-	std::vector<float> Vector_of_neuron_values_one_dim_validation;		// one dimensional Vector_of_neuron_values
 	std::vector<std::vector<float>> Vector_of_weights_validation;
 	std::vector<std::vector<float>> Vector_of_bias_validation;
 	std::vector<std::vector<float>> Vector_of_error_values_validation;
@@ -88,7 +81,6 @@ private:
 
 	std::vector<std::vector<float>>& Vector_of_data_validation_ref = Vector_of_data_validation;
 	std::vector<std::vector<float>>& Vector_of_neuron_values_validation_ref = Vector_of_neuron_values_validation;
-	std::vector<float>& Vector_of_neuron_values_one_dim_validation_ref = Vector_of_neuron_values_one_dim_validation;
 	std::vector<std::vector<float>>& Vector_of_weights_validation_ref = Vector_of_weights_validation;
 	std::vector<std::vector<float>>& Vector_of_bias_validation_ref = Vector_of_bias_validation;
 	std::vector<std::vector<float>>& Vector_of_error_values_validation_ref = Vector_of_error_values_validation;
@@ -193,9 +185,7 @@ public:
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
 		std::vector<std::vector<float>>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_bias,
-		int it_data,
-		int it_weight,
-		int it_prev_layer
+		int it_data
 	);
 
 	// backpropagation
@@ -203,7 +193,6 @@ public:
 	(
 		std::vector<std::vector<float>>& Vector_of_data,
 		std::vector<std::vector<float>>& Vector_of_neuron_values,
-		std::vector<float>& Vector_of_neuron_values_one_dim,
 		std::vector<std::vector<float>>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_bias,
 		std::vector<std::vector<float>>& Vector_of_error_values,
@@ -211,11 +200,6 @@ public:
 		std::vector<float>& Min_value_vector,
 		std::vector<float>& MAPE_value,
 		int it_data,
-		int it_weight,
-		int it_prev_layer,
-		int it_error,
-		int it_iterator_one_dim,
-		int it_value_neuron,
 		int epoch
 	);
 
@@ -245,8 +229,7 @@ public:
 		std::vector<std::vector<float>>& Vector_of_weights,
 		std::vector<std::vector<float>>& Vector_of_bias,
 		int it_data,
-		int it_weight,
-		int it_prev_layer
+		int it_weight
 	);
 
 	// write output data to file

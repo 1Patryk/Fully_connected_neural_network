@@ -1,5 +1,6 @@
 #include "../include/Fully_connected_network.hpp"
 
+/*
 int main()
 {
 	Fully_connected_network DATA;
@@ -11,3 +12,4 @@ int main()
 
 	return(0);
 }
+*/

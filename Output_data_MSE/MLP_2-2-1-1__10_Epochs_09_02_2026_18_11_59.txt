@@ -1,0 +1,83 @@
+MLP_2-2-1-1__10_Epochs_09_02_2026_18_11_59.txt
+
+MAPE_training(10): 2.21233
+MAPE_validation(10): 3.24791
+
+*Max_training_value[0]: 10
+*Min_training_value[0]: 3
+
+*Max_training_value[1]: 96
+*Min_training_value[1]: 82
+
+*Max_training_value[2]: 99
+*Min_training_value[2]: 92
+
+
+*Max_validation_value[0]: 9
+*Min_validation_value[0]: 1
+
+*Max_validation_value[1]: 100
+*Min_validation_value[1]: 84
+
+*Max_validation_value[2]: 101
+*Min_validation_value[2]: 93
+
+
+Number of epochs || MAPE_value_training || MAPE_value_validation
+
+[1]		2.514675		3.418253
+[2]		2.212676		3.248107
+[3]		2.212326		3.247903
+[4]		2.212324		3.247903
+[5]		2.212324		3.247903
+[6]		2.212324		3.247902
+[7]		2.212324		3.247904
+[8]		2.212326		3.247905
+[9]		2.212323		3.247905
+[10]		2.212326		3.247907
+
+
+Vector_of_weights_training
+
+Pos. || value
+
+[0][0]		0.390155
+[0][1]		-0.369292
+[0][2]		-0.460241
+[0][3]		0.326437
+[1][0]		0.032080
+[1][1]		0.456312
+[2][0]		-0.038289
+
+
+Vector_of_bias_training
+
+Pos. || value
+
+[0][0]		0.390155
+[0][1]		-0.369291
+[1][0]		-0.460237
+[2][0]		0.326079
+
+
+Vector_of_weights_validation
+
+Pos. || value
+
+[0][0]		0.390155
+[0][1]		-0.369292
+[0][2]		-0.460241
+[0][3]		0.326437
+[1][0]		0.032080
+[1][1]		0.456312
+[2][0]		-0.038292
+
+
+Vector_of_bias_validation
+
+Pos. || value
+
+[0][0]		0.390155
+[0][1]		-0.369291
+[1][0]		-0.460237
+[2][0]		0.326072

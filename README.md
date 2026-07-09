@@ -8,7 +8,7 @@ This project is a simulation of an artificial neural network.
 
 ## Main concept
 
-An artificial neural network is a simplified model of the human brain. Neurons are a description of a mathematical formula:
+An artificial neural network is a simplified model of the human brain. The smallest components of the network are neurons, which can be described using a mathematical formula:
 
 $$ f(u) = f(\sum_{i=0}^m w_i x_j + b) $$
 
@@ -26,5 +26,33 @@ $\ x_{i} - i'th \\ input \\ value \$
 
 $\ b - bias \$
 
-## Avaliable activation function:
+## Input data
+
+- Example of data (a .txt file with tab-delimited data):
+
+Number_of_input || Number_of_output	
+
+2	1				// user's filled
+
+Degree || Load || Diffraction
+
+8	4	-0.037145655
+10	4	-0.038994299
+12	4	-0.040549755
+14	4	-0.041891839
+
+(last line must be empty)
+
+## Capabilities
+
+### Avaliable activation function:
+
 - Unipolar sigmoidal function
+
+- Bipolar sigmoidal function
+
+- 
+
+
+
+

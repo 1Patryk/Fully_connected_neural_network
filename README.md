@@ -32,14 +32,14 @@ $\ b - bias \$
 
 Number_of_input || Number_of_output	
 
-2	1				// user's filled
+2	1			"\t"  "\t" 	// user's filled
 
 Degree || Load || Diffraction
 
-8	4	-0.037145655
-10	4	-0.038994299
-12	4	-0.040549755
-14	4	-0.041891839
+8	4	-0.037145655  <br />
+10	4	-0.038994299  <br />
+12	4	-0.040549755  <br />
+14	4	-0.041891839  <br />
 
 (last line must be empty)
 

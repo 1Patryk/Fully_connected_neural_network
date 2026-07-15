@@ -32,7 +32,7 @@ $\ b - bias \$
 
 Number_of_input || Number_of_output	
 
-2	1			&nbsp 	// user's filled
+2	1		> > 	// user's filled
 
 Degree || Load || Diffraction
 

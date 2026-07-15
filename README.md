@@ -37,7 +37,7 @@ Number_of_input || Number_of_output
 Degree || Load || Diffraction
 
 8	&nbsp; 4 &nbsp; -0.037145655  <br />
-10	4	-0.038994299  <br />
+10	&nbsp; 4	-0.038994299  <br />
 12	4	-0.040549755  <br />
 14	4	-0.041891839  <br />
 
